@@ -61,23 +61,33 @@ to check if everything is ok.
 #### Generation of .dpd files
 
 The available commands are :
-1.
-     Print FileDependGraph <module name list>.
+1. 
+```
+Print FileDependGraph <module name list>.
+```
    A module can be a file, or a sub-module in a file.
-   Example :  Print FileDependGraph M M2.A.B.
+   Example :  
+```
+Print FileDependGraph M M2.A.B.
+```
    Take all the objects the specified modules and build the dependencies
    between them.
-1.
+1. 
+```
     Print DependGraph my_lemma.
-  Analyse recursively the dependencies of 'my_lemma'.
-1.
+```
+  Analyse recursively the dependencies of ``my_lemma``.
+1. 
+```
     Set DependGraph File "f.dpd".
+```
   To change the name of the generated file (default is graph.dpd).
   Useful when one needs to build several files in one session.
 
 **Advice:**
 you need to use ``Require`` to load the module that you want to explore,
-    but don't use any Import/Export command because the tool is then unable
+    but don't use any ``Import``/``Export``
+   command because the tool is then unable
     to properly group the nodes by modules.
 
 **Example:**
