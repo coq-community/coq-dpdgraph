@@ -51,7 +51,7 @@ to check if everything is ok.
 
 - to have compiled the tools (see above)
 - a compiled COQ file.
-  You can for instance use tests/Test.v (a modified clone of COQ List.v)
+  You can for instance use ``tests/Test.v`` (a modified clone of COQ ``List.v``)
    and compile it doing :
 ```
   $ coqc tests/Test.v
@@ -61,7 +61,7 @@ to check if everything is ok.
 #### Generation of .dpd files
 
 The available commands are :
-1. 
+- Generate dependencies between a list of objects:
 ```
 Print FileDependGraph <module name list>.
 ```
@@ -70,18 +70,19 @@ Print FileDependGraph <module name list>.
 ```
 Print FileDependGraph M M2.A.B.
 ```
-   Take all the objects the specified modules and build the dependencies
+   Take all the objects of the specified modules and build the dependencies
    between them.
-1. 
+
+- Generate the dependencies of one objects:
 ```
     Print DependGraph my_lemma.
 ```
   Analyse recursively the dependencies of ``my_lemma``.
-1. 
+
+- Change the name of the generated file (default is ``graph.dpd``):
 ```
     Set DependGraph File "f.dpd".
 ```
-  To change the name of the generated file (default is graph.dpd).
   Useful when one needs to build several files in one session.
 
 **Advice:**
