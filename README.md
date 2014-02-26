@@ -104,4 +104,108 @@ Info: Graph output in graph2.dpd
 ^D
 ```
 
+#### From a .dpd file to a .dot file
 
+```
+$ ./dpd2dot graph.dpd
+Info: read file graph.dpd
+Info: Graph output in graph.dot
+```
+
+There are some options :
+```
+$ ./dpd2dot -help
+Usage : ./dpd2dot [options]
+  -o : name of output file (default: name of input file .dot)
+  -with-defs : show everything (default)
+  -without-defs : show only Prop objects
+  -rm-trans : remove transitive dependencies (default)
+  -keep-trans : keep transitive dependencies
+  -debug : set debug mode
+  -help  Display this list of options
+  --help  Display this list of options
+```
+
+The only useful option at the moment is ``-without-defs`` that export only
+``Prop`` objects to the graph (``Axiom``, ``Theorem``, ``Lemma``, etc).
+
+#### Graph visualisation
+
+You need :
+
+- [graphviz](http://www.graphviz.org/) (ie. dot tool)
+- a visualizer:
+  Personally, I use [zgrviewer](http://zvtm.sourceforge.net/zgrviewer.html)
+```
+$ zgrviewer file.dot
+```
+  but there are others.
+
+You can also convert .dot file to .svg file using :
+```
+  $ dot -Tsvg file.dot > file.svg
+```
+You can then use ``firefox`` or ``inskape`` to view the ``.svg`` graph.
+
+The main advantage of using ``firefox`` is that the nodes are linked to
+the ``coqdoc`` pages if they have been generated in the same directory.
+But the navigation (zoom, moves) is very poor and slow.
+
+#### Graph interpretation
+
+The graph can be interpreted like this :
+- edge n1 --> n2 : n1 uses n2
+- node :
+  - green : proved lemma
+  - orange :  axiom/admitted lemma
+  - dark pink : Definition, etc
+  - light pink : Parameter, etc
+  - violet : inductive,
+  - blue : constructor,
+  - multi-circled : not used (no predecessor in the graph)
+- yellow box : module
+- objects that are not in a yellow box are COQ objects.
+
+## Development information
+
+#### Generated ``.dpd`` format description
+
+```
+graph : obj_list
+obj : node | edge
+
+node : "N: " node_id node_name '[' node_attribute_list ']' ';'
+node_id : [0-9]+
+node_name : '"' string '"'
+node_attribute_list :
+   | empty
+   | node_attribute ',' node_attribute_list
+node_attribute :
+   | kind=[cnst|inductive|construct]
+   | prop=[yes|no]
+   | path="m0.m1.m2"
+   | body=[yes|no]
+
+edge : "E: "  node_id node_id '[' edge_attribute_list ']' ';'
+edge_attribute_list :
+   | empty
+   | edge_attribute ',' edge_attribute_list
+edge_attribute :
+   | weight=NUM
+```
+
+The parser accept .dpd files as described above,
+  but also any attribute for nodes and edges having the form :
+  prop=val or prop="string..." or prop=NUM
+  so that the generated .dpd can have new attributes without having to change
+  the other tools.
+  Each tool can then pick the attributes that it is able to handle;
+  they are not supposed to raise an error whenever there is
+  an unknown attribute.
+
+
+## More information
+
+Also see the files:
+- TODO 
+- Changlog
