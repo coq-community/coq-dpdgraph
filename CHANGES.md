@@ -1,28 +1,29 @@
-# CHANGELOG
+# Changelog
 
-[26/02/2014] Change the name from dpdgraph to coq-dpdgraph
+- [26/02/2014] Change the name from dpdgraph to coq-dpdgraph  
              and start to move to GitHub.
-[24/02/2014] Add missing "Declarations.force_opaque"  for Coq 8.4
+- [24/02/2014] Add missing "Declarations.force_opaque"  for Coq 8.4
              thanks to Yves Bertot. Working version now.
-[24/02/2014] Version 0.4b : fix compilation problems with Coq 8.4,
+- [24/02/2014] Version 0.4b : fix compilation problems with Coq 8.4,
              but it is not working. Published it anyway to get some help.
-[24/04/2013] Version 0.3 :
+- [24/04/2013] Version 0.3 :  
              Adaptation for Coq 8.3 + better Makefile (thanks to Julien Narboux)
-[18/09/2009] Add licence and distribute as version 0.2.
-[07/08/2009] Arguments for FileDependGraph don't need "" anymore
+- [18/09/2009] Add licence and distribute as version 0.2.
+- [07/08/2009] Arguments for FileDependGraph don't need "" anymore
              + module names checking and 'globalisation'
              (Patch from Hugo Herbelin)
-[24/07/2009] Add attributes on edges
-[24/07/2009] Count the number of time an object is used by another one
-[24/07/2009] Hierarchical subgraphs
-[24/07/2009] Add URL to coqdoc in .dot nodes for .svg export
-[24/07/2009] Tests management in Makefile
-[23/07/2009] Better handling of special characters in names and identification
-[23/07/2009] Identification of dot graph nodes by their full COQ names
+- [24/07/2009] Add attributes on edges
+- [24/07/2009] Count the number of time an object is used by another one
+- [24/07/2009] Hierarchical subgraphs
+- [24/07/2009] Add URL to coqdoc in .dot nodes for .svg export
+- [24/07/2009] Tests management in Makefile
+- [23/07/2009] Better handling of special characters in names and identification
+- [23/07/2009] Identification of dot graph nodes by their full COQ names
              instead of a number.
-[23/07/2009] First locally distributed version.
+- [23/07/2009] First locally distributed version.
 
-# HISTORY
+----
+# History
 
 These tools are based on the function ``SearchDepend`` that Yves Bertot posted
 on ``Coq-Club`` at on the February 27th, 2009.

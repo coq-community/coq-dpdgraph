@@ -74,15 +74,15 @@ The available commands are :
     between them.
 
 - Generate the dependencies of one objects:
-```
-    Print DependGraph my_lemma.
-```
+
+        Print DependGraph my_lemma.
+
   Analyse recursively the dependencies of ``my_lemma``.
 
 - Change the name of the generated file (default is ``graph.dpd``):
-```
-    Set DependGraph File "f.dpd".
-```
+
+        Set DependGraph File "f.dpd".
+
   Useful when one needs to build several files in one session.
 
 **Advice:**
@@ -195,8 +195,8 @@ The parser accept .dpd files as described above,
   but also any attribute for nodes and edges having the form :
   ``prop=val`` or ``prop="string..."`` or ``prop=NUM``
   so that the generated ``.dpd`` can have new attributes without having to change
-  the other tools.
-  Each tool can then pick the attributes that it is able to handle;
+  the other tools.  
+Each tool can then pick the attributes that it is able to handle;
   they are not supposed to raise an error whenever there is
   an unknown attribute.
 
@@ -205,4 +205,4 @@ The parser accept .dpd files as described above,
 
 Also see the files:
 - TODO 
-- [CHANGES](CHANGES)
+- [CHANGES](CHANGES.md)
