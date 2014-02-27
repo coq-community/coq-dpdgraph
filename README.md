@@ -62,14 +62,16 @@ to check if everything is ok.
 
 The available commands are :
 - Generate dependencies between a list of objects:
+
         Print FileDependGraph <module name list>.
-   A module can be a file, or a sub-module in a file.
-   Example :  
-```
-Print FileDependGraph M M2.A.B.
-```
-   Take all the objects of the specified modules and build the dependencies
-   between them.
+
+    A module can be a file, or a sub-module in a file.
+    Example :  
+
+        Print FileDependGraph M M2.A.B.
+
+    Take all the objects of the specified modules and build the dependencies
+    between them.
 
 - Generate the dependencies of one objects:
 ```
@@ -203,5 +205,4 @@ The parser accept .dpd files as described above,
 
 Also see the files:
 - TODO 
-- [CHANGES]()
-- [CHANGES]
+- [CHANGES](CHANGES)
