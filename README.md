@@ -62,9 +62,7 @@ to check if everything is ok.
 
 The available commands are :
 - Generate dependencies between a list of objects:
-```
-Print FileDependGraph <module name list>.
-```
+        Print FileDependGraph <module name list>.
    A module can be a file, or a sub-module in a file.
    Example :  
 ```
@@ -135,15 +133,12 @@ You need :
 
 - [graphviz](http://www.graphviz.org/) (ie. dot tool)
 - a visualizer:
-  Personally, I use [zgrviewer](http://zvtm.sourceforge.net/zgrviewer.html)
-```
-$ zgrviewer file.dot
-```
+  I personally use [zgrviewer](http://zvtm.sourceforge.net/zgrviewer.html)
   but there are others.
 
 You can also convert .dot file to .svg file using :
 ```
-  $ dot -Tsvg file.dot > file.svg
+$ dot -Tsvg file.dot > file.svg
 ```
 You can then use ``firefox`` or ``inskape`` to view the ``.svg`` graph.
 
@@ -196,8 +191,8 @@ edge_attribute :
 
 The parser accept .dpd files as described above,
   but also any attribute for nodes and edges having the form :
-  prop=val or prop="string..." or prop=NUM
-  so that the generated .dpd can have new attributes without having to change
+  ``prop=val`` or ``prop="string..."`` or ``prop=NUM``
+  so that the generated ``.dpd`` can have new attributes without having to change
   the other tools.
   Each tool can then pick the attributes that it is able to handle;
   they are not supposed to raise an error whenever there is
@@ -208,4 +203,5 @@ The parser accept .dpd files as described above,
 
 Also see the files:
 - TODO 
-- Changlog
+- [CHANGES]()
+- [CHANGES]
