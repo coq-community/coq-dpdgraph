@@ -1,0 +1,50 @@
+TODO: transfer this to GitHub issues !
+----
+
+Rebuild a demo !
+
+-[2014-01-07] 
+  - utiliser ocamlgraph pour le calcul de le cloture transitive
+    dans la fonction reduce_graph (cf. mail Julien Narboux)
+
+-[2013-09-12] 
+  - adaptation for OCaml 4.00.1 and Coq 8.4pl1 (April 2013)
+    (.ml -> .ml4 + change in Declarations types)
+  - tests are nor working as before : TODO
+
+#-----------------
+~~ COQ part :
+
+- add dependencies on objects used in object type.
+  Example :
+  Parameter size : list -> nat.
+  Axiom size_nil : size nil = 0.
+  [size_nil] should depend on [size].
+
+- dependencies on [Parametric Morphism] are not detected...
+  Well, this is not really true, but links seems to be in the wrong way
+  (see tests/Morph.v)
+
+- add an option to limit the recursive search to a given level.
+
+- also use Section to organize the graph.
+
+~~ translation to .dot
+
+~~ other tools
+
+- try to export .dpd to sqlite database and use firefox extension
+
+~~ visalisation
+
+- use  ocamlgraph/viewgraph in order to be able to add actions on nodes
+
+- interactive visualisation ?...
+
+~~ General :
+
+#-----------------
+~~ Fixed :
+
+[07/08/2009] fixed bug : requests on internal COQ modules don't work...
+

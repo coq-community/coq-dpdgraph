@@ -203,6 +203,6 @@ Each tool can then pick the attributes that it is able to handle;
 
 ## More information
 
-Also see the files:
-- TODO 
+Also see:
 - [CHANGES](CHANGES.md)
+- [distributed versions](https://anne.pacalet.fr/dev/dpdgraph/)
