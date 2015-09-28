@@ -57,7 +57,7 @@ DISTRIBUTED+=Make
 
 $(COQEXE) : Make_coq $(COQEXTFILES)
 	$(ECHO_CIBLE)
-	$(MAKE) -f $< $@
+	$(MAKE) COQDEP=$(COQDEP) -f $< $@
 
 Make_coq : Make
 	$(ECHO_CIBLE)
