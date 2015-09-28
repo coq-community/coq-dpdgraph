@@ -4,8 +4,6 @@ Build dependency graphs between COQ objects,
 where COQ is the famous formal proof management system (see
 http://coq.inria.fr/).
 
-**Coming soon !**
-
 ## What's inside ?
 
 First of all, it is a small tool (an extended COQ toplevel) that extracts the
@@ -19,6 +17,13 @@ them.
 The idea is that other small tools can be developed latter on to process
 the .dpd files.
 
+## How to get it
+
+You can:
+- either clone it from GitHub at: https://github.com/Karmaki/coq-dpdgraph
+- or get the
+[last distributed version](https://anne.pacalet.fr/dev/dpdgraph/latest.tgz)
+
 ## Compilation
 
 #### Requirements
@@ -26,8 +31,8 @@ the .dpd files.
 - to be able to build a coqtop (I don't know exactly what is needed...)
    (at least ocaml, calmp5, libcoq-ocaml-dev, ... ?)
   The last version has been tested with:
-  - Coq 8.4pl2 (January 2014)
-  - compiled with OCaml 4.00.1
+  - Coq 8.4pl5 (March 2015)
+  - compiled with OCaml 4.02.1
 - [ocamlgraph](http://ocamlgraph.lri.fr/) (for dpd2dot tool)
   Any version should work since only the basic feature are used.
 

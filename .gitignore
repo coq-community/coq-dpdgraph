@@ -1,3 +1,4 @@
+.depend
 *.annot
 *.cmo
 *.cma
@@ -7,3 +8,17 @@
 *.cmx
 *.cmxs
 *.cmxa
+*.ml4.d
+version.ml
+coqthmdep
+dpd2dot
+Make_coq
+dpd_lex.ml
+dpd_parse.ml
+dpd_parse.mli
+tests/*.log
+tests/*.ok
+tests/*.dot
+tests/*.dpd
+tests/*.glob
+tests/Test.vo

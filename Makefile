@@ -1,6 +1,7 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #            This file is part of the DpdGraph tools.
-#  Copyright (C) 2009-2013 Anne Pacalet (Anne.Pacalet@free.fr)
+#  Copyright (C) 2009-2015 Anne Pacalet (Anne.Pacalet@free.fr)
+#                      and Yves Bertot (Yves.Bertot@inria.fr)
 #                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #      This file is distributed under the terms of the 
 #       GNU Lesser General Public License Version 2.1
@@ -110,6 +111,8 @@ include .depend
 GENERATED+=.depend
 
 #-------------------------------------------------------------------------------
+.PHONY: tests
+
 TESTDIR=tests
 TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v \
 	  $(TESTDIR)/Morph.cmd $(TESTDIR)/Test.cmd $(TESTDIR)/search.cmd
@@ -125,7 +128,7 @@ DISTRIBUTED+=$(TESTS_SRC) $(TESTS_ORACLE)
 
 .PRECIOUS : $(TESTS) $(TESTS_LOG) $(TESTS_ORACLE)
 
-test : $(TESTS_OK)
+tests test : $(TESTS_OK)
 
 %.log : %
 	cp $< $@
@@ -170,16 +173,16 @@ $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(COQEXE)
           touch $@ ; \
         else \
           echo "[31mDIFFERENCES[0m : diff $*.oracle $*.log" ; \
-          echo "Pour forcer une nouvelle execution du test :" ; \
+	  echo "To force a new execution of the test:" ; \
 	  echo "  rm $*.log ; make $*.ok"; \
-          echo "[31mPour accepter faire[0m : " ; \
+          echo "[31mTo accept the results[0m: " ; \
           echo "  cp $*.log $*.oracle" ; \
           rm -f $@ ; \
         fi
 
-# l'oracle est mis à jour par l'utilisateur, mais il faut en avoir 1.
+# oracle is updated by user, but one is needed the first time
 %.oracle :
-	$(ECHO_CIBLE) "[ATTENTION : génération automatique d'oracle]"
+	$(ECHO_CIBLE) "[ATTENTION : automatic generation of $@]"
 	$(MAKE) $*.log
 	cp $*.log $*.oracle
 

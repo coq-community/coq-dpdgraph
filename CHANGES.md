@@ -1,5 +1,7 @@
 # Changelog
 
+- [28/09/2015] Check that the GitHub version is up-to-date
+             + minor updates in Copyrights and README.
 - [26/02/2014] Change the name from dpdgraph to coq-dpdgraph
              and start to move to GitHub.
 - [24/02/2014] Add missing "Declarations.force_opaque"  for Coq 8.4

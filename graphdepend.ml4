@@ -1,6 +1,6 @@
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
 (*            This file is part of the DpdGraph tools.                        *)
-(*   Copyright (C) 2009-2013 Anne Pacalet (Anne.Pacalet@free.fr)           *)
+(*   Copyright (C) 2009-2015 Anne Pacalet (Anne.Pacalet@free.fr)           *)
 (*             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                *)
 (*        This file is distributed under the terms of the                     *)
 (*         GNU Lesser General Public License Version 2.1                      *)
