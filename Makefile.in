@@ -102,6 +102,8 @@ include .depend_tool
 GENERATED+=.depend_tool
 
 #-------------------------------------------------------------------------------
+.PHONY: tests
+
 TESTDIR=tests
 TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v \
 	  $(TESTDIR)/Morph.cmd $(TESTDIR)/Test.cmd $(TESTDIR)/search.cmd
@@ -117,7 +119,7 @@ DISTRIBUTED+=$(TESTS_SRC) $(TESTS_ORACLE)
 
 .PRECIOUS : $(TESTS) $(TESTS_LOG) $(TESTS_ORACLE)
 
-tests test : $(TESTS_OK) 
+tests test : $(TESTS_OK)
 
 %.log : %
 	cp $< $@
@@ -162,16 +164,16 @@ $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(COQEXE)
           touch $@ ; \
         else \
           echo "[31mDIFFERENCES[0m : diff $*.oracle $*.log" ; \
-          echo "To force a new execution of the test :" ; \
+          echo "To force a new execution of the test:" ; \
 	  echo "  rm $*.log ; make $*.ok"; \
-          echo "[31mTo accept the results[0m : " ; \
+          echo "[31mTo accept the results[0m: " ; \
           echo "  cp $*.log $*.oracle" ; \
           rm -f $@ ; \
         fi
 
 # l'oracle is updated by user, but one is needed the first time
 %.oracle :
-	$(ECHO_CIBLE) "[ATTENTION : automatic generaion of $@]"
+	$(ECHO_CIBLE) "[ATTENTION : automatic generation of $@]"
 	$(MAKE) $*.log
 	cp $*.log $*.oracle
 
