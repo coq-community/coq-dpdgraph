@@ -1,7 +1,7 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #            This file is part of the DpdGraph tools.
 #  Copyright (C) 2009-2015 Anne Pacalet (Anne.Pacalet@free.fr)
-#                and Yves Bertot (Yves.Bertot@inria.fr)
+#                      and Yves Bertot (Yves.Bertot@inria.fr)
 #                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #      This file is distributed under the terms of the 
 #       GNU Lesser General Public License Version 2.1
@@ -14,15 +14,13 @@ ECHO_CIBLE = $(ECHO) "   * build $@"
 
 PRE=dpd
 
-NAME=dpdgraph
+NAME=coq-dpdgraph
 VERSION=$(shell cat VERSION)
 
 COQEXE=./coqthmdep
 DPD2DOT=./dpd2dot
 
-ifndef MAKE_PUB
 OCAMLLIBDIR := @OCAMLLIB@
-endif # MAKE_PUB
 
 INCLUDES = -I +ocamlgraph
 
@@ -67,41 +65,41 @@ GENERATED+=version.ml
 
 $(DPD2DOT) : $(CMOS)
 	$(ECHO_CIBLE)
-	ocamlc -g $(INCLUDES) -o $@ graph.cma $(CMOS)
+	@OCAMLC@ -g $(INCLUDES) -o $@ graph.cma $(CMOS)
 
 %.cmo : %.ml
 	$(ECHO_CIBLE)
-	ocamlc $(OCAMLFLAGS) $<
+	@OCAMLC@ $(OCAMLFLAGS) $<
 
 %.cmx : %.ml
 	$(ECHO_CIBLE)
-	ocamlopt $(OPTPACKFLAGS) $(OCAMLOPTFLAGS) $<
+	@OCAMLOPT@ $(OPTPACKFLAGS) $(OCAMLOPTFLAGS) $<
 
 %.cmi : %.mli
 	$(ECHO_CIBLE)
-	ocamlc $(OCAMLFLAGS) $<
+	@OCAMLC@ $(OCAMLFLAGS) $<
 
 %.ml : %.mll
 	$(ECHO_CIBLE)
-	ocamllex $<
+	@OCAMLLEX@ $<
 
 GENERATED+=$(PRE)_lex.ml 
 
 %.ml : %.mly
 	$(ECHO_CIBLE)
-	ocamlyacc $<
+	@OCAMLYACC@ $<
 
 GENERATED+=$(PRE)_parse.ml $(PRE)_parse.mli
 
-depend: .depend
+depend: .depend_tool
 
-.depend : $(ML_ALL) 
+.depend_tool : $(ML_ALL) 
 	$(ECHO_CIBLE)
-	ocamldep $(ML_ALL) *.mli > $@
+	@OCAMLDEP@ $(ML_ALL) *.mli > $@
 
-ifndef MAKE_PUB
-include .depend
-endif # MAKE_PUB
+include .depend_tool
+
+GENERATED+=.depend_tool
 
 #-------------------------------------------------------------------------------
 TESTDIR=tests
@@ -119,7 +117,7 @@ DISTRIBUTED+=$(TESTS_SRC) $(TESTS_ORACLE)
 
 .PRECIOUS : $(TESTS) $(TESTS_LOG) $(TESTS_ORACLE)
 
-test : $(TESTS_OK) 
+tests test : $(TESTS_OK) 
 
 %.log : %
 	cp $< $@
@@ -164,21 +162,21 @@ $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(COQEXE)
           touch $@ ; \
         else \
           echo "[31mDIFFERENCES[0m : diff $*.oracle $*.log" ; \
-          echo "Pour forcer une nouvelle execution du test :" ; \
+          echo "To force a new execution of the test :" ; \
 	  echo "  rm $*.log ; make $*.ok"; \
-          echo "[31mPour accepter faire[0m : " ; \
+          echo "[31mTo accept the results[0m : " ; \
           echo "  cp $*.log $*.oracle" ; \
           rm -f $@ ; \
         fi
 
-# l'oracle est mis à jour par l'utilisateur, mais il faut en avoir 1.
+# l'oracle is updated by user, but one is needed the first time
 %.oracle :
-	$(ECHO_CIBLE) "[ATTENTION : génération automatique d'oracle]"
+	$(ECHO_CIBLE) "[ATTENTION : automatic generaion of $@]"
 	$(MAKE) $*.log
 	cp $*.log $*.oracle
 
 #-------------------------------------------------------------------------------
-DISTRIBUTED+=Makefile LICENSE README VERSION
+DISTRIBUTED+=Makefile LICENSE README.md VERSION
 
 distrib : $(NAME)-$(VERSION).tgz
 
@@ -189,21 +187,8 @@ distrib : $(NAME)-$(VERSION).tgz
 	cp --parents $(DISTRIBUTED) $*
 	tar zcvf $@ $*
 	rm -rf $*
+	@ echo "Don't forget to copy README.md and $@ on the server if needed"
 
-
-#-------------------------------------------------------------------------------
-PUB_DIR=/home/anne/public_html/dev/$(NAME)/
-
-PUB_FILES=README \
-           coqdoc.css style.css Test.html \
-           graphTestPerm.svg graphTestReDun.svg
-
-# pub : $(PUB_FILES:%=$(PUB_DIR)/%)
-pub :
-        # cp *.tgz $(PUB_DIR) do this manually on tom
-
-$(PUB_DIR)/% : %
-	cp $< $@
 
 #-------------------------------------------------------------------------------
 clean_coq : Make_coq
