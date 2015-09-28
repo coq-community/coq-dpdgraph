@@ -71,12 +71,15 @@ let collect_dependance gref =
   | Libnames.VarRef _ -> assert false
   | Libnames.ConstRef cst ->
       let cb = Environ.lookup_constant cst (Global.env()) in
-      let c = match cb.Declarations.const_body with 
-        | Declarations.Def c -> Declarations.force c 
-        | Declarations.OpaqueDef c -> Declarations.force_opaque c 
-        | Declarations.Undef _ -> raise (NoDef gref)
+      let cl = match cb.Declarations.const_body with 
+        | Declarations.Def c -> [Declarations.force c]
+        | Declarations.OpaqueDef c -> [Declarations.force_opaque c]
+        | Declarations.Undef _ -> []
       in
-      collect_long_names c Data.empty
+      let cl = match cb.Declarations.const_type with
+        | Declarations.NonPolymorphicType t -> t::cl
+        | Declarations.PolymorphicArity _ ->  cl in
+      List.fold_right collect_long_names cl Data.empty
   | Libnames.IndRef i | Libnames.ConstructRef (i,_) -> 
       let _, indbody = Global.lookup_inductive i in
       let ca = indbody.Declarations.mind_user_lc in

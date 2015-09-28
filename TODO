@@ -15,12 +15,6 @@ Rebuild a demo !
 #-----------------
 ~~ COQ part :
 
-- add dependencies on objects used in object type.
-  Example :
-  Parameter size : list -> nat.
-  Axiom size_nil : size nil = 0.
-  [size_nil] should depend on [size].
-
 - dependencies on [Parametric Morphism] are not detected...
   Well, this is not really true, but links seems to be in the wrong way
   (see tests/Morph.v)
