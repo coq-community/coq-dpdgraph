@@ -40,10 +40,12 @@ Test_perm_nil [label="perm_nil", URL=<Test.html#perm_nil>, fillcolor="#7FAAFF"] 
   Test_Permutation_sym -> Test_perm_trans [] ;
   Test_Permutation_sym -> Test_Permutation_ind [] ;
   Test_Permutation_sym -> Test_perm_nil [] ;
+  Test_Permutation_trans -> Test_Permutation [] ;
   Test_Permutation_trans -> Test_perm_trans [] ;
   Test_app -> Test_list [] ;
   Test_app -> Test_cons [] ;
   Test_app_comm_cons -> Test_app [] ;
+  Test_app_comm_cons -> _eq [] ;
   Test_app_comm_cons -> _eq_refl [] ;
   Test_app_nil_end -> Test_app [] ;
   Test_app_nil_end -> _eq_ind [] ;
