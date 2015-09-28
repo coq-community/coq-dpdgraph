@@ -97,7 +97,7 @@ depend: .depend
 	$(ECHO_CIBLE)
 	@OCAMLDEP@ $(ML_ALL) *.mli > $@
 
-include .depend_tool
+include .depend
 
 GENERATED+=.depend
 
