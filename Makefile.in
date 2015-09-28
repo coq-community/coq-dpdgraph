@@ -91,15 +91,15 @@ GENERATED+=$(PRE)_lex.ml
 
 GENERATED+=$(PRE)_parse.ml $(PRE)_parse.mli
 
-depend: .depend_tool
+depend: .depend
 
-.depend_tool : $(ML_ALL) 
+.depend : $(ML_ALL) 
 	$(ECHO_CIBLE)
 	@OCAMLDEP@ $(ML_ALL) *.mli > $@
 
 include .depend_tool
 
-GENERATED+=.depend_tool
+GENERATED+=.depend
 
 #-------------------------------------------------------------------------------
 .PHONY: tests
