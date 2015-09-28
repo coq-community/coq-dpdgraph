@@ -13,6 +13,7 @@
 #   OCAMLOPT      "ocamlopt" (or "ocamlopt.opt" if present), or "no"
 #   OCAMLBEST     either "byte" if no native compiler was found,
 #                 or "opt" otherwise
+#   OCAMLFIND     "ocamlfind"
 #   OCAMLDEP      "ocamldep"
 #   OCAMLLEX      "ocamllex" (or "ocamllex.opt" if present)
 #   OCAMLYACC     "ocamlyac"
@@ -156,12 +157,24 @@ fi
 # testing for ocamlgraph
 AC_MSG_CHECKING(ocamlgraph package)
 
-AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmxa,
-  OCAMLGRAPH=yes,
-  OCAMLGRAPH=no)
+if test "$OCAMLFIND" = ""; then
+  if test -f "$OCAMLLIB/ocamlgraph/graph.cmxa" ; then
+    OCAMLGRAPH=yes
+  else
+    OCAMLGRAPH=no
+  fi
+  OCAMLGRAPH_PATH=+ocamlgraph
+else
+  OCAMLGRAPH_PATH=`ocamlfind query ocamlgraph | tr -d '\\r\\n'`
+  if test "$OCAMLGRAPH_PATH" = "" ;then
+     OCAMLGRAPH=no 
+  fi
+fi
 
 if test "$OCAMLGRAPH" = no ; then
-   AC_MSG_ERROR(ocamlgraph is not installed.)
+  AC_MSG_ERROR(ocamlgraph is not found.)
+else
+  AC_MSG_RESULT($OCAMLGRAPH_PATH)
 fi
 
 AC_CHECK_PROG(COQC,coqc,coqc,no)
@@ -196,6 +209,7 @@ AC_SUBST(OBJEXT)
 AC_SUBST(INCLUDEGTK2)
 AC_SUBST(NATIVE_DYNLINK)
 AC_SUBST(COQC)
+AC_SUBST(OCAMLGRAPH_PATH)
 
 # Finally create the Makefile from Makefile.in
 AC_OUTPUT(Makefile)

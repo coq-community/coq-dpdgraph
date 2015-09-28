@@ -20,9 +20,7 @@ VERSION=$(shell cat VERSION)
 COQEXE=./coqthmdep
 DPD2DOT=./dpd2dot
 
-OCAMLLIBDIR := @OCAMLLIB@
-
-INCLUDES = -I +ocamlgraph
+INCLUDES = -I @OCAMLGRAPH_PATH@
 
 all : $(COQEXE) $(DPD2DOT)
 
