@@ -186,7 +186,7 @@ COQVERSION=`$COQC -v | sed -n -e 's|.*version *\(.*\)$|\1|p' `
 echo "Coq version is $COQVERSION"
 
 case $COQVERSION in
-  8.1*|8.2*|8.3*)
+  8.1*|8.2*|8.3*|8.4*)
         AC_MSG_ERROR(dpdgraph needs Coq version 8.4 or higher);;
 esac
 # substitutions to perform

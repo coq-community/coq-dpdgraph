@@ -17,12 +17,12 @@ PRE=dpd
 NAME=coq-dpdgraph
 VERSION=$(shell cat VERSION)
 
-COQEXE=./coqthmdep
+DPDPLUGIN=./dpdgraph.cmxs ./dpdgraph.vo
 DPD2DOT=./dpd2dot
 
 INCLUDES = -I @OCAMLGRAPH_PATH@
 
-all : $(COQEXE) $(DPD2DOT)
+all : $(DPDPLUGIN) $(DPD2DOT)
 
 DISTRIBUTED = $(PRE)_compute.ml $(PRE)_dot.ml \
 	 $(PRE)_parse.mly  $(PRE)_lex.mll $(PRE).ml
@@ -37,16 +37,16 @@ COQDEP=@OCAMLDEP@
 OCAMLFLAGS =  -w Ael -warn-error -g -dtypes $(INCLUDES) -c
 OCAMLOPTFLAGS = -c
 
-COQEXTFILES=searchdepend.ml4 graphdepend.ml4
+COQEXTFILES=searchdepend.ml4 graphdepend.ml4 dpdgraph.mllib
 
-GENERATED+=$(COQEXTFILES:%.ml4=%.o) $(COQEXTFILES:%.ml4=%.cmx)
+GENERATED+=$(COQEXTFILES:%.ml4=%.o) $(COQEXTFILES:%.ml4=%.cmx) dpdgraph.cmxs
 
 DISTRIBUTED+=$(COQEXTFILES)
 DISTRIBUTED+=Make
 
-$(COQEXE) : Make_coq $(COQEXTFILES)
+$(DPDPLUGIN) : Make_coq $(COQEXTFILES)
 	$(ECHO_CIBLE)
-	$(MAKE) COQDEP=$(COQDEP) -f $< $@
+	$(MAKE) -f $< $@
 
 Make_coq : Make
 	$(ECHO_CIBLE)
