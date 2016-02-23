@@ -187,7 +187,7 @@ echo "Coq version is $COQVERSION"
 
 case $COQVERSION in
   8.1*|8.2*|8.3*|8.4*)
-        AC_MSG_ERROR(dpdgraph needs Coq version 8.4 or higher);;
+        AC_MSG_ERROR(dpdgraph needs Coq version 8.5 or higher);;
 esac
 # substitutions to perform
 AC_SUBST(OCAMLC)
