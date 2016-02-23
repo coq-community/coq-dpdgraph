@@ -37,14 +37,18 @@ COQDEP=@OCAMLDEP@
 OCAMLFLAGS =  -w Ael -warn-error -g -dtypes $(INCLUDES) -c
 OCAMLOPTFLAGS = -c
 
-COQEXTFILES=searchdepend.ml4 graphdepend.ml4 dpdgraph.mllib
+COQEXTFILES=searchdepend.ml4 graphdepend.ml4
 
 GENERATED+=$(COQEXTFILES:%.ml4=%.o) $(COQEXTFILES:%.ml4=%.cmx) dpdgraph.cmxs
 
-DISTRIBUTED+=$(COQEXTFILES)
+DISTRIBUTED+=$(COQEXTFILES) dpdgraph.mllib
 DISTRIBUTED+=Make
 
-$(DPDPLUGIN) : Make_coq $(COQEXTFILES)
+install : Make_coq
+	$(MAKE) -f $< install
+	cp dpd2dot $(BINDIR)/
+
+$(DPDPLUGIN) : Make_coq $(DISTRIBUTED)
 	$(ECHO_CIBLE)
 	$(MAKE) -f $< $@
 
