@@ -37,17 +37,16 @@ let is_prop gref = match gref with
       let cb = Environ.lookup_constant cnst env in
       let cnst_type =
           Typeops.type_of_constant_type env cb.Declarations.const_type in
-      let is_prop = 
         if Term.is_Prop cnst_type then true
-        else begin
-          try
-            let (_, s) = Typing.type_of env Evd.empty cnst_type 
-            in Term.is_Prop s 
-          with _ -> false
-        end
-      in is_prop
+        else
+          let s = Safe_typing.typing (Global.safe_env()) cnst_type in
+              Term.is_Prop (Safe_typing.j_type s)
   | Globnames.IndRef _ -> false
-  | Globnames.ConstructRef _ -> false
+  | Globnames.ConstructRef cst ->
+    let cst_j = Safe_typing.typing (Global.safe_env()) (Term.mkConstruct cst) in
+    let cst_tt = Safe_typing.typing (Global.safe_env())
+                    (Safe_typing.j_type cst_j)
+    in Term.is_Prop (Safe_typing.j_type cst_tt)
   | Globnames.VarRef _ -> assert false
 
 
@@ -187,8 +186,8 @@ end = struct
     let env = Global.env() in
     let cb = Environ.lookup_constant cnst env in
     let acc = match cb.Declarations.const_body with 
-      | Declarations.Def c -> ("body", "yes")::acc
       | Declarations.OpaqueDef _
+      | Declarations.Def _ -> ("body", "yes")::acc
       | Declarations.Undef _  -> ("body", "no")::acc
     in acc
 
@@ -276,7 +275,7 @@ END
 *)
 
 VERNAC COMMAND EXTEND DependGraph
-  | ["PrintDependGraph" reference(ref) ] -> 
+  | ["Print" "DependGraph" reference(ref) ] -> 
       [ mk_dpds_graph (Nametab.global ref) ]
   | ["Print" "FileDependGraph" reference_list(dl) ] -> 
       [ file_graph_depend (List.map locate_mp_dirpath dl) ]
