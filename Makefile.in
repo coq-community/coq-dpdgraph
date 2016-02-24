@@ -127,7 +127,7 @@ tests test : $(TESTS_OK)
 	cp $< $@
 
 %.vo : %.v
-	coqc $<
+	coqc -R . dpdgraph $<
 
 %.html : %.v
 	coqdoc $<
@@ -135,20 +135,20 @@ tests test : $(TESTS_OK)
 %.svg : %.dot
 	dot -Tsvg -o$@ $<
 
-%.dpd : %.vo %.cmd $(COQEXE)
+%.dpd : %.vo %.cmd
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); ../$(COQEXE) < $(*F).cmd > /dev/null  2>&1
+	cd $(TESTDIR); coqtop -R .. dpdgraph < $(*F).cmd > /dev/null
 
-Morph%.dpd : $(TESTDIR)/Morph.vo $(TESTDIR)/Morph.cmd $(COQEXE)
+Morph%.dpd : $(TESTDIR)/Morph.vo $(TESTDIR)/Morph.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); ../$(COQEXE) < Morph.cmd > /dev/null  2>&1
+	cd $(TESTDIR); coqtop -R .. dpdgraph < Morph.cmd > /dev/null
 
-graph%.dpd : $(TESTDIR)/Test.vo $(TESTDIR)/Test.cmd $(COQEXE)
+graph%.dpd : $(TESTDIR)/Test.vo $(TESTDIR)/Test.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); ../$(COQEXE) < Test.cmd > /dev/null  2>&1
+	cd $(TESTDIR); coqtop -R .. dpdgraph < Test.cmd > /dev/null
 
-$(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(COQEXE)
-	$(COQEXE) -I $(TESTDIR) <  $(TESTDIR)/search.cmd > $@ 2> /dev/null
+$(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
+	coqtop -R . dpdgraph <  $(TESTDIR)/search.cmd > $@ 2> /dev/null
 
 %.dot : %.dpd  $(DPD2DOT)
 	$(DPD2DOT) $< > /dev/null
@@ -207,5 +207,5 @@ clean : clean_coq clean_test
 	rm -f $(GENERATED) 
 	rm -f $(CMOS) $(CMXS) $(ML_ALL:%.ml=%.o) *.cmi
 	rm -f $(ML_ALL:%.ml=%.annot)
-	rm -f $(DPD2DOT) $(COQEXE)
+	rm -f $(DPD2DOT) $(DPDPLUGIN)
 
