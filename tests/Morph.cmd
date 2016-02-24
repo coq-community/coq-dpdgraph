@@ -1,3 +1,5 @@
+Require Import dpdgraph.dpdgraph.
+
 Require Morph.
 
 Set DependGraph File "Morph.dpd".
