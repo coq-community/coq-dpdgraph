@@ -2340,7 +2340,7 @@ echo "Coq version is $COQVERSION"
 
 case $COQVERSION in
   8.1*|8.2*|8.3*|8.4*)
-        as_fn_error $? "dpdgraph needs Coq version 8.4 or higher" "$LINENO" 5;;
+        as_fn_error $? "dpdgraph needs Coq version 8.5 or higher" "$LINENO" 5;;
 esac
 # substitutions to perform
 
