@@ -1,50 +1,62 @@
-# coq-dpdgraph
+coq-dpdgraph
+============
 
 Build dependency graphs between COQ objects,
 where COQ is the famous formal proof management system (see
 http://coq.inria.fr/).
 
-## What's inside ?
+### What's inside ?
 
-First of all, it is a small tool (an extended COQ toplevel) that extracts the
-dependencies between COQ objects, and produce a file (.dpd) with this 
-information.
+First of all, it is a small tool (a Coq plugin) that extracts the
+dependencies between COQ objects, and produce a file (we suggest using
+the suffix .dpd) with this information.
 
 Then, another tool reads these .dpd files and produce graph file
 using .dot format (cf. http://www.graphviz.org/) that makes possible to view
 them.
 
-The idea is that other small tools can be developed latter on to process
+The idea is that other small tools can be developed later on to process
 the .dpd files.
 
-## How to get it
+### How to get it
 
 You can:
 - either clone it from GitHub at: https://github.com/Karmaki/coq-dpdgraph
+- or get the opam package form the opam-coq-archive (repository "released")
 - or get the
 [last distributed version](https://anne.pacalet.fr/dev/dpdgraph/latest.tgz)
 
-## Compilation
+### Compilation
 
 #### Requirements
 
-- to be able to build a coqtop (I don't know exactly what is needed...)
-   (at least ocaml, calmp5, libcoq-ocaml-dev, ... ?)
-  The last version has been tested with:
-  - Coq 8.4pl5 (March 2015)
-  - compiled with OCaml 4.02.1
+- The latest version runs with coq 8.5
+  it has been tested with a version of Coq installed using opam and with
+  Ocaml version 4.02.3
 - [ocamlgraph](http://ocamlgraph.lri.fr/) (for dpd2dot tool)
   Any version should work since only the basic feature are used.
 
-#### Compile
+#### Compile from the pre-packaged source archive
+    $ wget https://github.com/ybertot/coq-dpdgraph/archive/compatible-8.5.zip
+    $ ./configure
+    $ make && make install
 
-    $ make
-
-should produce 2 executables :
-- ./coqthmdep : an extended coqtop to be able to build .dpd files.
+This should produce a plugin library for Coq and an executable :
+- ./dpdgraph.cmxs : a plugin to be loaded in Coq
 - ./dpd2dot : a tool to transform .dpd files into .dot graphs.
 
+#### install using opam
+
+If you use opam, you can install it simply by typing
+
+  $ opam repo add coq-released https://coq.inria.fr/opam/released
+  $ opam install coq-dpdgraph.0.4
+
 #### Test
+
+If you install the archive by cloning the git repository, you have
+a sub-directory containing test files.  These can be tested using the
+following command.
 
     $ make -s test
 
@@ -99,13 +111,17 @@ you need to use ``Require`` to load the module that you want to explore,
 **Example:**
 ```
 $ ledit ./coqthmdep -I tests/
-Welcome to Coq 8.2 (February 2009)
-Coq < Require Test.
-Coq < Print FileDependGraph Test.
-Info: Graph output in graph.dpd
+Welcome to Coq 8.5 (February 2016)
+
+Coq < Require dpdgraph.dpdgraph.
+[Loading ML file dpdgraph.cmxs ... done]
+
+Coq < Require List.
+Coq < Print FileDependGraph List.
+Print FileDependGraph List.
+Fetching opaque proofs from disk for Coq.Lists.List
+Info: output dependencies in file graph.dpd
 Coq < Set DependGraph File "graph2.dpd".
-Coq < Print DependGraph Test.Permutation_app_swap.
-Info: Graph output in graph2.dpd
 ^D
 ```
 
