@@ -51,7 +51,7 @@ This should produce a plugin library for Coq and an executable :
 If you use opam, you can install `coq-dpdgraph` and `ocamlgraph`
 
     $ opam repo add coq-released https://coq.inria.fr/opam/released
-    $ opam install coq-dpdgraph.0.4
+    $ opam install coq-dpdgraph
 
 #### Compile from the git repository
 
