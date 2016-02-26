@@ -48,10 +48,17 @@ This should produce a plugin library for Coq and an executable :
 
 #### install using opam
 
-If you use opam, you can install `coq-dpdgraph` and 
+If you use opam, you can install `coq-dpdgraph` and `ocamlgraph`
 
-  $ opam repo add coq-released https://coq.inria.fr/opam/released
-  $ opam install coq-dpdgraph.0.4
+    $ opam repo add coq-released https://coq.inria.fr/opam/released
+    $ opam install coq-dpdgraph.0.4
+
+#### Compile from the git repository
+
+If you obtained directly the files from the git repository (e.g. by cloning),
+then the `configure` file is missing.  It can be generated using
+the following command:
+    $ autoconf
 
 #### Test
 
@@ -157,7 +164,9 @@ You need :
 
 - [graphviz](http://www.graphviz.org/) (ie. dot tool)
 - a visualizer:
-  I personally use [zgrviewer](http://zvtm.sourceforge.net/zgrviewer.html)
+  we tested [zgrviewer](http://zvtm.sourceforge.net/zgrviewer.html),
+  [xdot](https://pypi.python.org/pypi/xdot),
+  [kgraphviewer](https://extragear.kde.org/apps/kgraphviewer/),
   but there are others.
 
 You can also convert .dot file to .svg file using :

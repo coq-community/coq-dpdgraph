@@ -1,5 +1,8 @@
 # Changelog
 
+- [26/02/2016] Make the software work with coq 8.5, fix the computation of
+  axioms, constructors, and propositions, switch from a stand-alone program to
+  a coq plugin.
 - [28/09/2015] Check that the GitHub version is up-to-date
              + minor updates in Copyrights and README.
 - [26/02/2014] Change the name from dpdgraph to coq-dpdgraph
