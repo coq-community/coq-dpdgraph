@@ -8,10 +8,10 @@ http://coq.inria.fr/).
 ### What's inside ?
 
 First of all, it is a small tool (a Coq plugin) that extracts the
-dependencies between COQ objects, and produce a file (we suggest using
+dependencies between COQ objects, and produces a file (we suggest using
 the suffix .dpd) with this information.
 
-Then, another tool reads these .dpd files and produce graph file
+Then, another tool reads these .dpd files and produces a graph file
 using .dot format (cf. http://www.graphviz.org/) that makes possible to view
 them.
 
@@ -22,7 +22,7 @@ the .dpd files.
 
 You can:
 - either clone it from GitHub at: https://github.com/Karmaki/coq-dpdgraph
-- or get the opam package form the opam-coq-archive (repository "released")
+- or get the opam package named `coq-dpdgraph` form the opam-coq-archive (repository "released")
 - or get the
 [last distributed version](https://anne.pacalet.fr/dev/dpdgraph/latest.tgz)
 
@@ -31,23 +31,24 @@ You can:
 #### Requirements
 
 - The latest version runs with coq 8.5
-  it has been tested with a version of Coq installed using opam and with
+- it has been tested with a version of Coq installed using opam and with
   Ocaml version 4.02.3
 - [ocamlgraph](http://ocamlgraph.lri.fr/) (for dpd2dot tool)
   Any version should work since only the basic feature are used.
 
 #### Compile from the pre-packaged source archive
-    $ wget https://github.com/ybertot/coq-dpdgraph/archive/compatible-8.5.zip
+First download the archive, unpack it, and change directory to the `coq-dpdgraph` directory.
+
     $ ./configure
     $ make && make install
 
 This should produce a plugin library for Coq and an executable :
-- ./dpdgraph.cmxs : a plugin to be loaded in Coq
-- ./dpd2dot : a tool to transform .dpd files into .dot graphs.
+- `./dpdgraph.cmxs` : a plugin to be loaded in Coq
+- `./dpd2dot` : a tool to transform .dpd files into .dot graphs.
 
 #### install using opam
 
-If you use opam, you can install it simply by typing
+If you use opam, you can install `coq-dpdgraph` and 
 
   $ opam repo add coq-released https://coq.inria.fr/opam/released
   $ opam install coq-dpdgraph.0.4
