@@ -58,6 +58,7 @@ If you use opam, you can install `coq-dpdgraph` and `ocamlgraph`
 If you obtained directly the files from the git repository (e.g. by cloning),
 then the `configure` file is missing.  It can be generated using
 the following command:
+
     $ autoconf
 
 #### Test
