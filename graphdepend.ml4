@@ -31,7 +31,9 @@ let get_dirlist_grefs dirlist =
     Search.generic_search None select;
     !selected_gref
 
-let is_prop gref = match gref with
+let is_prop gref id =
+try
+match gref with
   | Globnames.ConstRef cnst -> 
       let env = Global.env() in
       let cb = Environ.lookup_constant cnst env in
@@ -39,8 +41,11 @@ let is_prop gref = match gref with
           Typeops.type_of_constant_type env cb.Declarations.const_type in
         if Term.is_Prop cnst_type then true
         else
-          let s = Safe_typing.typing (Global.safe_env()) cnst_type in
-              Term.is_Prop (Safe_typing.j_type s)
+let env = Environ.push_context cb.Declarations.const_universes env in
+let evd = Evd.from_env env in
+let (_,s) = Typing.type_of env evd cnst_type in
+(*          let s = Safe_typing.typing (Global.safe_env()) cnst_type in *)
+              Term.is_Prop s (* (Safe_typing.j_type s) *)
   | Globnames.IndRef _ -> false
   | Globnames.ConstructRef cst ->
     let cst_j = Safe_typing.typing (Global.safe_env()) (Term.mkConstruct cst) in
@@ -48,6 +53,9 @@ let is_prop gref = match gref with
                     (Safe_typing.j_type cst_j)
     in Term.is_Prop (Safe_typing.j_type cst_tt)
   | Globnames.VarRef _ -> assert false
+with _ -> 
+  warning (str "unable to determine whether " ++ str id ++
+                        str " has its type in sort Prop"); false
 
 
 module G = struct
@@ -191,8 +199,8 @@ end = struct
       | Declarations.Undef _  -> ("body", "no")::acc
     in acc
 
-  let add_gref_attrib acc gref =
-    let is_prop = is_prop gref in 
+  let add_gref_attrib acc gref id =
+    let is_prop = is_prop gref id in 
     let acc = ("prop", if is_prop then "yes" else "no")::acc in
     let acc = match gref with
       | Globnames.ConstRef cnst -> 
@@ -215,7 +223,7 @@ end = struct
     let gref = G.Node.gref n in
     let dirname, name = G.Node.split_name n in
     let acc = if dirname = "" then [] else [("path", "\""^dirname^"\"")] in
-    let acc = add_gref_attrib acc gref in
+    let acc = add_gref_attrib acc gref name in
       Format.fprintf fmt "N: %d \"%s\" [%a];@." id name
         pp_attribs acc
 
