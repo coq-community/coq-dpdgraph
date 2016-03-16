@@ -41,11 +41,11 @@ match gref with
           Typeops.type_of_constant_type env cb.Declarations.const_type in
         if Term.is_Prop cnst_type then true
         else
-let env = Environ.push_context cb.Declarations.const_universes env in
-let evd = Evd.from_env env in
-let (_,s) = Typing.type_of env evd cnst_type in
-(*          let s = Safe_typing.typing (Global.safe_env()) cnst_type in *)
-              Term.is_Prop s (* (Safe_typing.j_type s) *)
+        let s_env = Safe_typing.push_context 
+                     true cb.Declarations.const_universes
+                     (Global.safe_env ()) in
+        let s = Safe_typing.typing s_env cnst_type in
+            Term.is_Prop (Safe_typing.j_type s)
   | Globnames.IndRef _ -> false
   | Globnames.ConstructRef cst ->
     let cst_j = Safe_typing.typing (Global.safe_env()) (Term.mkConstruct cst) in
