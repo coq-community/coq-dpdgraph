@@ -7,7 +7,12 @@
 (*        (see the enclosed LICENSE file for mode details)                    *)
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
 
+module G = Dpd_compute.G
+module Node = Dpd_compute.Node
+
 let version_option = ref false
+
+let threshold_option = ref 0
 
 let spec_args = [
   ("-with-defs", Arg.Set Dpd_compute.with_defs, 
@@ -20,16 +25,27 @@ let spec_args = [
       ": keep transitive dependencies");
   ("-debug", Arg.Set Dpd_compute.debug_flag, 
       ": set debug mode");
+  ("-threshold", Arg.Set_int threshold_option, 
+      ": Max number of references allowed (default 0)");
   ("-v", Arg.Set version_option, 
       ": print version and exit");
 ]
 
-let do_file n f =
+let print_usage g t =
+  let print_node n =
+    let d = (G.in_degree g n) in
+    if d <= t then
+      Format.printf "%s\t(%d)\n" (Node.name n) d
+  in
+  G.iter_vertex print_node g
+
+let do_file _ f =
   try
     Dpd_compute.feedback "read file %s@." f;
     let g = Dpd_lex.read f in
     let g = Dpd_compute.build_graph g in
-      Dpd_compute.simplify_graph g
+    Dpd_compute.simplify_graph g;
+    print_usage g !threshold_option
   with Dpd_compute.Error msg -> Dpd_compute.error "%s@." msg
 
 let main () =
