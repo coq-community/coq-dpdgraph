@@ -33,7 +33,7 @@ let do_file n f =
   with Dpd_compute.Error msg -> Dpd_compute.error "%s@." msg
 
 let main () =
-  let usage_msg = "Usage : "^(Sys.argv.(0))^" [options]" in
+  let usage_msg = "Usage : "^(Sys.argv.(0))^" [options] <input_file.dpd>" in
   let args = ref [] in
   let memo_arg arg = args := arg :: !args in
     Arg.parse spec_args memo_arg usage_msg;
