@@ -11,6 +11,7 @@ module G = Dpd_compute.G
 module Node = Dpd_compute.Node
 
 let version_option = ref false
+let print_path_option = ref true
 
 let threshold_option = ref 0
 
@@ -27,6 +28,10 @@ let spec_args = [
       ": set debug mode");
   ("-threshold", Arg.Set_int threshold_option, 
       ": Max number of references allowed (default 0)");
+  ("-with-path", Arg.Set print_path_option,
+      ": print path (default)");
+  ("-without-path", Arg.Clear print_path_option,
+      ": do not print path");
   ("-v", Arg.Set version_option, 
       ": print version and exit");
 ]
@@ -35,7 +40,13 @@ let print_usage g t =
   let print_node n =
     let d = (G.in_degree g n) in
     if d <= t then
-      Format.printf "%s\t(%d)\n" (Node.name n) d
+      if !print_path_option then
+        let prefix = match Node.get_attrib "path" n with
+          | None -> ""
+          | Some d -> d^":"
+        in Format.printf "%s%s\t(%d)\n" prefix (Node.name n) d
+      else
+        Format.printf "%s\t(%d)\n" (Node.name n) d
   in
   G.iter_vertex print_node g
 
