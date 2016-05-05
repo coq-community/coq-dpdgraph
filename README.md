@@ -234,7 +234,7 @@ Each tool can then pick the attributes that it is able to handle;
 
 #### Find unused definitions via .dpd file
 
-You can use ``dpdusage`` command to find unsed defintions.
+You can use ``dpdusage`` command to find unused defintions.
 Example:
 
 ```
