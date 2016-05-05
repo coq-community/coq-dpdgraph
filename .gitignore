@@ -24,6 +24,7 @@ config.status
 
 coqthmdep
 dpd2dot
+dpdusage
 Make_coq
 dpd_lex.ml
 dpd_parse.ml
