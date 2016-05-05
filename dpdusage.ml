@@ -9,12 +9,7 @@
 
 let version_option = ref false
 
-let out_file = ref None
-let set_out_file file = out_file := Some file
-
 let spec_args = [
-  ("-o", Arg.String set_out_file, 
-      ": name of output file (default: name of input file .dot)");
   ("-with-defs", Arg.Set Dpd_compute.with_defs, 
       ": show everything (default)");
   ("-without-defs", Arg.Clear Dpd_compute.with_defs, 
@@ -34,14 +29,7 @@ let do_file n f =
     Dpd_compute.feedback "read file %s@." f;
     let g = Dpd_lex.read f in
     let g = Dpd_compute.build_graph g in
-      Dpd_compute.simplify_graph g;
-    let dotfile = match !out_file with 
-      | None -> (Filename.chop_extension f)^".dot" 
-      | Some f -> 
-          if n = 0 then f 
-          else (Filename.chop_extension f)^"."^(string_of_int n)^".dot"
-    in
-      Dpd_dot.graph_file dotfile g
+      Dpd_compute.simplify_graph g
   with Dpd_compute.Error msg -> Dpd_compute.error "%s@." msg
 
 let main () =
