@@ -232,6 +232,21 @@ Each tool can then pick the attributes that it is able to handle;
   they are not supposed to raise an error whenever there is
   an unknown attribute.
 
+#### Find unused definitions via .dpd file
+
+You can use ``dpdusage`` command to find unsed defintions.
+Example:
+
+```
+$ ./dpdusage tests/graph2.dpd
+Info: read file tests/graph2.dpd
+Permutation_app_swap	(0)
+```
+
+In the example above it reports that ``Permutation_app_swap`` was
+references 0 times.  You can specify max number of references allowed
+(default 0) via ``-threshold`` command line option.
+
 
 ## More information
 
