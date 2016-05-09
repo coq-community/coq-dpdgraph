@@ -1,22 +1,24 @@
 coq-dpdgraph
 ============
 
-Build dependency graphs between COQ objects,
-where COQ is the famous formal proof management system (see
+Build dependency graphs between Coq objects,
+where Coq is the famous formal proof management system (see
 http://coq.inria.fr/).
 
 ### What's inside ?
 
-First of all, it is a small tool (a Coq plugin) that extracts the
-dependencies between COQ objects, and produces a file (we suggest using
+First of all, it is a small tool (a Coq plug-in) that extracts the
+dependencies between Coq objects, and produces a file (we suggest using
 the suffix .dpd) with this information.
 
-Then, another tool reads these .dpd files and produces a graph file
+The idea is that other small tools can be then developed to process
+the .dpd files. At the moment, there is:
+- `dpd2dot` that reads these .dpd files and produces a graph file
 using .dot format (cf. http://www.graphviz.org/) that makes possible to view
-them.
+them;
+- `dpdusage`: to find unused definitions.
 
-The idea is that other small tools can be developed later on to process
-the .dpd files.
+Hope other tools later on to do more things. Feel free to contribute!
 
 ### How to get it
 
@@ -30,7 +32,7 @@ You can:
 
 #### Requirements
 
-- The latest version runs with coq 8.5
+- The latest version runs with Coq 8.5
 - it has been tested with a version of Coq installed using opam and with
   Ocaml version 4.02.3
 - [ocamlgraph](http://ocamlgraph.lri.fr/) (for dpd2dot tool)
@@ -42,8 +44,8 @@ First download the archive, unpack it, and change directory to the `coq-dpdgraph
     $ ./configure
     $ make && make install
 
-This should produce a plugin library for Coq and an executable :
-- `./dpdgraph.cmxs` : a plugin to be loaded in Coq
+This should produce a plug-in library for Coq and an executable :
+- `./dpdgraph.cmxs` : a plug-in to be loaded in Coq
 - `./dpd2dot` : a tool to transform .dpd files into .dot graphs.
 
 #### install using opam
@@ -73,18 +75,18 @@ to check if everything is ok.
 
 ## How to use it
 
-#### Requirements
+### Requirements
 
 - to have compiled the tools (see above)
-- a compiled COQ file.
-  You can for instance use ``tests/Test.v`` (a modified clone of COQ ``List.v``)
+- a compiled Coq file.
+  You can for instance use ``tests/Test.v`` (a modified clone of Coq ``List.v``)
    and compile it doing :
 ```
   $ coqc tests/Test.v
 ```
 
 
-#### Generation of .dpd files
+### Generation of .dpd files
 
 The available commands are :
 - Generate dependencies between a list of objects:
@@ -92,7 +94,7 @@ The available commands are :
         Print FileDependGraph <module name list>.
 
     A module can be a file, or a sub-module in a file.
-    Example :  
+    Example :
 
         Print FileDependGraph M M2.A.B.
 
@@ -119,8 +121,8 @@ you need to use ``Require`` to load the module that you want to explore,
 
 **Example:**
 ```
-$ ledit ./coqthmdep -I tests/
-Welcome to Coq 8.5 (February 2016)
+$ ledit coqtop -R . dpdgraph -I tests/
+Welcome to Coq 8.5 (April 2016)
 
 Coq < Require dpdgraph.dpdgraph.
 [Loading ML file dpdgraph.cmxs ... done]
@@ -134,7 +136,9 @@ Coq < Set DependGraph File "graph2.dpd".
 ^D
 ```
 
-#### From a .dpd file to a .dot file
+### dpd2dot: from a .dpd file to a .dot file
+
+#### Graph generation
 
 ```
 $ ./dpd2dot graph.dpd
@@ -193,7 +197,22 @@ The graph can be interpreted like this :
   - blue : constructor,
   - multi-circled : not used (no predecessor in the graph)
 - yellow box : module
-- objects that are not in a yellow box are COQ objects.
+- objects that are not in a yellow box are Coq objects.
+
+### dpdusage: find unused definitions via .dpd file
+
+You can use ``dpdusage`` command to find unused definitions.
+Example:
+
+```
+$ ./dpdusage tests/graph2.dpd
+Info: read file tests/graph2.dpd
+Permutation_app_swap	(0)
+```
+
+In the example above it reports that ``Permutation_app_swap`` was
+references 0 times.  You can specify max number of references allowed
+(default 0) via ``-threshold`` command line option.
 
 ## Development information
 
@@ -227,25 +246,10 @@ The parser accept .dpd files as described above,
   but also any attribute for nodes and edges having the form :
   ``prop=val`` or ``prop="string..."`` or ``prop=NUM``
   so that the generated ``.dpd`` can have new attributes without having to change
-  the other tools.  
+  the other tools.
 Each tool can then pick the attributes that it is able to handle;
   they are not supposed to raise an error whenever there is
   an unknown attribute.
-
-#### Find unused definitions via .dpd file
-
-You can use ``dpdusage`` command to find unused defintions.
-Example:
-
-```
-$ ./dpdusage tests/graph2.dpd
-Info: read file tests/graph2.dpd
-Permutation_app_swap	(0)
-```
-
-In the example above it reports that ``Permutation_app_swap`` was
-references 0 times.  You can specify max number of references allowed
-(default 0) via ``-threshold`` command line option.
 
 
 ## More information
