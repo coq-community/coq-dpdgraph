@@ -123,7 +123,8 @@ TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v \
 TESTS_DPD=$(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd \
 	  $(TESTDIR)/Morph.dpd $(TESTDIR)/Morph_rw.dpd
 TESTS_DOT=$(TESTS_DPD:%.dpd=%.dot)
-TESTS=$(TESTS_DPD) $(TESTS_DOT) $(TESTDIR)/graph.without.dot $(TESTDIR)/search
+TESTS=$(TESTS_DPD) $(TESTS_DOT) $(TESTDIR)/graph.without.dot \
+      $(TESTDIR)/search  $(TESTDIR)/graph2.dpdusage
 TESTS_LOG=$(TESTS:%=%.log)
 TESTS_ORACLE=$(TESTS:%=%.oracle)
 TESTS_OK=$(TESTS:%=%.ok)
@@ -133,6 +134,9 @@ DISTRIBUTED+=$(TESTS_SRC) $(TESTS_ORACLE)
 .PRECIOUS : $(TESTS) $(TESTS_LOG) $(TESTS_ORACLE)
 
 tests test : $(TESTS_OK)
+
+$(TESTDIR)/%.dpdusage.log: $(TESTDIR)/%.dpd $(DPDUSAGE)
+	$(DPDUSAGE) $< > $@
 
 %.log : %
 	cp $< $@
