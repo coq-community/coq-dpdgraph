@@ -3,6 +3,8 @@ dist: trusty
 language: c
 cache:
   apt: true
+  directories:
+    - $HOME/.opam
 os:
 - linux
 install:
@@ -12,7 +14,7 @@ install:
 - opam init -y
 - eval $(opam config env)
 - opam config var root
-- opam install -y ocamlfind coq
+- opam install -y ocamlfind ocamlgraph coq
 - opam list
 script:
 - autoconf
