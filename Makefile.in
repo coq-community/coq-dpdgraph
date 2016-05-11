@@ -118,10 +118,11 @@ GENERATED+=.depend
 .PHONY: tests
 
 TESTDIR=tests
-TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v \
-	  $(TESTDIR)/Morph.cmd $(TESTDIR)/Test.cmd $(TESTDIR)/search.cmd
+TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v $(TESTDIR)/Polymorph.v \
+	  $(TESTDIR)/Morph.cmd $(TESTDIR)/Test.cmd $(TESTDIR)/search.cmd \
+          $(TESTDIR)/Polymorph.cmd
 TESTS_DPD=$(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd \
-	  $(TESTDIR)/Morph.dpd $(TESTDIR)/Morph_rw.dpd
+	  $(TESTDIR)/Morph.dpd $(TESTDIR)/Morph_rw.dpd $(TESTDIR)/Polymorph.dpd
 TESTS_DOT=$(TESTS_DPD:%.dpd=%.dot)
 TESTS=$(TESTS_DPD) $(TESTS_DOT) $(TESTDIR)/graph.without.dot \
       $(TESTDIR)/search  $(TESTDIR)/graph2.dpdusage
@@ -158,12 +159,15 @@ Morph%.dpd : $(TESTDIR)/Morph.vo $(TESTDIR)/Morph.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
 	cd $(TESTDIR); coqtop -R .. dpdgraph < Morph.cmd > /dev/null
 
+Polymorph%.dpd : $(TESTDIR)/Polymorph.vo $(TESTDIR)/Polymorph.cmd $(DPDPLUGIN)
+	cd $(TESTDIR); coqtop -R .. dpdgraph < Polymorph.cmd
+
 graph%.dpd : $(TESTDIR)/Test.vo $(TESTDIR)/Test.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
 	cd $(TESTDIR); coqtop -R .. dpdgraph < Test.cmd > /dev/null
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
-	coqtop -R . dpdgraph <  $(TESTDIR)/search.cmd > $@ 2> /dev/null
+	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph 2> /dev/null | sed -e 's/Welcome to Coq.*/Welcome to Coq/' > $@ 
 
 %.dot : %.dpd  $(DPD2DOT)
 	$(DPD2DOT) $< > /dev/null

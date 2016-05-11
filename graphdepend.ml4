@@ -31,23 +31,25 @@ let get_dirlist_grefs dirlist =
     Search.generic_search None select;
     !selected_gref
 
-let is_prop gref = match gref with
-  | Globnames.ConstRef cnst -> 
-      let env = Global.env() in
-      let cb = Environ.lookup_constant cnst env in
-      let cnst_type =
-          Typeops.type_of_constant_type env cb.Declarations.const_type in
-        if Term.is_Prop cnst_type then true
-        else
-          let s = Safe_typing.typing (Global.safe_env()) cnst_type in
-              Term.is_Prop (Safe_typing.j_type s)
-  | Globnames.IndRef _ -> false
-  | Globnames.ConstructRef cst ->
-    let cst_j = Safe_typing.typing (Global.safe_env()) (Term.mkConstruct cst) in
-    let cst_tt = Safe_typing.typing (Global.safe_env())
-                    (Safe_typing.j_type cst_j)
-    in Term.is_Prop (Safe_typing.j_type cst_tt)
-  | Globnames.VarRef _ -> assert false
+let is_prop gref id =
+try
+let glob = Glob_term.GRef(Loc.ghost, gref, None) in
+   let env = Global.env() in
+   let sigma = Evd.from_env env in
+   let sigma', c = Pretyping.understand_tcc env sigma glob in
+   let sigma2 = Evarconv.consider_remaining_unif_problems env sigma' in
+   let sigma3, nf = Evarutil.nf_evars_and_universes sigma2 in
+   let pl, uctx = Evd.universe_context sigma3 in
+   let env2 = Environ.push_context uctx (Evarutil.nf_env_evar sigma3 env) in
+   let c2 = nf c in
+   let t = Environ.j_type (Typeops.infer env2 c2) in
+   let t2 = Environ.j_type (Typeops.infer env2 t) in
+       Term.is_Prop t2
+with _ -> 
+  begin
+    warning (str "unable to determine the type of the type for " ++ str id);
+    false
+  end;;
 
 
 module G = struct
@@ -191,8 +193,8 @@ end = struct
       | Declarations.Undef _  -> ("body", "no")::acc
     in acc
 
-  let add_gref_attrib acc gref =
-    let is_prop = is_prop gref in 
+  let add_gref_attrib acc gref id =
+    let is_prop = is_prop gref id in 
     let acc = ("prop", if is_prop then "yes" else "no")::acc in
     let acc = match gref with
       | Globnames.ConstRef cnst -> 
@@ -215,7 +217,7 @@ end = struct
     let gref = G.Node.gref n in
     let dirname, name = G.Node.split_name n in
     let acc = if dirname = "" then [] else [("path", "\""^dirname^"\"")] in
-    let acc = add_gref_attrib acc gref in
+    let acc = add_gref_attrib acc gref name in
       Format.fprintf fmt "N: %d \"%s\" [%a];@." id name
         pp_attribs acc
 

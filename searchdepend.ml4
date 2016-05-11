@@ -62,6 +62,8 @@ let collect_long_names (c:Term.constr) (acc:Data.t) =
           Array.fold_right add ca (Array.fold_right add ca' acc)
       | Term.CoFix(_,(_,ca,ca')) -> 
           Array.fold_right add ca (Array.fold_right add ca' acc)
+      | Term.Proj(p, c) ->
+          add c acc
   in add c acc
 
 exception NoDef of Globnames.global_reference
