@@ -153,21 +153,22 @@ $(TESTDIR)/%.dpdusage.log: $(TESTDIR)/%.dpd $(DPDUSAGE)
 
 %.dpd : %.vo %.cmd
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop -R .. dpdgraph < $(*F).cmd > /dev/null
+	cd $(TESTDIR); coqtop -R .. dpdgraph < $(*F).cmd > /dev/null 2>&1
 
 Morph%.dpd : $(TESTDIR)/Morph.vo $(TESTDIR)/Morph.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop -R .. dpdgraph < Morph.cmd > /dev/null
+	cd $(TESTDIR); coqtop -R .. dpdgraph < Morph.cmd > /dev/null 2>&1
 
 Polymorph%.dpd : $(TESTDIR)/Polymorph.vo $(TESTDIR)/Polymorph.cmd $(DPDPLUGIN)
 	cd $(TESTDIR); coqtop -R .. dpdgraph < Polymorph.cmd
 
 graph%.dpd : $(TESTDIR)/Test.vo $(TESTDIR)/Test.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop -R .. dpdgraph < Test.cmd > /dev/null
+	cd $(TESTDIR); coqtop -R .. dpdgraph < Test.cmd > /dev/null 2>&1
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
-	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph 2> /dev/null | sed -e 's/Welcome to Coq.*/Welcome to Coq/' > $@ 
+	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph 2> /dev/null \
+	  | sed -e 's/Welcome to Coq.*/Welcome to Coq/' > $@
 
 %.dot : %.dpd  $(DPD2DOT)
 	$(DPD2DOT) $< > /dev/null

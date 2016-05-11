@@ -1,0 +1,19 @@
+sudo: required
+dist: trusty
+language: c
+cache: apt
+os:
+- linux
+install:
+- sudo add-apt-repository --yes ppa:avsm/ppa
+- sudo apt-get update -qq
+- sudo apt-get install -qq -y opam
+- opam init -y
+- eval $(opam config env)
+- opam install -y ocamlfind coq
+- opam list
+script:
+- ./configure
+- make
+- make tests > tmp.log
+- if grep DIFFERENCES tmp.log ; then exit 1 ; else exit 0 ; fi
