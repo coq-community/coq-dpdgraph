@@ -19,17 +19,24 @@ VERSION=$(shell cat VERSION)
 
 DPDPLUGIN=./dpdgraph.cmxs ./dpdgraph.vo
 DPD2DOT=./dpd2dot
+DPDUSAGE=./dpdusage
 
 INCLUDES = -I @OCAMLGRAPH_PATH@
 
-all : $(DPDPLUGIN) $(DPD2DOT)
+all : $(DPDPLUGIN) $(DPD2DOT) $(DPDUSAGE)
 
 DISTRIBUTED = $(PRE)_compute.ml $(PRE)_dot.ml \
-	 $(PRE)_parse.mly  $(PRE)_lex.mll $(PRE).ml
+	 $(PRE)_parse.mly  $(PRE)_lex.mll $(PRE)2dot.ml $(PRE)usage.ml
 
-ML_ALL = version.ml $(PRE)_compute.ml $(PRE)_dot.ml \
-	 $(PRE)_parse.ml  $(PRE)_lex.ml $(PRE).ml
-CMOS=$(ML_ALL:%.ml=%.cmo)
+ML_COMMON = version.ml $(PRE)_compute.ml $(PRE)_dot.ml \
+	 $(PRE)_parse.ml  $(PRE)_lex.ml
+ML_DPD2DOT = $(PRE)2dot.ml
+ML_DPDUSAGE = $(PRE)usage.ml
+
+ML_ALL = $(ML_COMMON) $(ML_DPD2DOT) $(ML_DPDUSAGE)
+
+CMOS_DPD2DOT=$(ML_COMMON:%.ml=%.cmo) $(ML_DPD2DOT:%.ml=%.cmo)
+CMOS_DPDUSAGE=$(ML_COMMON:%.ml=%.cmo) $(ML_DPDUSAGE:%.ml=%.cmo)
 CMXS=$(ML_ALL:%.ml=%.cmx)
 
 COQDEP=@OCAMLDEP@
@@ -46,7 +53,7 @@ DISTRIBUTED+=Make
 
 install : Make_coq
 	$(MAKE) -f $< install
-	cp dpd2dot $(BINDIR)/
+	cp dpd2dot dpdusage $(BINDIR)/
 
 $(DPDPLUGIN) : Make_coq $(DISTRIBUTED)
 	$(ECHO_CIBLE)
@@ -65,9 +72,13 @@ version.ml : VERSION
 
 GENERATED+=version.ml
 
-$(DPD2DOT) : $(CMOS)
+$(DPD2DOT) : $(CMOS_DPD2DOT)
 	$(ECHO_CIBLE)
-	@OCAMLC@ -g $(INCLUDES) -o $@ graph.cma $(CMOS)
+	@OCAMLC@ -g $(INCLUDES) -o $@ graph.cma $(CMOS_DPD2DOT)
+
+$(DPDUSAGE) : $(CMOS_DPDUSAGE)
+	$(ECHO_CIBLE)
+	@OCAMLC@ -g $(INCLUDES) -o $@ graph.cma $(CMOS_DPDUSAGE)
 
 %.cmo : %.ml
 	$(ECHO_CIBLE)
@@ -113,7 +124,8 @@ TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v $(TESTDIR)/Polymorph.v \
 TESTS_DPD=$(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd \
 	  $(TESTDIR)/Morph.dpd $(TESTDIR)/Morph_rw.dpd $(TESTDIR)/Polymorph.dpd
 TESTS_DOT=$(TESTS_DPD:%.dpd=%.dot)
-TESTS=$(TESTS_DPD) $(TESTS_DOT) $(TESTDIR)/graph.without.dot $(TESTDIR)/search
+TESTS=$(TESTS_DPD) $(TESTS_DOT) $(TESTDIR)/graph.without.dot \
+      $(TESTDIR)/search  $(TESTDIR)/graph2.dpdusage
 TESTS_LOG=$(TESTS:%=%.log)
 TESTS_ORACLE=$(TESTS:%=%.oracle)
 TESTS_OK=$(TESTS:%=%.ok)
@@ -123,6 +135,9 @@ DISTRIBUTED+=$(TESTS_SRC) $(TESTS_ORACLE)
 .PRECIOUS : $(TESTS) $(TESTS_LOG) $(TESTS_ORACLE)
 
 tests test : $(TESTS_OK)
+
+$(TESTDIR)/%.dpdusage.log: $(TESTDIR)/%.dpd $(DPDUSAGE)
+	$(DPDUSAGE) $< > $@
 
 %.log : %
 	cp $< $@
@@ -209,7 +224,7 @@ clean_test :
 
 clean : clean_coq clean_test
 	rm -f $(GENERATED) 
-	rm -f $(CMOS) $(CMXS) $(ML_ALL:%.ml=%.o) *.cmi
+	rm -f $(CMOS_DPDUSAGE) $(CMOS_DPD2DOT) $(CMXS) $(ML_ALL:%.ml=%.o) *.cmi
 	rm -f $(ML_ALL:%.ml=%.annot)
-	rm -f $(DPD2DOT) $(DPDPLUGIN)
+	rm -f $(DPD2DOT) $(DPDUSAGE) $(DPDPLUGIN)
 
