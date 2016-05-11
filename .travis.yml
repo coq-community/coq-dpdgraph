@@ -1,7 +1,8 @@
 sudo: required
 dist: trusty
 language: c
-cache: apt
+cache:
+  apt: true
 os:
 - linux
 install:
@@ -10,9 +11,11 @@ install:
 - sudo apt-get install -qq -y opam
 - opam init -y
 - eval $(opam config env)
+- opam config var root
 - opam install -y ocamlfind coq
 - opam list
 script:
+- autoconf
 - ./configure
 - make
 - make tests > tmp.log
