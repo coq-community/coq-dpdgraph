@@ -14,7 +14,8 @@ install:
 - opam init -y
 - eval $(opam config env)
 - opam config var root
-- opam install -y ocamlfind ocamlgraph coq
+- opam install -y ocamlfind ocamlgraph
+- travis_wait opam install -y coq
 - opam list
 script:
 - autoconf
