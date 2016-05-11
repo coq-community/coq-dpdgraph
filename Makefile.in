@@ -167,7 +167,7 @@ graph%.dpd : $(TESTDIR)/Test.vo $(TESTDIR)/Test.cmd $(DPDPLUGIN)
 	cd $(TESTDIR); coqtop -R .. dpdgraph < Test.cmd > /dev/null
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
-	coqtop -R . dpdgraph <  $(TESTDIR)/search.cmd > $@ 2> /dev/null
+	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph | sed -e 's/Welcome to Coq.*/Welcome to Coq/' > $@ 2> /dev/null
 
 %.dot : %.dpd  $(DPD2DOT)
 	$(DPD2DOT) $< > /dev/null
