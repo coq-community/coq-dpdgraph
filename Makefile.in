@@ -17,6 +17,8 @@ PRE=dpd
 NAME=coq-dpdgraph
 VERSION=$(shell cat VERSION)
 
+BINDIR=@BINDIR@
+
 DPDPLUGIN=./dpdgraph.cmxs ./dpdgraph.vo
 DPD2DOT=./dpd2dot
 DPDUSAGE=./dpdusage
