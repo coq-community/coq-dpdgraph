@@ -5,6 +5,8 @@ Build dependency graphs between Coq objects,
 where Coq is the famous formal proof management system (see
 http://coq.inria.fr/).
 
+Travis CI status on master branch: [![Build Status](https://travis-ci.org/Karmaki/coq-dpdgraph.svg?branch=master)](https://travis-ci.org/Karmaki/coq-dpdgraph)
+
 ### What's inside ?
 
 First of all, it is a small tool (a Coq plug-in) that extracts the
@@ -257,3 +259,4 @@ Each tool can then pick the attributes that it is able to handle;
 Also see:
 - [CHANGES](CHANGES.md)
 - [distributed versions](https://anne.pacalet.fr/dev/dpdgraph/)
+- [coq-dpdgraph in Travis CI](https://travis-ci.org/Karmaki/coq-dpdgraph/)

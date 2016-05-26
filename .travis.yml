@@ -5,8 +5,6 @@ cache:
   apt: true
   directories:
     - $HOME/.opam
-os:
-- linux
 install:
 - sudo add-apt-repository --yes ppa:avsm/ppa
 - sudo apt-get update -qq
@@ -21,5 +19,5 @@ script:
 - autoconf
 - ./configure
 - make
-- make tests > tmp.log
+- make tests | tee tmp.log
 - if grep DIFFERENCES tmp.log ; then exit 1 ; else exit 0 ; fi
