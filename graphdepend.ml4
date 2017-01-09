@@ -263,7 +263,7 @@ let locate_mp_dirpath ref =
     CErrors.user_err_loc 
       (loc,"",str "Unknown module" ++ spc() ++ Libnames.pr_qualid qid)
 
-VERNAC COMMAND EXTEND DependGraphSetFile
+VERNAC COMMAND EXTEND DependGraphSetFile CLASSIFIED AS QUERY
   | ["Set" "DependGraph" "File" string(str)] -> [ filename := str ]
 END
 
@@ -278,7 +278,7 @@ VERNAC ARGUMENT EXTEND dirlist
 END
 *)
 
-VERNAC COMMAND EXTEND DependGraph
+VERNAC COMMAND EXTEND DependGraph CLASSIFIED AS QUERY
   | ["Print" "DependGraph" reference(ref) ] -> 
       [ mk_dpds_graph (Nametab.global ref) ]
   | ["Print" "FileDependGraph" reference_list(dl) ] -> 
