@@ -50,6 +50,10 @@ This should produce a plug-in library for Coq and an executable :
 - `./dpdgraph.cmxs` : a plug-in to be loaded in Coq
 - `./dpd2dot` : a tool to transform .dpd files into .dot graphs.
 
+If you prefer all compiled files to stay in the coq-dpdgraph directory, you can
+skip the make install command.  However, you will have to use 
+   $ coqtop -R <coq-dpdgraph-directory> dpdgraph -I <coq-dpdgraph-directory>
+
 #### install using opam
 
 If you use opam, you can install `coq-dpdgraph` and `ocamlgraph`
