@@ -34,9 +34,9 @@ You can:
 
 #### Requirements
 
-- The latest version runs with Coq 8.5
+- The latest version runs with Coq 8.6
 - it has been tested with a version of Coq installed using opam and with
-  Ocaml version 4.02.3
+  Ocaml version 4.04.0
 - [ocamlgraph](http://ocamlgraph.lri.fr/) (for dpd2dot tool)
   Any version should work since only the basic feature are used.
 
