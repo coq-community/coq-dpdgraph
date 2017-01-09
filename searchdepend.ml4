@@ -10,6 +10,7 @@
 
 
 open Pp
+open Constrarg
 
 module Data = struct
   type t = int Globnames.Refmap.t
@@ -90,12 +91,12 @@ let display_dependance gref =
     let pp gr n s = 
       Printer.pr_global gr ++ str "(" ++ int n ++ str ")" ++ spc() ++s
     in
-      Pp.msgnl (str"[" ++ ((Data.fold pp) d (str "]")))
+      Feedback.msg_notice (str"[" ++ ((Data.fold pp) d (str "]")))
   in try let data = collect_dependance gref in display data
   with NoDef gref -> 
-    Pp.msgerrnl (Printer.pr_global gref ++ str " has no value")
+    Feedback.msg_error (Printer.pr_global gref ++ str " has no value")
 
-VERNAC COMMAND EXTEND Searchdepend
+VERNAC COMMAND EXTEND Searchdepend CLASSIFIED AS QUERY
    ["SearchDepend" global(ref) ] -> [ display_dependance (Nametab.global ref) ]
 END
 

@@ -10,14 +10,16 @@
 DECLARE PLUGIN "dpdgraph"
 
 open Pp
+open Constrarg
+open Stdarg
 
-let debug msg = if false then Pp.msgnl msg
+let debug msg = if false then Feedback.msg_debug msg
 
-let feedback msg = Pp.msgnl (str "Info: " ++ msg)
+let feedback msg = Feedback.msg_notice (str "Info: " ++ msg)
 
-let warning msg = Pp.msgerrnl (str "Warning: " ++ msg)
+let warning msg = Feedback.msg_warning (str "Warning: " ++ msg)
 
-let error msg = Pp.msgerrnl (str "Error: " ++ msg)
+let error msg = Feedback.msg_error (str "Error: " ++ msg)
 
 let filename = ref "graph.dpd"
 
@@ -258,7 +260,7 @@ let locate_mp_dirpath ref =
   let (loc,qid) = Libnames.qualid_of_reference ref in
   try Nametab.dirpath_of_module (Nametab.locate_module qid)
   with Not_found -> 
-    Errors.user_err_loc 
+    CErrors.user_err_loc 
       (loc,"",str "Unknown module" ++ spc() ++ Libnames.pr_qualid qid)
 
 VERNAC COMMAND EXTEND DependGraphSetFile

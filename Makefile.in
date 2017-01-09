@@ -166,7 +166,7 @@ Polymorph%.dpd : $(TESTDIR)/Polymorph.vo $(TESTDIR)/Polymorph.cmd $(DPDPLUGIN)
 
 graph%.dpd : $(TESTDIR)/Test.vo $(TESTDIR)/Test.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop -R .. dpdgraph < Test.cmd > /dev/null 2>&1
+	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < Test.cmd > /dev/null 2>&1
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
 	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph 2> /dev/null \
