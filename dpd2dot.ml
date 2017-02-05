@@ -60,4 +60,3 @@ let main () =
           ignore (List.fold_left (fun n f -> do_file n f; n+1) 1 l)
 
 let () = main ()
-

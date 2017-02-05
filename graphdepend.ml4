@@ -284,5 +284,3 @@ VERNAC COMMAND EXTEND DependGraph CLASSIFIED AS QUERY
   | ["Print" "FileDependGraph" reference_list(dl) ] ->
       [ file_graph_depend (List.map locate_mp_dirpath dl) ]
 END
-
-

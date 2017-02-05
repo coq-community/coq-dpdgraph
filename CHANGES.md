@@ -41,4 +41,3 @@ we really want to see.
 So finally, I have made a simple file generation from coq to export every useful
 information. The idea is to have external tools to read the information file and
 generate whatever we want.  I think it will be easier to maintain and extend.
-

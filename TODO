@@ -41,4 +41,3 @@ Rebuild a demo !
 ~~ Fixed :
 
 [07/08/2009] fixed bug : requests on internal COQ modules don't work...
-

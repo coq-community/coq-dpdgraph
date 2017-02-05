@@ -188,4 +188,3 @@ let graph_file filename g =
      let fmt = Format.formatter_of_out_channel oc in
        print_graph fmt g;
        close_out oc
-

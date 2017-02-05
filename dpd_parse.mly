@@ -66,4 +66,3 @@ attrib_value:
     | NUM { string_of_int $1 }
 
 %%
-

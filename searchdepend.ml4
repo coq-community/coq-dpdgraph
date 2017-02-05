@@ -99,4 +99,3 @@ let display_dependance gref =
 VERNAC COMMAND EXTEND Searchdepend CLASSIFIED AS QUERY
    ["SearchDepend" global(ref) ] -> [ display_dependance (Nametab.global ref) ]
 END
-

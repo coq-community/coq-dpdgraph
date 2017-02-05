@@ -230,4 +230,3 @@ clean : clean_coq clean_test
 	rm -f $(CMOS_DPDUSAGE) $(CMOS_DPD2DOT) $(CMXS) $(ML_ALL:%.ml=%.o) *.cmi
 	rm -f $(ML_ALL:%.ml=%.annot)
 	rm -f $(DPD2DOT) $(DPDUSAGE) $(DPDPLUGIN)
-

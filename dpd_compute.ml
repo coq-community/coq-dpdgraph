@@ -130,4 +130,3 @@ let remove_some_nodes g =
 let simplify_graph g =
   if not !with_defs then remove_some_nodes g;
   if !reduce_trans then reduce_graph g;
-
