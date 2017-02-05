@@ -12,6 +12,9 @@ let version_option = ref false
 let out_file = ref None
 let set_out_file file = out_file := Some file
 
+let graphname = ref None
+let set_graphname name = graphname := Some name
+
 let spec_args = [
   ("-o", Arg.String set_out_file,
       ": name of output file (default: name of input file .dot)");
@@ -22,7 +25,9 @@ let spec_args = [
   ("-rm-trans", Arg.Set Dpd_compute.reduce_trans,
       ": remove transitive dependencies (default)");
   ("-keep-trans", Arg.Clear Dpd_compute.reduce_trans,
-      ": keep transitive dependencies");
+   ": keep transitive dependencies");
+  ("-graphname", Arg.String set_graphname,
+      ": name of graph (default: name of input file)");
   ("-debug", Arg.Set Dpd_compute.debug_flag,
       ": set debug mode");
   ("-v", Arg.Set version_option,
@@ -39,9 +44,12 @@ let do_file n f =
       | None -> (Filename.chop_extension f)^".dot"
       | Some f ->
           if n = 0 then f
-          else (Filename.chop_extension f)^"."^(string_of_int n)^".dot"
+	  else (Filename.chop_extension f)^"."^(string_of_int n)^".dot" in
+    let graph_name = match !graphname with
+      | None -> (Filename.chop_extension f)
+      | Some name -> name
     in
-      Dpd_dot.graph_file dotfile g
+      Dpd_dot.graph_file graph_name dotfile g
   with Dpd_compute.Error msg -> Dpd_compute.error "%s@." msg
 
 let main () =

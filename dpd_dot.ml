@@ -151,7 +151,7 @@ let print_subgraphs fmt sg_tbl =
 
 (** don't use Graph.Graphviz because of attribute limitations (URL, subgraph,
 * ...) *)
-let print_graph fmt graph =
+let print_graph name fmt graph =
   let subgraphs = Hashtbl.create 7 in
   let print_node n =
      let attribs = node_attribs graph n in
@@ -168,7 +168,7 @@ let print_graph fmt graph =
       (node_dot_id (G.E.src e)) (node_dot_id (G.E.dst e))
       (print_attribs ", ") edge_attribs
   in
-  Format.fprintf fmt "digraph G {@.";
+  Format.fprintf fmt "digraph %s {@." name;
   Format.fprintf fmt "  graph [ratio=0.5]@.";
   Format.fprintf fmt "  node [style=filled]@.";
   G.iter_vertex print_node graph;
@@ -177,7 +177,7 @@ let print_graph fmt graph =
   Format.fprintf fmt "} /* END */@."
 
 
-let graph_file filename g =
+let graph_file graphname filename g =
   let file, oc =
     try filename, open_out filename
     with Sys_error msg ->
@@ -186,5 +186,5 @@ let graph_file filename g =
         file, open_out file
   in C.feedback "Graph output in %s@." file;
      let fmt = Format.formatter_of_out_channel oc in
-       print_graph fmt g;
+       print_graph graphname fmt g;
        close_out oc

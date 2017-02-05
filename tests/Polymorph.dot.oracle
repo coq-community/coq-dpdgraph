@@ -1,4 +1,4 @@
-digraph G {
+digraph tests/Polymorph {
   graph [ratio=0.5]
   node [style=filled]
 Polymorph_foo [label="foo", URL=<Polymorph.html#foo>, peripheries=3, fillcolor="#F070D1"] ;
