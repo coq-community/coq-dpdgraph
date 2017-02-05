@@ -12,7 +12,7 @@
 let g = ref (Dpd_compute.G.create ())
 
 let pp_lex_inter fmt (p1, p2) =
-  Format.fprintf fmt "between %a and %a" 
+  Format.fprintf fmt "between %a and %a"
     Dpd_compute.pp_lex_pos p1 Dpd_compute.pp_lex_pos p2
 
 %}
@@ -60,7 +60,7 @@ attribs :
 attrib :
     | IDENT EQUAL attrib_value { ($1, $3) }
 
-attrib_value: 
+attrib_value:
     | IDENT { $1 }
     | STRING { $1 }
     | NUM { string_of_int $1 }

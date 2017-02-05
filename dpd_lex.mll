@@ -68,7 +68,7 @@ and comment = parse
       let buf_in = open_in filename in
       let lexbuf = Lexing.from_channel buf_in in
       let init_pos = lexbuf.Lexing.lex_curr_p in
-        lexbuf.Lexing.lex_curr_p <- 
+        lexbuf.Lexing.lex_curr_p <-
         { init_pos with Lexing.pos_fname = filename };
       let info = P.graph token lexbuf in
         close_in buf_in;

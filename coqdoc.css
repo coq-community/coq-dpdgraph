@@ -1,5 +1,5 @@
 body { padding: 0px 0px;
-       margin: 0px 0px; 
+       margin: 0px 0px;
        background-color: white }
 
 #page { display: block;
@@ -15,7 +15,7 @@ body { padding: 0px 0px;
           border-bottom-style: solid;
           border-width: thin }
 
-#header h1 { padding: 0; 
+#header h1 { padding: 0;
              margin: 0;}
 
 
@@ -53,13 +53,13 @@ body { padding: 0px 0px;
              background-color: #90bdff;
              border-style: plain}
 
-.inlinecode { 
+.inlinecode {
     display: inline;
-    font-family: monospace } 
+    font-family: monospace }
 
-.code { 
+.code {
     display: block;
-    font-family: monospace } 
+    font-family: monospace }
 
 /* Pied de page */
 
@@ -67,32 +67,32 @@ body { padding: 0px 0px;
           font-family: sans-serif; }
 
 #footer a:visited { color: blue; }
-#footer a:link { text-decoration: none; 
+#footer a:link { text-decoration: none;
                  color: #888888; }
 
 .id { display: inline; }
 
-.id[type="constructor"] { 
+.id[type="constructor"] {
     color: rgb(60%,0%,0%);
 }
 
-.id[type="var"] { 
+.id[type="var"] {
     color: rgb(40%,0%,40%);
 }
 
-.id[type="definition"] { 
+.id[type="definition"] {
     color: rgb(0%,40%,0%);
 }
 
-.id[type="lemma"] { 
+.id[type="lemma"] {
     color: rgb(0%,40%,0%);
 }
 
-.id[type="inductive"] { 
+.id[type="inductive"] {
     color: rgb(0%,0%,80%);
 }
 
-.id[type="keyword"] { 
+.id[type="keyword"] {
  color : #cf1d1d;
 /*     color: black; */
 }
