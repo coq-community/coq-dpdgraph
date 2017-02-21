@@ -3,11 +3,11 @@ TODO: transfer this to GitHub issues !
 
 Rebuild a demo !
 
--[2014-01-07] 
+-[2014-01-07]
   - utiliser ocamlgraph pour le calcul de le cloture transitive
     dans la fonction reduce_graph (cf. mail Julien Narboux)
 
--[2013-09-12] 
+-[2013-09-12]
   - adaptation for OCaml 4.00.1 and Coq 8.4pl1 (April 2013)
     (.ml -> .ml4 + change in Declarations types)
   - tests are nor working as before : TODO
@@ -41,4 +41,3 @@ Rebuild a demo !
 ~~ Fixed :
 
 [07/08/2009] fixed bug : requests on internal COQ modules don't work...
-

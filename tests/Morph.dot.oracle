@@ -1,4 +1,4 @@
-digraph G {
+digraph tests/Morph {
   graph [ratio=0.5]
   node [style=filled]
 Morph_rw [label="rw", URL=<Morph.html#rw>, peripheries=3, fillcolor="#7FFFD4"] ;

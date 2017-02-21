@@ -25,11 +25,11 @@ let filename = ref "graph.dpd"
 
 let get_dirlist_grefs dirlist =
   let selected_gref = ref [] in
-  let select gref env constr = 
-    if Search.module_filter (dirlist, false) gref env constr then 
+  let select gref env constr =
+    if Search.module_filter (dirlist, false) gref env constr then
     (debug (str "Select " ++ Printer.pr_global gref);
      selected_gref := gref::!selected_gref)
-  in 
+  in
     Search.generic_search None select;
     !selected_gref
 
@@ -47,7 +47,7 @@ let glob = Glob_term.GRef(Loc.ghost, gref, None) in
    let t = Environ.j_type (Typeops.infer env2 c2) in
    let t2 = Environ.j_type (Typeops.infer env2 t) in
        Term.is_Prop t2
-with _ -> 
+with _ ->
   begin
     warning (str "unable to determine the type of the type for " ++ str id);
     false
@@ -63,13 +63,13 @@ module G = struct
     let compare n1 n2 = Pervasives.compare (id n1) (id n2)
     let equal n1 n2 = 0 = compare n1 n2
 
-    let full_name n = 
-      let qualid = 
+    let full_name n =
+      let qualid =
         Nametab.shortest_qualid_of_global Names.Idset.empty (gref n)
       in Libnames.string_of_qualid qualid
 
     let split_name n =
-      let qualid = 
+      let qualid =
         Nametab.shortest_qualid_of_global Names.Idset.empty (gref n) in
       let dirpath, ident = Libnames.repr_qualid qualid in
       let dirpath = Names.string_of_dirpath dirpath in
@@ -111,25 +111,25 @@ module G = struct
     with Not_found -> None
 
   (** *)
-  let add_node ((nds, eds) as g) gref = 
+  let add_node ((nds, eds) as g) gref =
     match get_node g gref with
       | Some n -> g, n
       | None ->
-          gref_cpt := !gref_cpt + 1; 
+          gref_cpt := !gref_cpt + 1;
           Hashtbl.add nds gref !gref_cpt;
           let n = (!gref_cpt, gref) in
             g, n
 
   let add_edge (nds, eds) n1 n2 nb = nds, Edges.add (n1, n2, nb) eds
 
-  (* let succ (_nds, eds) n = 
-    let do_e e acc = 
-      if Node.equal n (Edge.src e) then (Edge.dst e)::acc else acc 
+  (* let succ (_nds, eds) n =
+    let do_e e acc =
+      if Node.equal n (Edge.src e) then (Edge.dst e)::acc else acc
     in Edges.fold do_e eds []
 
-  let pred (_nds, eds) n = 
-    let do_e e acc = 
-      if Node.equal n (Edge.dst e) then (Edge.src e)::acc else acc 
+  let pred (_nds, eds) n =
+    let do_e e acc =
+      if Node.equal n (Edge.dst e) then (Edge.src e)::acc else acc
     in Edges.fold do_e eds []
    *)
 
@@ -148,8 +148,8 @@ let add_gref_dpds graph ~all n_gref todo =
   debug (str "Add dpds " ++ Printer.pr_global gref);
   let add_dpd dpd nb_use (g, td) = match G.get_node g dpd with
     | Some n -> let g = G.add_edge g n_gref n nb_use in g, td
-    | None -> 
-        if all then 
+    | None ->
+        if all then
           let g, n = G.add_node g dpd in
           let g = G.add_edge g n_gref n nb_use in
             g, n::td
@@ -161,9 +161,9 @@ let add_gref_dpds graph ~all n_gref todo =
         graph, todo
     with Searchdepend.NoDef gref -> (* nothing to do *) graph, todo
 
-(** add gref node and add it to the todo list 
+(** add gref node and add it to the todo list
 * to process its dependencies later. *)
-let add_gref_only (graph, todo) gref = 
+let add_gref_only (graph, todo) gref =
   debug (str "Add " ++ Printer.pr_global gref);
   let graph, n = G.add_node graph gref in
   let todo = n::todo in
@@ -171,10 +171,10 @@ let add_gref_only (graph, todo) gref =
 
 (** add the gref in [l] and build the dependencies according to [all] *)
 let add_gref_list_and_dpds graph ~all l =
-  let graph, todo = List.fold_left add_gref_only (graph, []) l in 
+  let graph, todo = List.fold_left add_gref_only (graph, []) l in
   let rec add_gref_dpds_rec graph todo = match todo with
     | [] -> graph
-    | n::todo -> 
+    | n::todo ->
         let graph, todo = add_gref_dpds graph ~all n todo in
           add_gref_dpds_rec graph todo
   in
@@ -182,30 +182,30 @@ let add_gref_list_and_dpds graph ~all l =
     graph
 
 (** Don't forget to update the README file if something is changed here *)
-module Out : sig 
-  val file : G.t -> unit 
+module Out : sig
+  val file : G.t -> unit
 end = struct
 
   let add_cnst_attrib acc cnst =
     let env = Global.env() in
     let cb = Environ.lookup_constant cnst env in
-    let acc = match cb.Declarations.const_body with 
+    let acc = match cb.Declarations.const_body with
       | Declarations.OpaqueDef _
       | Declarations.Def _ -> ("body", "yes")::acc
       | Declarations.Undef _  -> ("body", "no")::acc
     in acc
 
   let add_gref_attrib acc gref id =
-    let is_prop = is_prop gref id in 
+    let is_prop = is_prop gref id in
     let acc = ("prop", if is_prop then "yes" else "no")::acc in
     let acc = match gref with
-      | Globnames.ConstRef cnst -> 
+      | Globnames.ConstRef cnst ->
           let acc = ("kind", "cnst")::acc in
             add_cnst_attrib acc cnst
-      | Globnames.IndRef _ -> 
+      | Globnames.IndRef _ ->
           let acc = ("kind", "inductive")::acc in
             acc
-      | Globnames.ConstructRef _ -> 
+      | Globnames.ConstructRef _ ->
           let acc = ("kind", "construct")::acc in
             acc
       | Globnames.VarRef _ -> assert false
@@ -225,7 +225,7 @@ end = struct
 
   let out_edge fmt _g e =
     let edge_attribs = ("weight", string_of_int (G.Edge.nb_use e))::[] in
-    Format.fprintf fmt "E: %d %d [%a];@." 
+    Format.fprintf fmt "E: %d %d [%a];@."
       (G.Node.id (G.Edge.src e)) (G.Node.id (G.Edge.dst e))
       pp_attribs edge_attribs
 
@@ -242,14 +242,14 @@ end = struct
     with Sys_error msg ->
       error (str "cannot open file: " ++ (str msg));
 end
-  
+
 let mk_dpds_graph gref =
-  let graph = G.empty () in 
+  let graph = G.empty () in
   let all = true in (* get all the dependencies recursively *)
   let graph = add_gref_list_and_dpds graph ~all [gref] in
     Out.file graph
 
-let file_graph_depend dirlist = 
+let file_graph_depend dirlist =
   let graph = G.empty () in
   let grefs = get_dirlist_grefs dirlist in
   let all = false in (* then add the dependencies only to existing nodes *)
@@ -259,8 +259,8 @@ let file_graph_depend dirlist =
 let locate_mp_dirpath ref =
   let (loc,qid) = Libnames.qualid_of_reference ref in
   try Nametab.dirpath_of_module (Nametab.locate_module qid)
-  with Not_found -> 
-    CErrors.user_err_loc 
+  with Not_found ->
+    CErrors.user_err_loc
       (loc,"",str "Unknown module" ++ spc() ++ Libnames.pr_qualid qid)
 
 VERNAC COMMAND EXTEND DependGraphSetFile CLASSIFIED AS QUERY
@@ -279,10 +279,8 @@ END
 *)
 
 VERNAC COMMAND EXTEND DependGraph CLASSIFIED AS QUERY
-  | ["Print" "DependGraph" reference(ref) ] -> 
+  | ["Print" "DependGraph" reference(ref) ] ->
       [ mk_dpds_graph (Nametab.global ref) ]
-  | ["Print" "FileDependGraph" reference_list(dl) ] -> 
+  | ["Print" "FileDependGraph" reference_list(dl) ] ->
       [ file_graph_depend (List.map locate_mp_dirpath dl) ]
 END
-
-

@@ -3,7 +3,7 @@
 #  Copyright (C) 2009-2015 Anne Pacalet (Anne.Pacalet@free.fr)
 #                      and Yves Bertot (Yves.Bertot@inria.fr)
 #                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#      This file is distributed under the terms of the 
+#      This file is distributed under the terms of the
 #       GNU Lesser General Public License Version 2.1
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -98,7 +98,7 @@ $(DPDUSAGE) : $(CMOS_DPDUSAGE)
 	$(ECHO_CIBLE)
 	@OCAMLLEX@ $<
 
-GENERATED+=$(PRE)_lex.ml 
+GENERATED+=$(PRE)_lex.ml
 
 %.ml : %.mly
 	$(ECHO_CIBLE)
@@ -108,7 +108,7 @@ GENERATED+=$(PRE)_parse.ml $(PRE)_parse.mli
 
 depend: .depend
 
-.depend : $(ML_ALL) 
+.depend : $(ML_ALL)
 	$(ECHO_CIBLE)
 	@OCAMLDEP@ $(ML_ALL) *.mli > $@
 
@@ -221,13 +221,12 @@ clean_coq : Make_coq
 	$(MAKE) -f $< clean
 
 clean_test :
-	rm -f $(TESTS) $(TESTS_LOG) $(TESTS_OK) 
+	rm -f $(TESTS) $(TESTS_LOG) $(TESTS_OK)
 	rm -f $(TESTDIR)/Test.vo  $(TESTDIR)/Test.glob
 	rm -f $(TESTDIR)/Morph.vo  $(TESTDIR)/Morph.glob
 
 clean : clean_coq clean_test
-	rm -f $(GENERATED) 
+	rm -f $(GENERATED)
 	rm -f $(CMOS_DPDUSAGE) $(CMOS_DPD2DOT) $(CMXS) $(ML_ALL:%.ml=%.o) *.cmi
 	rm -f $(ML_ALL:%.ml=%.annot)
 	rm -f $(DPD2DOT) $(DPDUSAGE) $(DPDPLUGIN)
-

@@ -1,4 +1,4 @@
-digraph G {
+digraph tests/graph {
   graph [ratio=0.5]
   node [style=filled]
 Test_app_removelast_last [label="app_removelast_last", URL=<Test.html#app_removelast_last>, peripheries=3, fillcolor="#7FFFD4"] ;
