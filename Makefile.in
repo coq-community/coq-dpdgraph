@@ -41,10 +41,17 @@ CMOS_DPD2DOT=$(ML_COMMON:%.ml=%.cmo) $(ML_DPD2DOT:%.ml=%.cmo)
 CMOS_DPDUSAGE=$(ML_COMMON:%.ml=%.cmo) $(ML_DPDUSAGE:%.ml=%.cmo)
 CMXS=$(ML_ALL:%.ml=%.cmx)
 
-COQDEP=@OCAMLDEP@
+OCAMLC=@OCAMLC@
+OCAMLOPT=@OCAMLOPT@
+OCAMLDEP=@OCAMLDEP@
+OCAMLLEX=@OCAMLLEX@
+OCAMLYACC=@OCAMLYACC@
 
-OCAMLFLAGS =  -w Ael -warn-error -g -dtypes $(INCLUDES) -c
+OCAMLFLAGS =  -w +a -warn-error +a -safe-string -g -dtypes $(INCLUDES) -c
 OCAMLOPTFLAGS = -c
+
+COQ_MAKEFILE=@COQ_MAKEFILE@
+# COQDEP=$(OCAMLDEP)
 
 COQEXTFILES=searchdepend.ml4 graphdepend.ml4
 
@@ -63,7 +70,7 @@ $(DPDPLUGIN) : Make_coq $(DISTRIBUTED)
 
 Make_coq : Make
 	$(ECHO_CIBLE)
-	coq_makefile -f $< > $@
+	$(COQ_MAKEFILE) -f $< > $@
 
 GENERATED+= Make_coq
 
@@ -76,33 +83,33 @@ GENERATED+=version.ml
 
 $(DPD2DOT) : $(CMOS_DPD2DOT)
 	$(ECHO_CIBLE)
-	@OCAMLC@ -g $(INCLUDES) -o $@ graph.cma $(CMOS_DPD2DOT)
+	$(OCAMLC) -g $(INCLUDES) -o $@ graph.cma $(CMOS_DPD2DOT)
 
 $(DPDUSAGE) : $(CMOS_DPDUSAGE)
 	$(ECHO_CIBLE)
-	@OCAMLC@ -g $(INCLUDES) -o $@ graph.cma $(CMOS_DPDUSAGE)
+	$(OCAMLC) -g $(INCLUDES) -o $@ graph.cma $(CMOS_DPDUSAGE)
 
 %.cmo : %.ml
 	$(ECHO_CIBLE)
-	@OCAMLC@ $(OCAMLFLAGS) $<
+	$(OCAMLC) $(OCAMLFLAGS) $<
 
 %.cmx : %.ml
 	$(ECHO_CIBLE)
-	@OCAMLOPT@ $(OPTPACKFLAGS) $(OCAMLOPTFLAGS) $<
+	$(OCAMLOPT) $(OPTPACKFLAGS) $(OCAMLOPTFLAGS) $<
 
 %.cmi : %.mli
 	$(ECHO_CIBLE)
-	@OCAMLC@ $(OCAMLFLAGS) $<
+	$(OCAMLC) $(OCAMLFLAGS) $<
 
 %.ml : %.mll
 	$(ECHO_CIBLE)
-	@OCAMLLEX@ $<
+	$(OCAMLLEX) $<
 
 GENERATED+=$(PRE)_lex.ml
 
 %.ml : %.mly
 	$(ECHO_CIBLE)
-	@OCAMLYACC@ $<
+	$(OCAMLYACC) $<
 
 GENERATED+=$(PRE)_parse.ml $(PRE)_parse.mli
 
@@ -110,14 +117,13 @@ depend: .depend
 
 .depend : $(ML_ALL)
 	$(ECHO_CIBLE)
-	@OCAMLDEP@ $(ML_ALL) *.mli > $@
+	$(OCAMLDEP) $(ML_ALL) *.mli > $@
 
 include .depend
 
 GENERATED+=.depend
 
 #-------------------------------------------------------------------------------
-.PHONY: tests
 
 TESTDIR=tests
 TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v $(TESTDIR)/Polymorph.v \
@@ -136,6 +142,7 @@ DISTRIBUTED+=$(TESTS_SRC) $(TESTS_ORACLE)
 
 .PRECIOUS : $(TESTS) $(TESTS_LOG) $(TESTS_ORACLE)
 
+.PHONY: tests test
 tests test : $(TESTS_OK)
 
 $(TESTDIR)/%.dpdusage.log: $(TESTDIR)/%.dpd $(DPDUSAGE)
@@ -153,20 +160,22 @@ $(TESTDIR)/%.dpdusage.log: $(TESTDIR)/%.dpd $(DPDUSAGE)
 %.svg : %.dot
 	dot -Tsvg -o$@ $<
 
-%.dpd : %.vo %.cmd
-	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < $(*F).cmd > /dev/null 2>&1
-
-Morph%.dpd : $(TESTDIR)/Morph.vo $(TESTDIR)/Morph.cmd $(DPDPLUGIN)
+$(TESTDIR)/Morph%.dpd : $(TESTDIR)/Morph.vo $(TESTDIR)/Morph.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
 	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < Morph.cmd > /dev/null 2>&1
 
-Polymorph%.dpd : $(TESTDIR)/Polymorph.vo $(TESTDIR)/Polymorph.cmd $(DPDPLUGIN)
+$(TESTDIR)/Polymorph%.dpd : $(TESTDIR)/Polymorph.vo $(TESTDIR)/Polymorph.cmd \
+                            $(DPDPLUGIN)
 	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < Polymorph.cmd
 
-graph%.dpd : $(TESTDIR)/Test.vo $(TESTDIR)/Test.cmd $(DPDPLUGIN)
+$(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd: \
+	             $(TESTDIR)/Test.vo $(TESTDIR)/Test.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
 	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < Test.cmd > /dev/null 2>&1
+
+%.dpd : %.vo %.cmd
+	# cd to tests to generate .dpd file there.
+	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < $(*F).cmd > /dev/null 2>&1
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
 	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph 2> /dev/null \
@@ -217,6 +226,16 @@ distrib : $(NAME)-$(VERSION).tgz
 
 
 #-------------------------------------------------------------------------------
+# Configuration
+
+Makefile: Makefile.in config.status
+	$(ECHO_CIBLE)
+	./config.status $@
+
+config.status: configure
+	./config.status --recheck
+
+#-------------------------------------------------------------------------------
 clean_coq : Make_coq
 	$(MAKE) -f $< clean
 
@@ -225,8 +244,14 @@ clean_test :
 	rm -f $(TESTDIR)/Test.vo  $(TESTDIR)/Test.glob
 	rm -f $(TESTDIR)/Morph.vo  $(TESTDIR)/Morph.glob
 
+clean_config:
+	rm -rf autom4te.cache
+	rm -f configure config.log config.status
+	rm -r Makefile
+
 clean : clean_coq clean_test
 	rm -f $(GENERATED)
 	rm -f $(CMOS_DPDUSAGE) $(CMOS_DPD2DOT) $(CMXS) $(ML_ALL:%.ml=%.o) *.cmi
 	rm -f $(ML_ALL:%.ml=%.annot)
 	rm -f $(DPD2DOT) $(DPDUSAGE) $(DPDPLUGIN)
+	echo "Use: make clean_config to remove configuration generated files"

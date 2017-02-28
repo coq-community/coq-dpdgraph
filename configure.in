@@ -188,9 +188,15 @@ COQVERSION=`$COQC -v | sed -n -e 's|.*version *\(.*\)$|\1|p' `
 echo "Coq version is $COQVERSION"
 
 case $COQVERSION in
-  8.1*|8.2*|8.3*|8.4*)
-        AC_MSG_ERROR(dpdgraph needs Coq version 8.5 or higher);;
+  8.1*|8.2*|8.3*|8.4*|8.5*)
+        AC_MSG_ERROR(dpdgraph needs Coq version 8.6 or higher);;
 esac
+
+AC_CHECK_PROG(COQ_MAKEFILE,coq_makefile,coq_makefile,no)
+if test "$COQ_MAKEFILE" = no ; then
+	AC_MSG_ERROR(Cannot find coq_makefile.)
+fi
+
 BINDIR_PRE=`which coqc`
 BINDIR=`dirname $BINDIR_PRE`
 # substitutions to perform
@@ -203,16 +209,12 @@ AC_SUBST(OCAMLYACC)
 AC_SUBST(OCAMLBEST)
 AC_SUBST(OCAMLVERSION)
 AC_SUBST(OCAMLLIB)
-AC_SUBST(OCAMLWEB)
-AC_SUBST(LABLGTK2)
-AC_SUBST(LABLGNOMECANVAS)
-AC_SUBST(OCAMLWIN32)
 AC_SUBST(EXE)
 AC_SUBST(LIBEXT)
 AC_SUBST(OBJEXT)
-AC_SUBST(INCLUDEGTK2)
 AC_SUBST(NATIVE_DYNLINK)
 AC_SUBST(COQC)
+AC_SUBST(COQ_MAKEFILE)
 AC_SUBST(BINDIR)
 AC_SUBST(OCAMLGRAPH_PATH)
 

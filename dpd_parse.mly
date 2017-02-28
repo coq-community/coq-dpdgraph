@@ -9,8 +9,6 @@
 (*        (see the enclosed LICENSE file for mode details)                    *)
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
 
-let g = ref (Dpd_compute.G.create ())
-
 let pp_lex_inter fmt (p1, p2) =
   Format.fprintf fmt "between %a and %a"
     Dpd_compute.pp_lex_pos p1 Dpd_compute.pp_lex_pos p2

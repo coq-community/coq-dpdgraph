@@ -93,9 +93,7 @@ let add_node_in_subgraph sg_tbl n sg =
   let (l, ssg, nodes) = get_subgraph sg in
     Hashtbl.replace sg_tbl sg (l, ssg, n::nodes)
 
-let str2id s =
-  let char = function  '.' | '\'' -> '_' |  c -> c in
-    for i = 0 to String.length s - 1 do s.[i] <- char s.[i] done; s
+let str2id s = String.map (function  '.' | '\'' -> '_' |  c -> c) s
 
 let rec print_attribs sep fmt attribs =
   let print_a fmt a = match a with

@@ -7,7 +7,7 @@ http://coq.inria.fr/).
 
 Travis CI status on master branch: [![Build Status](https://travis-ci.org/Karmaki/coq-dpdgraph.svg?branch=master)](https://travis-ci.org/Karmaki/coq-dpdgraph)
 
-### What's inside ?
+## What's inside ?
 
 First of all, it is a small tool (a Coq plug-in) that extracts the
 dependencies between Coq objects, and produces a file (we suggest using
@@ -22,7 +22,7 @@ them;
 
 Hope other tools later on to do more things. Feel free to contribute!
 
-### How to get it
+## How to get it
 
 You can:
 - either clone it from GitHub at: https://github.com/Karmaki/coq-dpdgraph
@@ -41,6 +41,7 @@ You can:
   Any version should work since only the basic feature are used.
 
 #### Compile from the pre-packaged source archive
+
 First download the archive, unpack it, and change directory to the `coq-dpdgraph` directory.
 
     $ ./configure
