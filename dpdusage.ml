@@ -12,8 +12,43 @@ module Node = Dpd_compute.Node
 
 let version_option = ref false
 let print_path_option = ref true
+let strict_whitelist = ref false
 
 let threshold_option = ref 0
+
+module Ident_set = Set.Make(String)
+
+let whitelisted = ref Ident_set.empty
+
+let add_whitelisted_item s =
+  whitelisted := Ident_set.add s !whitelisted
+
+let remove_surrounding_white_space s =
+  let i = ref 0 in
+  let j = ref (String.length s - 1) in
+  while !i <= !j && (s.[!i] = ' ' || s.[!i] = '\t') do
+    incr i
+  done;
+  while !i <= !j && (s.[!j] = ' ' || s.[!j] = '\t') do
+    decr j
+  done;
+  String.sub s !i (!j - !i + 1)
+
+let add_whitelist_file f =
+  let ic =
+    try open_in f
+    with Sys_error m ->
+      Dpd_compute.error "Whitelist file %s: %s@.Exit.@." f m;
+      exit 1
+  in
+  try while true do
+        let line = input_line ic in
+        let line = remove_surrounding_white_space line in
+        if String.length line > 0 && line.[0] <> '#'
+        then add_whitelisted_item line
+      done
+  with End_of_file ->
+    close_in ic
 
 let spec_args = [
   ("-with-defs", Arg.Set Dpd_compute.with_defs,
@@ -32,6 +67,14 @@ let spec_args = [
       ": print path (default)");
   ("-without-path", Arg.Clear print_path_option,
       ": do not print path");
+  ("-whitelist", Arg.String add_whitelisted_item,
+      "path:ident : whitelist path:ident");
+  ("-whitelist-file", Arg.String add_whitelist_file,
+      "file : whitelist content of file");
+  ("-strict-whitelist", Arg.Set strict_whitelist,
+      ": warn about whitelisted items above threshold");
+  ("-liberal-whitelist", Arg.Clear strict_whitelist,
+      ": don't warn about whitelisted items (default)");
   ("-v", Arg.Set version_option,
       ": print version and exit");
 ]
@@ -40,15 +83,34 @@ let print_usage g t =
   let print_node n =
     let d = (G.in_degree g n) in
     if d <= t then
-      if !print_path_option then
-        let prefix = match Node.get_attrib "path" n with
+      let prefix = match Node.get_attrib "path" n with
           | None -> ""
-          | Some d -> d^":"
-        in Format.printf "%s%s\t(%d)\n" prefix (Node.name n) d
+          | Some p -> p
+      in
+      let long_id = prefix ^ ":" ^ (Node.name n) in
+      if Ident_set.mem long_id !whitelisted then
+        begin
+          if !strict_whitelist then
+            whitelisted := Ident_set.remove long_id !whitelisted
+        end
       else
-        Format.printf "%s\t(%d)\n" (Node.name n) d
+        if !print_path_option then
+          Format.printf "%s:%s\t(%d)\n" prefix (Node.name n) d
+        else
+          Format.printf "%s\t(%d)\n" (Node.name n) d
   in
   G.iter_vertex print_node g
+
+let warn_on_unused_whitelite threshold =
+  if not (Ident_set.is_empty !whitelisted) then begin
+      Dpd_compute.warning
+        "The following whitelisted items do not \
+         appear@ or are above threshold %d:@."
+        threshold;
+      Ident_set.iter
+        (Format.printf "\t%s@.")
+        !whitelisted
+    end
 
 let do_file _ f =
   try
@@ -56,7 +118,9 @@ let do_file _ f =
     let g = Dpd_lex.read f in
     let g = Dpd_compute.build_graph g in
     Dpd_compute.simplify_graph g;
-    print_usage g !threshold_option
+    print_usage g !threshold_option;
+    if !strict_whitelist then
+      warn_on_unused_whitelite !threshold_option
   with Dpd_compute.Error msg -> Dpd_compute.error "%s@." msg
 
 let main () =

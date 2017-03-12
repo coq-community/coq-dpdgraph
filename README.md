@@ -219,7 +219,13 @@ Permutation_app_swap	(0)
 
 In the example above it reports that ``Permutation_app_swap`` was
 references 0 times.  You can specify max number of references allowed
-(default 0) via ``-threshold`` command line option.
+(default 0) via ``-threshold`` command line option. You can whitelist
+your toplevel theorems with ``-whitelist`` or ``-whitelist-file``.
+In the whitelist, identifiers must appear as ``dpdusage`` would print them
+(that is with a colon separating the module path from the short name).
+With option ``-strict-whitelist`` you will get a warning if a
+whitelisted item does not appear in the Coq development or if its
+usage count is above the threshold.
 
 ## Development information
 
