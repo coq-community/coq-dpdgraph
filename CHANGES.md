@@ -1,5 +1,6 @@
 # Changelog
 
+- [12/03/2017] add whitelist options to dpdusage
 - [09/01/2017] Make the software work with coq 8.6
 - [09/05/2016] Add dpdusage to find unused definitions (from Vadim Zaliva).
 - [26/02/2016] Make the software work with coq 8.5, fix the computation of
