@@ -84,8 +84,7 @@ let build_graph lobj =
 
 
 
-(** remove edge (n1 -> n2) iff n2 is indirectly reachable by n1 *)
-(* TODO : not sure this is working for graphs with cycles *)
+(** remove edge (n1 -> n2) iff n2 is indirectly reachable by n1, or if n1 and n2 are the same *)
 let reduce_graph g =
   (* a table in which each node is mapped to the set of indirected accessible
    * nodes *)
@@ -98,7 +97,7 @@ let reduce_graph g =
       let add_succ_reachable acc s =
         let acc = (* add [s] successors *)
           List.fold_left (fun set x -> Vset.add x set) acc (G.succ g s)
-        in (Vset.union acc (reachable s))
+	in (Vset.union acc (if Node.equal v s then Vset.empty else reachable s))
       in
       let acc = List.fold_left add_succ_reachable Vset.empty (G.succ g v) in
         (* try to remove edges *)
