@@ -1,4 +1,4 @@
-digraph G {
+digraph tests/PrimitiveProjections {
   graph [ratio=0.5]
   node [style=filled]
 PrimitiveProjections_foo [label="foo", URL=<PrimitiveProjections.html#foo>, peripheries=3, fillcolor="#F070D1"] ;
