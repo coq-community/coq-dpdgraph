@@ -1,5 +1,8 @@
 # Changelog
 
+- [03/04/2017] Move configure.in into configure.ac and rewrite it
+- [21/02/2017] Add the -graphname option (default: name of the input file)
+               (from JasonGross)
 - [09/01/2017] Make the software work with coq 8.6
 - [09/05/2016] Add dpdusage to find unused definitions (from Vadim Zaliva).
 - [26/02/2016] Make the software work with coq 8.5, fix the computation of
