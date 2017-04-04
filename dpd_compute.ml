@@ -27,6 +27,7 @@ type error =
   | UnterminatedComment of Lexing.position option
   | ParsingError of Lexing.position * Lexing.position
   | EdgeWithoutNode of int
+  | NodeWithSameId of int * string * string
 
 exception Error of error
 
@@ -35,7 +36,17 @@ let pp_lex_pos fmt p = Format.fprintf fmt "(line:%d, character:%d)"
                          (p.Lexing.pos_cnum - p.Lexing.pos_bol)
 
 let pp_lex_inter fmt (p1, p2) =
-  Format.fprintf fmt "between %a and %a" pp_lex_pos p1 pp_lex_pos p2
+  let l1 = p1.Lexing.pos_lnum in
+  let c1 = p1.Lexing.pos_cnum - p1.Lexing.pos_bol in
+  let l2 = p2.Lexing.pos_lnum in
+  let c2 = p2.Lexing.pos_cnum - p2.Lexing.pos_bol in
+  if l1 = l2 then
+    if c1 = c2 then
+      pp_lex_pos fmt p1
+    else
+      Format.fprintf fmt "(line:%d, character:%d-%d)" l1 c1 c2
+  else
+    Format.fprintf fmt "between %a and %a" pp_lex_pos p1 pp_lex_pos p2
 
 let pp_error = function
   | OpenFileError msg ->
@@ -50,6 +61,10 @@ let pp_error = function
       error "parsing error %a.@." pp_lex_inter (p1, p2)
   | EdgeWithoutNode node_id ->
       error "no node with number %d: cannot build edge.@." node_id
+  | NodeWithSameId (node_id, old_name, name) ->
+      error "a node named '%s' already has the number %d. \
+             Cannot create new node named '%s' with the same number.@."
+        old_name node_id name
 
 
 let get_attrib a attribs =
@@ -98,7 +113,14 @@ let build_graph lobj =
   in
   let add_obj o = match o with
     | N ((id, _, _) as n) ->
-        Hashtbl.add node_tbl id n; let n = G.V.create n in G.add_vertex g n
+      begin
+        try
+          let old_n = Hashtbl.find node_tbl id in
+          raise (Error (NodeWithSameId (id, Node.name old_n, Node.name n)))
+        with Not_found ->
+          Hashtbl.add node_tbl id n;
+          let n = G.V.create n in G.add_vertex g n
+      end
     | E (id1, id2, attribs) ->
         let e = G.E.create (get_node id1) attribs (get_node id2) in
         G.add_edge_e g e
@@ -107,7 +129,8 @@ let build_graph lobj =
 
 
 
-(** remove edge (n1 -> n2) iff n2 is indirectly reachable by n1, or if n1 and n2 are the same *)
+(** remove edge (n1 -> n2) iff n2 is indirectly reachable by n1,
+ * or if n1 and n2 are the same *)
 let reduce_graph g =
   (* a table in which each node is mapped to the set of indirected accessible
    * nodes *)

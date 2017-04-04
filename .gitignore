@@ -33,5 +33,6 @@ tests/*.log
 tests/*.ok
 tests/*.dot
 tests/*.dpd
+!tests/*.err.dpd
 tests/*.glob
 tests/Test.vo

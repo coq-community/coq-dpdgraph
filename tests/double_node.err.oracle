@@ -1,0 +1,2 @@
+Info: read file tests/double_node.err.dpd
+Error: a node named 'two' already has the number 2. Cannot create new node named 'another two' with the same number.
