@@ -50,7 +50,7 @@ let do_file n f =
       | Some name -> name
     in
       Dpd_dot.graph_file graph_name dotfile g
-  with Dpd_compute.Error msg -> Dpd_compute.error "%s@." msg
+  with Dpd_compute.Error err -> Dpd_compute.pp_error err
 
 let main () =
   let usage_msg = "Usage : "^(Sys.argv.(0))^" [options]" in

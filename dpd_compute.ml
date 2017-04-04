@@ -21,14 +21,36 @@ let error format = pp "Error: " format
 let warning format = pp "Warning: " format
 let feedback format = pp "Info: " format
 
-exception Error of string
+type error =
+  | OpenFileError of string
+  | LexicalError of Lexing.position * string
+  | UnterminatedComment of Lexing.position option
+  | ParsingError of Lexing.position * Lexing.position
+  | EdgeWithoutNode of int
 
-let pp_lex_pos fmt p = Format.fprintf fmt "(l:%d, c:%d)"
+exception Error of error
+
+let pp_lex_pos fmt p = Format.fprintf fmt "(line:%d, character:%d)"
                          p.Lexing.pos_lnum
                          (p.Lexing.pos_cnum - p.Lexing.pos_bol)
 
 let pp_lex_inter fmt (p1, p2) =
   Format.fprintf fmt "between %a and %a" pp_lex_pos p1 pp_lex_pos p2
+
+let pp_error = function
+  | OpenFileError msg ->
+      error "%s.@." msg
+  | LexicalError (pos, str) ->
+      error "%a: illegal character '%s'.@." pp_lex_pos pos str
+  | UnterminatedComment (Some pos) ->
+      error "unterminated comment (started near %a).@." pp_lex_pos pos
+  | UnterminatedComment None ->
+      error "unterminated comment.@."
+  | ParsingError (p1, p2) ->
+      error "parsing error %a.@." pp_lex_inter (p1, p2)
+  | EdgeWithoutNode node_id ->
+      error "no node with number %d: cannot build edge.@." node_id
+
 
 let get_attrib a attribs =
   try Some (List.assoc a attribs) with Not_found -> None
@@ -70,15 +92,16 @@ type t_obj = N of Node.t | E of (int * int * (string * string) list)
 let build_graph lobj =
   let g = G.create () in
   let node_tbl = Hashtbl.create 10 in
-  let get_node id = Hashtbl.find node_tbl id in
+  let get_node id =
+    try Hashtbl.find node_tbl id
+    with Not_found -> raise (Error (EdgeWithoutNode id))
+  in
   let add_obj o = match o with
     | N ((id, _, _) as n) ->
         Hashtbl.add node_tbl id n; let n = G.V.create n in G.add_vertex g n
     | E (id1, id2, attribs) ->
-        try
-          let e = G.E.create (get_node id1) attribs (get_node id2) in
-          G.add_edge_e g e
-        with Not_found -> raise (Error "Cannot build edge : node doesn't exist")
+        let e = G.E.create (get_node id1) attribs (get_node id2) in
+        G.add_edge_e g e
   in List.iter add_obj lobj;
     g
 

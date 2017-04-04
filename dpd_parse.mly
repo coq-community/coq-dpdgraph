@@ -9,10 +9,6 @@
 (*        (see the enclosed LICENSE file for mode details)                    *)
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
 
-let pp_lex_inter fmt (p1, p2) =
-  Format.fprintf fmt "between %a and %a"
-    Dpd_compute.pp_lex_pos p1 Dpd_compute.pp_lex_pos p2
-
 %}
 
 %token <string> IDENT
@@ -38,10 +34,11 @@ obj_list :
 obj :
     | node SEMICOL { $1 }
     | edge SEMICOL { $1 }
-    | error { Format.printf "Error %a\n"
-              pp_lex_inter ((symbol_start_pos()), (symbol_end_pos()));
-            raise (Dpd_compute.Error "parse error")
-          }
+    | error { let p_start = symbol_start_pos () in
+              let p_end = symbol_end_pos () in
+              let err = Dpd_compute.ParsingError (p_start, p_end) in
+              raise (Dpd_compute.Error err)
+            }
 
 node : NODE NUM STRING opt_attribs { Dpd_compute.N ($2, $3, $4) }
 

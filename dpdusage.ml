@@ -57,7 +57,7 @@ let do_file _ f =
     let g = Dpd_compute.build_graph g in
     Dpd_compute.simplify_graph g;
     print_usage g !threshold_option
-  with Dpd_compute.Error msg -> Dpd_compute.error "%s@." msg
+  with Dpd_compute.Error err -> Dpd_compute.pp_error err
 
 let main () =
   let usage_msg = "Usage : "^(Sys.argv.(0))^" [options] <input_file.dpd>" in

@@ -1,6 +1,6 @@
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
 (*            This file is part of the DpdGraph tools.                        *)
-(*   Copyright (C) 2009-2015 Anne Pacalet (Anne.Pacalet@free.fr)           *)
+(*   Copyright (C) 2009-2017 Anne Pacalet (Anne.Pacalet@free.fr)           *)
 (*             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                *)
 (*        This file is distributed under the terms of the                     *)
 (*         GNU Lesser General Public License Version 2.1                      *)
@@ -9,15 +9,10 @@
 
 {
   module P = Dpd_parse (* tokens *)
-  module C = Dpd_compute
 
-let new_line lexbuf = (* in ocaml-3.11.0 but not before... *)
-  let lcp = lexbuf.Lexing.lex_curr_p in
-  lexbuf.Lexing.lex_curr_p <- { lcp with
-    Lexing.pos_lnum = lcp.Lexing.pos_lnum + 1;
-    Lexing.pos_bol = lcp.Lexing.pos_cnum;
-  }
-
+  let comment_pos = ref None
+  let start_comment pos =
+    comment_pos := Some pos
 }
 
 let blank = [' ' '\t' ]
@@ -31,8 +26,9 @@ let ident = first_letter other_letter*
 
 rule token = parse
   | blank+                    { token lexbuf }     (* skip blanks *)
-  | newline                   { new_line lexbuf; token lexbuf }
-  | "/*"                      { let _ = comment lexbuf in token lexbuf }
+  | newline                   { Lexing.new_line lexbuf; token lexbuf }
+  | "/*"                      { start_comment (Lexing.lexeme_start_p lexbuf);
+                                let _ = comment lexbuf in token lexbuf }
   | "//" [^'\n']* newline     { token lexbuf }
 
   | "N:"                      { P.NODE }
@@ -50,29 +46,34 @@ rule token = parse
   | '"' ([^'"']+ as str) '"' { P.STRING (str)}
 
   | eof               { P.EOF }
-  | _               { let str    = String.escaped (Lexing.lexeme lexbuf) in
-                        Format.printf "illegal character: '%s' at %a\n"
-                          str C.pp_lex_pos (Lexing.lexeme_start_p lexbuf);
-                        raise (C.Error "lexical error")
+  | _               {
+                      let str = String.escaped (Lexing.lexeme lexbuf) in
+                      let pos = Lexing.lexeme_start_p lexbuf in
+                      let err = Dpd_compute.LexicalError (pos, str) in
+                      raise (Dpd_compute.Error err)
                     }
 
 and comment = parse
         "*/"                  { () }
-  |     newline                  { new_line lexbuf; comment lexbuf }
+  |     newline               { Lexing.new_line lexbuf; comment lexbuf }
   |     _                     { comment lexbuf }
-  | eof { raise (C.Error "lexical error : unterminated comment") }
+  | eof { let err = Dpd_compute.UnterminatedComment (!comment_pos) in
+          raise (Dpd_compute.Error err) }
 
 {
+  (* @raise Dpd_compute.Error e *)
   let read filename =
-    try
-      let buf_in = open_in filename in
-      let lexbuf = Lexing.from_channel buf_in in
-      let init_pos = lexbuf.Lexing.lex_curr_p in
-        lexbuf.Lexing.lex_curr_p <-
-        { init_pos with Lexing.pos_fname = filename };
-      let info = P.graph token lexbuf in
-        close_in buf_in;
-        info
-    with Sys_error msg -> raise (C.Error msg)
+    let buf_in =
+      try open_in filename
+        with Sys_error msg ->
+          let err = Dpd_compute.OpenFileError msg in
+          raise (Dpd_compute.Error err)
+    in
+    let lexbuf = Lexing.from_channel buf_in in
+    let init_pos = lexbuf.Lexing.lex_curr_p in
+    lexbuf.Lexing.lex_curr_p <- { init_pos with Lexing.pos_fname = filename };
+    let info = P.graph token lexbuf in
+    close_in buf_in;
+    info
 
 }
