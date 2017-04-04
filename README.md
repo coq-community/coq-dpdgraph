@@ -229,9 +229,12 @@ references 0 times.  You can specify max number of references allowed
 graph : obj_list
 obj : node | edge
 
-node : "N: " node_id node_name '[' node_attribute_list ']' ';'
+node : "N: " node_id node_name node_attributes ';'
 node_id : [0-9]+
 node_name : '"' string '"'
+node_attributes :
+   | empty
+   | '[' node_attribute_list ']'
 node_attribute_list :
    | empty
    | node_attribute ',' node_attribute_list
@@ -241,7 +244,10 @@ node_attribute :
    | path="m0.m1.m2"
    | body=[yes|no]
 
-edge : "E: "  node_id node_id '[' edge_attribute_list ']' ';'
+edge : "E: "  node_id node_id edge_attributes ';'
+edge_attributes :
+   | empty
+   | '[' edge_attribute_list ']'
 edge_attribute_list :
    | empty
    | edge_attribute ',' edge_attribute_list

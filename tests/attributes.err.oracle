@@ -1,0 +1,2 @@
+Info: read file tests/attributes.err.dpd
+Error: parsing error (line:3, character:25-26).
