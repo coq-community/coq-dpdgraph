@@ -10,8 +10,8 @@
 DECLARE PLUGIN "dpdgraph"
 
 open Pp
-open Constrarg
 open Stdarg
+open EConstr
 
 let debug msg = if false then Feedback.msg_debug msg
 
@@ -35,7 +35,7 @@ let get_dirlist_grefs dirlist =
 
 let is_prop gref id =
 try
-let glob = Glob_term.GRef(Loc.ghost, gref, None) in
+let glob = CAst.make (Glob_term.GRef(gref, None)) in
    let env = Global.env() in
    let sigma = Evd.from_env env in
    let sigma', c = Pretyping.understand_tcc env sigma glob in
@@ -43,7 +43,7 @@ let glob = Glob_term.GRef(Loc.ghost, gref, None) in
    let sigma3, nf = Evarutil.nf_evars_and_universes sigma2 in
    let pl, uctx = Evd.universe_context sigma3 in
    let env2 = Environ.push_context uctx (Evarutil.nf_env_evar sigma3 env) in
-   let c2 = nf c in
+   let c2 = nf (EConstr.to_constr sigma3 c) in
    let t = Environ.j_type (Typeops.infer env2 c2) in
    let t2 = Environ.j_type (Typeops.infer env2 t) in
        Term.is_Prop t2
@@ -260,8 +260,10 @@ let locate_mp_dirpath ref =
   let (loc,qid) = Libnames.qualid_of_reference ref in
   try Nametab.dirpath_of_module (Nametab.locate_module qid)
   with Not_found ->
-    CErrors.user_err_loc
-      (loc,"",str "Unknown module" ++ spc() ++ Libnames.pr_qualid qid)
+    let msg = str "Unknown module" ++ spc() ++ Libnames.pr_qualid qid in
+    match loc with
+    | None -> CErrors.user_err msg
+    | Some loc -> CErrors.user_err ~loc msg
 
 VERNAC COMMAND EXTEND DependGraphSetFile CLASSIFIED AS QUERY
   | ["Set" "DependGraph" "File" string(str)] -> [ filename := str ]
