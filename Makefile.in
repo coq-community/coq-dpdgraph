@@ -165,7 +165,7 @@ $(TESTDIR)/%.err.log: $(TESTDIR)/%.err.dpd $(DPD2DOT)
 	cp $< $@
 
 %.vo : %.v
-	coqc -R . dpdgraph $<
+	coqc -q -R . dpdgraph $<
 
 %.html : %.v
 	coqdoc $<
