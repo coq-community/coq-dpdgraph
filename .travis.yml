@@ -19,5 +19,6 @@ script:
 - autoconf
 - ./configure
 - make
+- make tests # we execute `make tests` twice; first for the return code, then for the output log
 - make tests | tee tmp.log
 - if grep DIFFERENCES tmp.log ; then exit 1 ; else exit 0 ; fi
