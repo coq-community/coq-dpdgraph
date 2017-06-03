@@ -26,6 +26,7 @@ coqthmdep
 dpd2dot
 dpdusage
 Make_coq
+CoqMakefile.conf
 dpd_lex.ml
 dpd_parse.ml
 dpd_parse.mli
