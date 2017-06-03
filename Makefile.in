@@ -186,6 +186,11 @@ $(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd: \
 	# cd to tests to generate .dpd file there.
 	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < Test.cmd > /dev/null 2>&1
 
+$(TESTDIR)/PrimitiveProjections.dpd $(TESTDIR)/PrimitiveProjections2.dpd: \
+	             $(TESTDIR)/PrimitiveProjections.vo $(TESTDIR)/PrimitiveProjections.cmd $(DPDPLUGIN)
+	# cd to tests to generate .dpd file there.
+	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < PrimitiveProjections.cmd > /dev/null 2>&1
+
 %.dpd : %.vo %.cmd
 	# cd to tests to generate .dpd file there.
 	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < $(*F).cmd > /dev/null 2>&1
