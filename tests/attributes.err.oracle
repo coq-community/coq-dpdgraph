@@ -1,2 +1,2 @@
 Info: read file tests/attributes.err.dpd
-Error: parsing error (line:3, character:25-26).
+Error: no node with number 10: cannot build edge.
