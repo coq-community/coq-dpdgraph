@@ -10,7 +10,7 @@
 
 
 open Pp
-open Constrarg
+open Stdarg
 
 module Data = struct
   type t = int Globnames.Refmap.t
