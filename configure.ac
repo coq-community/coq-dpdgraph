@@ -30,7 +30,7 @@ if test "$OCAMLC" = no ; then
 fi
 
 AC_MSG_CHECKING(ocamlc version)
-OCAMLVERSION=$($OCAMLC --version)
+OCAMLVERSION=$($OCAMLC -version)
 AC_MSG_RESULT($OCAMLVERSION)
 case $OCAMLVERSION in
   0.*|1.*|2.*|3.*)
@@ -61,7 +61,7 @@ if test "$OCAMLOPT" = no ; then
   AC_MSG_WARN(cannot find ocamlopt; bytecode compilation only.)
 else
   AC_MSG_CHECKING(ocamlopt version)
-  TMPVERSION=$($OCAMLOPT --version)
+  TMPVERSION=$($OCAMLOPT -version)
   if test "$TMPVERSION" != "$OCAMLVERSION" ; then
     AC_MSG_RESULT($TMPVERSION)
     AC_MSG_WARN(version differs from ocamlc; ocamlopt discarded.)
@@ -75,7 +75,7 @@ fi
 AC_CHECK_PROG(OCAMLCDOTOPT,ocamlc.opt,ocamlc.opt,no)
 if test "$OCAMLCDOTOPT" != no ; then
   AC_MSG_CHECKING(ocamlc.opt version)
-  TMPVERSION=$($OCAMLCDOTOPT --version)
+  TMPVERSION=$($OCAMLCDOTOPT -version)
   if test "$TMPVERSION" != "$OCAMLVERSION" ; then
     AC_MSG_RESULT($TMPVERSION)
     AC_MSG_WARN(version differs from ocamlc; ocamlc.opt discarded.)
@@ -88,7 +88,7 @@ fi
 AC_CHECK_PROG(OCAMLOPTDOTOPT,ocamlopt.opt,ocamlopt.opt,no)
 if test "$OCAMLOPTDOTOPT" != no ; then
   AC_MSG_CHECKING(ocamlc.opt version)
-  TMPVERSION=$($OCAMLOPTDOTOPT --version)
+  TMPVERSION=$($OCAMLOPTDOTOPT -version)
   if test "$TMPVERSION" != "$OCAMLVERSION" ; then
     AC_MSG_RESULT($TMPVERSION)
     AC_MSG_WARN(version differs from ocamlc; ocamlopt.opt discarded.)
