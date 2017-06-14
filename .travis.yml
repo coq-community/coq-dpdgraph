@@ -19,7 +19,7 @@ install:
 script:
 - autoconf
 - ./configure
-- make
+- make || exit $?
 - make tests # we execute `make tests` twice; first for the return code, then for the output log
 - make tests | tee tmp.log
 - if grep DIFFERENCES tmp.log ; then for i in $(grep DIFFERENCES tmp.log | grep -o 'diff .*' | sed s'/diff //g' | sed s'/ /~/g'); do i="$(echo "$i" | sed s'/~/ /g')"; echo diff $i; diff $i; done ; fi
