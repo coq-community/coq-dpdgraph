@@ -401,7 +401,9 @@ Test_exists_last [label="exists_last", URL=<Test.html#exists_last>, peripheries=
   Test_split_nth -> Test_split [] ;
   Test_split_nth -> Test_nth [] ;
   Test_split_nth -> Test_list_ind [] ;
-  Test_list_ind -> Test_list_rect [] ;
+  Test_list_ind -> Test_cons [] ;
+  Test_list_ind -> Test_nil [] ;
+  Test_list_ind -> Test_list [] ;
   Test_list_rect -> Test_cons [] ;
   Test_list_rect -> Test_nil [] ;
   Test_list_rect -> Test_list [] ;
