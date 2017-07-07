@@ -21,8 +21,6 @@ Test_perm_trans [label="perm_trans", URL=<Test.html#perm_trans>, fillcolor="#7FA
 _eq_sym [label="eq_sym", URL=<.html#eq_sym>, fillcolor="#7FFFD4"] ;
 _eq [label="eq", URL=<.html#eq>, fillcolor="#E2CDFA"] ;
 _eq_refl [label="eq_refl", URL=<.html#eq_refl>, fillcolor="#7FAAFF"] ;
-_eq_rect [label="eq_rect", URL=<.html#eq_rect>, fillcolor="#F070D1"] ;
-Test_list_rect [label="list_rect", URL=<Test.html#list_rect>, fillcolor="#F070D1"] ;
 Test_perm_nil [label="perm_nil", URL=<Test.html#perm_nil>, fillcolor="#7FAAFF"] ;
 Test_Permutation_ind [label="Permutation_ind", URL=<Test.html#Permutation_ind>, fillcolor="#7FFFD4"] ;
   Test_Permutation_app_swap -> Test_Permutation_sym [] ;
@@ -47,8 +45,10 @@ Test_Permutation_ind [label="Permutation_ind", URL=<Test.html#Permutation_ind>, 
   Test_Permutation_refl -> Test_Permutation [] ;
   Test_Permutation_refl -> Test_perm_skip [] ;
   Test_Permutation_refl -> Test_perm_nil [] ;
-  Test_list_ind -> Test_list_rect [] ;
-  _eq_ind -> _eq_rect [] ;
+  Test_list_ind -> Test_list [] ;
+  Test_list_ind -> Test_nil [] ;
+  Test_list_ind -> Test_cons [] ;
+  _eq_ind -> _eq [] ;
   _eq_ind_r -> _eq_ind [] ;
   _eq_ind_r -> _eq_sym [] ;
   Test_Permutation_trans -> Test_Permutation [] ;
@@ -69,14 +69,10 @@ Test_Permutation_ind [label="Permutation_ind", URL=<Test.html#Permutation_ind>, 
   Test_perm_trans -> Test_cons [] ;
   _eq_sym -> _eq [] ;
   _eq_sym -> _eq_refl [] ;
-  _eq_rect -> _eq [] ;
-  Test_list_rect -> Test_list [] ;
-  Test_list_rect -> Test_nil [] ;
-  Test_list_rect -> Test_cons [] ;
   Test_perm_nil -> Test_list [] ;
   Test_perm_nil -> Test_nil [] ;
   Test_perm_nil -> Test_cons [] ;
   Test_Permutation_ind -> Test_Permutation [] ;
 subgraph cluster_Test { label="Test"; fillcolor="#FFFFC3"; labeljust=l; style=filled 
-Test_Permutation_ind; Test_perm_nil; Test_list_rect; Test_perm_trans; Test_cons; Test_nil; Test_perm_swap; Test_perm_skip; Test_list; Test_Permutation; Test_app; Test_Permutation_trans; Test_list_ind; Test_Permutation_refl; Test_app_comm_cons; Test_app_nil_end; Test_Permutation_sym; Test_Permutation_app_swap; };
+Test_Permutation_ind; Test_perm_nil; Test_perm_trans; Test_cons; Test_nil; Test_perm_swap; Test_perm_skip; Test_list; Test_Permutation; Test_app; Test_Permutation_trans; Test_list_ind; Test_Permutation_refl; Test_app_comm_cons; Test_app_nil_end; Test_Permutation_sym; Test_Permutation_app_swap; };
 } /* END */
