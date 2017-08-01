@@ -152,6 +152,20 @@ DISTRIBUTED+=$(TESTS_SRC) $(TESTS_ORACLE)
 .PHONY: tests test
 tests test : $(TESTS_OK)
 
+.PHONY: test-suite
+test-suite:
+	rm -f tests.ok
+	($(MAKE) tests && touch tests.ok) | tee tmp.log
+	if grep DIFFERENCES tmp.log >/dev/null 2>&1 ; then \
+		for i in $$(grep DIFFERENCES tmp.log | grep -o 'diff .*' | sed s'/diff //g' | sed s'/ /~/g'); do \
+			i="$$(echo "$$i" | sed s'/~/ /g')"; \
+			echo diff $$i; \
+			diff $$i; \
+		done ; \
+	fi
+	if grep DIFFERENCES tmp.log >/dev/null 2>&1 ; then false ; else true ; fi
+	rm tests.ok
+
 $(TESTDIR)/%.dpdusage.log: $(TESTDIR)/%.dpd $(DPDUSAGE)
 	$(DPDUSAGE) $< > $@
 
