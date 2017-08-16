@@ -9,8 +9,6 @@
 
 DECLARE PLUGIN "dpdgraph"
 
-open API
-
 open Pp
 open Stdarg
 open EConstr
