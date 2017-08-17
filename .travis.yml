@@ -12,14 +12,12 @@ install:
 - opam init -y
 - eval $(opam config env)
 - opam config var root
+- opam repo add coq-core-dev https://coq.inria.fr/opam/core-dev || true
 - opam install -y ocamlfind ocamlgraph
-- travis_wait opam install -y coq
+- travis_wait opam install -y coq.8.7.dev
 - opam list
 script:
 - autoconf
 - ./configure
-- make
-- make tests # we execute `make tests` twice; first for the return code, then for the output log
-- make tests | tee tmp.log
-- if grep DIFFERENCES tmp.log ; then for i in $(grep DIFFERENCES tmp.log | grep -o 'diff .*' | sed s'/diff //g' | sed s'/ /~/g'); do i="$(echo "$i" | sed s'/~/ /g')"; echo diff $i; diff $i; done ; fi
-- if grep DIFFERENCES tmp.log ; then exit 1 ; else exit 0 ; fi
+- make || exit $?
+- make test-suite

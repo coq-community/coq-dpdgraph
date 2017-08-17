@@ -8,9 +8,8 @@
 (*        (see the enclosed LICENSE file for mode details)                    *)
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
 
-
 open Pp
-open Constrarg
+open Stdarg
 
 module Data = struct
   type t = int Globnames.Refmap.t
@@ -25,14 +24,14 @@ module Data = struct
   let fold f d acc = Globnames.Refmap.fold f d acc
 end
 
-let add_identifier (x:Names.identifier)(d:Data.t) =
+let add_identifier (x:Names.Id.t)(d:Data.t) =
   failwith
     ("SearchDep does not expect to find plain identifiers :" ^
-     Names.string_of_id x)
+     Names.Id.to_string x)
 
-let add_sort (s:Term.sorts)(d:Data.t) = d
+let add_sort (s:Sorts.t)(d:Data.t) = d
 
-let add_constant (cst:Names.constant)(d:Data.t) =
+let add_constant (cst:Names.Constant.t)(d:Data.t) =
   Data.add (Globnames.ConstRef cst) d
 
 let add_inductive ((k,i):Names.inductive)(d:Data.t) =

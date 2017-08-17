@@ -10,8 +10,8 @@
 DECLARE PLUGIN "dpdgraph"
 
 open Pp
-open Constrarg
 open Stdarg
+open EConstr
 
 let debug msg = if false then Feedback.msg_debug msg
 
@@ -35,18 +35,10 @@ let get_dirlist_grefs dirlist =
 
 let is_prop gref id =
 try
-let glob = Glob_term.GRef(Loc.ghost, gref, None) in
-   let env = Global.env() in
-   let sigma = Evd.from_env env in
-   let sigma', c = Pretyping.understand_tcc env sigma glob in
-   let sigma2 = Evarconv.consider_remaining_unif_problems env sigma' in
-   let sigma3, nf = Evarutil.nf_evars_and_universes sigma2 in
-   let pl, uctx = Evd.universe_context sigma3 in
-   let env2 = Environ.push_context uctx (Evarutil.nf_env_evar sigma3 env) in
-   let c2 = nf c in
-   let t = Environ.j_type (Typeops.infer env2 c2) in
-   let t2 = Environ.j_type (Typeops.infer env2 t) in
-       Term.is_Prop t2
+  let t, ctx = Universes.type_of_global gref in
+  let env = Environ.push_context_set ctx (Global.env ()) in
+  let s = (Typeops.infer_type env t).Environ.utj_type in
+  Sorts.is_prop s
 with _ ->
   begin
     warning (str "unable to determine the type of the type for " ++ str id);
@@ -72,9 +64,9 @@ module G = struct
       let qualid =
         Nametab.shortest_qualid_of_global Names.Idset.empty (gref n) in
       let dirpath, ident = Libnames.repr_qualid qualid in
-      let dirpath = Names.string_of_dirpath dirpath in
+      let dirpath = Names.DirPath.to_string dirpath in
       let dirpath = if dirpath = "<>" then "" else dirpath in
-      let name = Names.string_of_id ident in
+      let name = Names.Id.to_string ident in
         (dirpath, name)
         (*
       let mod_list = Names.repr_dirpath dir_path in
@@ -260,8 +252,10 @@ let locate_mp_dirpath ref =
   let (loc,qid) = Libnames.qualid_of_reference ref in
   try Nametab.dirpath_of_module (Nametab.locate_module qid)
   with Not_found ->
-    CErrors.user_err_loc
-      (loc,"",str "Unknown module" ++ spc() ++ Libnames.pr_qualid qid)
+    let msg = str "Unknown module" ++ spc() ++ Libnames.pr_qualid qid in
+    match loc with
+    | None -> CErrors.user_err msg
+    | Some loc -> CErrors.user_err ~loc msg
 
 VERNAC COMMAND EXTEND DependGraphSetFile CLASSIFIED AS QUERY
   | ["Set" "DependGraph" "File" string(str)] -> [ filename := str ]
