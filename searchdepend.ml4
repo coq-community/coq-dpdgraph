@@ -76,11 +76,9 @@ let collect_dependance gref =
   | Globnames.ConstRef cst ->
       let cb = Environ.lookup_constant cst (Global.env()) in
       let cl = match Global.body_of_constant_body cb with
-         Some e -> [e]
+         Some (e,_) -> [e]
 	| None -> [] in
-      let cl = match cb.Declarations.const_type with
-        | Declarations.RegularArity t -> t::cl
-        | Declarations.TemplateArity _ ->  cl in
+      let cl = cb.Declarations.const_type :: cl in
       List.fold_right collect_long_names cl Data.empty
   | Globnames.IndRef i | Globnames.ConstructRef (i,_) ->
       let _, indbody = Global.lookup_inductive i in
