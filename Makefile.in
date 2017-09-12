@@ -19,7 +19,7 @@ VERSION=@PACKAGE_VERSION@
 
 BINDIR=@BINDIR@
 
-DPDPLUGIN=./dpdgraph.cmxs ./dpdgraph.vo
+DPDPLUGIN=./dpdgraph.vo
 DPD2DOT=./dpd2dot
 DPDUSAGE=./dpdusage
 
