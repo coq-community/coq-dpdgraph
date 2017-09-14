@@ -166,7 +166,13 @@ let print_graph name fmt graph =
       (node_dot_id (G.E.src e)) (node_dot_id (G.E.dst e))
       (print_attribs ", ") edge_attribs
   in
-  Format.fprintf fmt "digraph %s {@." name;
+  let escaped_name =
+    if (String.compare name "graph" = 0) ||
+       (String.compare name "digraph" = 0) then
+      String.concat "" ["escaped_"; name]
+    else
+      name in
+  Format.fprintf fmt "digraph %s {@." escaped_name;
   Format.fprintf fmt "  graph [ratio=0.5]@.";
   Format.fprintf fmt "  node [style=filled]@.";
   G.iter_vertex print_node graph;
