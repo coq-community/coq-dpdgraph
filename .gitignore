@@ -12,7 +12,6 @@
 version.ml
 
 autom4te.cache
-configure
 Makefile
 config.log
 config.status
