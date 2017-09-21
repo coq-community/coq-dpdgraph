@@ -166,6 +166,10 @@ Usage : ./dpd2dot [options]
   -help  Display this list of options
   --help  Display this list of options
 ```
+If the name of the output file finishes with ``.dot``, then the name before
+the ``.dot`` suffix is used as the graph name in the dot syntax.  There
+are two exceptions: ``graph`` and ``digraph`` will be replaced with
+``escaped_graph`` and ``escaped_digraph`` respectively.
 
 The only useful option at the moment is ``-without-defs`` that export only
 ``Prop`` objects to the graph (``Axiom``, ``Theorem``, ``Lemma``, etc).
