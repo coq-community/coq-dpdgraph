@@ -48,20 +48,20 @@ Depending on how you got hold of the archive, you may be in one of three situati
 
    You should type the following command.
 
-   $ make && make install
+    $ make && make install
 
  2/ configure is present, but no Makefile
 
    You should type the following command.
 
-   $ ./configure && make && install
+    $ ./configure && make && install
 
  3/ configure is not present, Makefile is not present
 
    You should type the following command.
 
-   $ autoconf
-   $ configure && make && install
+    $ autoconf
+    $ configure && make && install
 
 #### install using opam
 
