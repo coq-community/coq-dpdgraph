@@ -92,7 +92,7 @@ Delimit Scope list_scope with list.
 
 Bind Scope list_scope with list.
 
-Arguments Scope list [type_scope].
+Arguments list _%type_scope.
 
 (** ** Facts about lists *)
 
