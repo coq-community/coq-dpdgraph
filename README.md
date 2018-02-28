@@ -44,6 +44,7 @@ You can:
 First download the archive, unpack it, and change directory to the `coq-dpdgraph` directory.
 
 Depending on how you got hold of the archive, you may be in one of three situations:
+
  1/ Makefile is present
 
    You should type the following command.
@@ -54,14 +55,14 @@ Depending on how you got hold of the archive, you may be in one of three situati
 
    You should type the following command.
 
-    $ ./configure && make && install
+    $ ./configure && make && make install
 
  3/ configure is not present, Makefile is not present
 
    You should type the following command.
 
     $ autoconf
-    $ configure && make && install
+    $ configure && make && make install
 
 #### install using opam
 
