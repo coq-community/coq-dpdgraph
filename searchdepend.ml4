@@ -40,9 +40,9 @@ let add_inductive ((k,i):Names.inductive)(d:Data.t) =
 let add_constructor(((k,i),j):Names.constructor)(d:Data.t) =
   Data.add (Globnames.ConstructRef ((k,i),j)) d
 
-let collect_long_names (c:Term.constr) (acc:Data.t) =
+let collect_long_names (c:Constr.t) (acc:Data.t) =
   let rec add c acc =
-    match Term.kind_of_term c with
+    match Constr.kind c with
         Term.Rel _ -> acc
       | Term.Var x -> add_identifier x acc
       | Term.Meta _ -> assert false
@@ -91,7 +91,7 @@ let display_dependance gref =
       Feedback.msg_notice (str"[" ++ ((Data.fold pp) d (str "]")))
   in try let data = collect_dependance gref in display data
   with NoDef gref ->
-    Feedback.msg_error (Printer.pr_global gref ++ str " has no value")
+    CErrors.user_err (Printer.pr_global gref ++ str " has no value")
 
 VERNAC COMMAND EXTEND Searchdepend CLASSIFIED AS QUERY
    ["SearchDepend" global(ref) ] -> [ display_dependance (Nametab.global ref) ]
