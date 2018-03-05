@@ -11,7 +11,6 @@ DECLARE PLUGIN "dpdgraph"
 
 open Pp
 open Stdarg
-open EConstr
 
 let debug msg = if false then Feedback.msg_debug msg
 
@@ -19,7 +18,7 @@ let feedback msg = Feedback.msg_notice (str "Info: " ++ msg)
 
 let warning msg = Feedback.msg_warning (str "Warning: " ++ msg)
 
-let error msg = Feedback.msg_error (str "Error: " ++ msg)
+let error msg = CErrors.user_err msg
 
 let filename = ref "graph.dpd"
 
@@ -57,12 +56,12 @@ module G = struct
 
     let full_name n =
       let qualid =
-        Nametab.shortest_qualid_of_global Names.Idset.empty (gref n)
+        Nametab.shortest_qualid_of_global Names.Id.Set.empty (gref n)
       in Libnames.string_of_qualid qualid
 
     let split_name n =
       let qualid =
-        Nametab.shortest_qualid_of_global Names.Idset.empty (gref n) in
+        Nametab.shortest_qualid_of_global Names.Id.Set.empty (gref n) in
       let dirpath, ident = Libnames.repr_qualid qualid in
       let dirpath = Names.DirPath.to_string dirpath in
       let dirpath = if dirpath = "<>" then "" else dirpath in
