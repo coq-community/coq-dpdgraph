@@ -249,7 +249,7 @@ let file_graph_depend dirlist =
     Out.file graph
 
 let locate_mp_dirpath ref =
-  let (loc,qid) = Libnames.qualid_of_reference ref in
+  let {CAst.loc=loc;v=qid} = Libnames.qualid_of_reference ref in
   try Nametab.dirpath_of_module (Nametab.locate_module qid)
   with Not_found ->
     let msg = str "Unknown module" ++ spc() ++ Libnames.pr_qualid qid in
