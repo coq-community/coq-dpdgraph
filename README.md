@@ -26,34 +26,43 @@ Hope other tools later on to do more things. Feel free to contribute!
 
 You can:
 - either clone it from GitHub at: https://github.com/Karmaki/coq-dpdgraph
-- or get the opam package named `coq-dpdgraph` form the opam-coq-archive (repository "released")
+- or get the opam package named `coq-dpdgraph` from the opam-coq archive (repository "released")
 - or get the
-[last distributed version](https://anne.pacalet.fr/dev/dpdgraph/latest.tgz)
-
+[latest distributed version](https://github.com/Karmaki/coq-dpdgraph/releases)
 ### Compilation
 
 #### Requirements
 
-- The latest version runs with Coq 8.6
+- The latest version runs with Coq 8.7.0
 - it has been tested with a version of Coq installed using opam and with
-  Ocaml version 4.04.0
+  Ocaml version 4.04.2
 - [ocamlgraph](http://ocamlgraph.lri.fr/) (for dpd2dot tool)
   Any version should work since only the basic feature are used.
 
-#### Compile from the pre-packaged source archive
+#### Compile from the pre-packaged source archive or the git repository
 
 First download the archive, unpack it, and change directory to the `coq-dpdgraph` directory.
 
-    $ ./configure
+Depending on how you got hold of the archive, you may be in one of three situations:
+
+ 1/ Makefile is present
+
+   You should type the following command.
+
     $ make && make install
 
-This should produce a plug-in library for Coq and an executable :
-- `./dpdgraph.cmxs` : a plug-in to be loaded in Coq
-- `./dpd2dot` : a tool to transform .dpd files into .dot graphs.
+ 2/ configure is present, but no Makefile
 
-If you prefer all compiled files to stay in the coq-dpdgraph directory, you can
-skip the make install command.  However, you will have to use
-   $ coqtop -R <coq-dpdgraph-directory> dpdgraph -I <coq-dpdgraph-directory>
+   You should type the following command.
+
+    $ ./configure && make && make install
+
+ 3/ configure is not present, Makefile is not present
+
+   You should type the following command.
+
+    $ autoconf
+    $ configure && make && make install
 
 #### install using opam
 
@@ -61,14 +70,6 @@ If you use opam, you can install `coq-dpdgraph` and `ocamlgraph`
 
     $ opam repo add coq-released https://coq.inria.fr/opam/released
     $ opam install coq-dpdgraph
-
-#### Compile from the git repository
-
-If you obtained directly the files from the git repository (e.g. by cloning),
-then the `configure` file is missing.  It can be generated using
-the following command:
-
-    $ autoconf
 
 #### Test
 
@@ -166,6 +167,10 @@ Usage : ./dpd2dot [options]
   -help  Display this list of options
   --help  Display this list of options
 ```
+If the name of the output file finishes with ``.dot``, then the name before
+the ``.dot`` suffix is used as the graph name in the dot syntax.  There
+are two exceptions: ``graph`` and ``digraph`` will be replaced with
+``escaped_graph`` and ``escaped_digraph`` respectively.
 
 The only useful option at the moment is ``-without-defs`` that export only
 ``Prop`` objects to the graph (``Axiom``, ``Theorem``, ``Lemma``, etc).

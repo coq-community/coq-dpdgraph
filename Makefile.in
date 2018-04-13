@@ -30,6 +30,8 @@ all : $(DPDPLUGIN) $(DPD2DOT) $(DPDUSAGE)
 DISTRIBUTED = $(PRE)_compute.ml $(PRE)_dot.ml \
        $(PRE)_parse.mly  $(PRE)_lex.mll $(PRE)2dot.ml $(PRE)usage.ml
 
+DISTRIBUTED+=dpdgraph.v
+
 ML_COMMON = version.ml $(PRE)_compute.ml $(PRE)_dot.ml \
           $(PRE)_parse.ml  $(PRE)_lex.ml
 ML_DPD2DOT = $(PRE)2dot.ml
@@ -128,6 +130,7 @@ GENERATED+=.depend
 
 TESTDIR=tests
 TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v $(TESTDIR)/Polymorph.v \
+	  $(TESTDIR)/PrimitiveProjections.v\
 	  $(TESTDIR)/Morph.cmd $(TESTDIR)/Test.cmd $(TESTDIR)/search.cmd \
           $(TESTDIR)/Polymorph.cmd $(TESTDIR)/PrimitiveProjections.cmd
 TESTS_DPD=$(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd \
@@ -243,7 +246,7 @@ $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
 	cp $*.log $*.oracle
 
 #-------------------------------------------------------------------------------
-DISTRIBUTED+=Makefile LICENSE README.md
+DISTRIBUTED+=Makefile LICENSE README.md configure Makefile.in
 
 distrib : $(NAME)-$(VERSION).tgz
 
