@@ -73,7 +73,7 @@ $(DPDPLUGIN) : Make_coq $(DISTRIBUTED)
 
 Make_coq : Make
 	$(ECHO_CIBLE)
-	$(COQ_MAKEFILE) -f $< > $@
+	$(COQ_MAKEFILE) -f $< -o $@
 
 GENERATED+= Make_coq
 
