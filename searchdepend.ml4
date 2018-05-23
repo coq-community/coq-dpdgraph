@@ -66,7 +66,7 @@ let collect_long_names (c:Constr.t) (acc:Data.t) =
           add c acc
   in add c acc
 
-exception NoDef of Globnames.global_reference
+exception NoDef of Names.global_reference
 
 let collect_dependance gref =
   match gref with
