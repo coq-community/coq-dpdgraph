@@ -42,43 +42,46 @@ let add_constructor(((k,i),j):Names.constructor)(d:Data.t) =
 
 let collect_long_names (c:Constr.t) (acc:Data.t) =
   let rec add c acc =
-    match Constr.kind c with
-        Term.Rel _ -> acc
-      | Term.Var x -> add_identifier x acc
-      | Term.Meta _ -> assert false
-      | Term.Evar _ -> assert false
-      | Term.Sort s -> add_sort s acc
-      | Term.Cast(c,_,t) -> add c (add t acc)
-      | Term.Prod(n,t,c) -> add t (add c acc)
-      | Term.Lambda(n,t,c) -> add t (add c acc)
-      | Term.LetIn(_,v,t,c) -> add v (add t (add c acc))
-      | Term.App(c,ca) -> add c (Array.fold_right add ca acc)
-      | Term.Const cst -> add_constant (Univ.out_punivs cst) acc
-      | Term.Ind i -> add_inductive (Univ.out_punivs i) acc
-      | Term.Construct cnst -> add_constructor (Univ.out_punivs cnst) acc
-      | Term.Case({Term.ci_ind=i},c,t,ca) ->
+    let open Constr in
+    match kind c with
+        Rel _ -> acc
+      | Var x -> add_identifier x acc
+      | Meta _ -> assert false
+      | Evar _ -> assert false
+      | Sort s -> add_sort s acc
+      | Cast(c,_,t) -> add c (add t acc)
+      | Prod(n,t,c) -> add t (add c acc)
+      | Lambda(n,t,c) -> add t (add c acc)
+      | LetIn(_,v,t,c) -> add v (add t (add c acc))
+      | App(c,ca) -> add c (Array.fold_right add ca acc)
+      | Const cst -> add_constant (Univ.out_punivs cst) acc
+      | Ind i -> add_inductive (Univ.out_punivs i) acc
+      | Construct cnst -> add_constructor (Univ.out_punivs cnst) acc
+      | Case({ci_ind=i},c,t,ca) ->
           add_inductive i (add c (add t (Array.fold_right add ca acc)))
-      | Term.Fix(_,(_,ca,ca')) ->
+      | Fix(_,(_,ca,ca')) ->
           Array.fold_right add ca (Array.fold_right add ca' acc)
-      | Term.CoFix(_,(_,ca,ca')) ->
+      | CoFix(_,(_,ca,ca')) ->
           Array.fold_right add ca (Array.fold_right add ca' acc)
-      | Term.Proj(p, c) ->
+      | Proj(p, c) ->
           add c acc
   in add c acc
 
 exception NoDef of Names.GlobRef.t
 
 let collect_dependance gref =
+  (* This will change to Names.GlobRef in 8.10 *)
+  let open Names.GlobRef in
   match gref with
-  | Globnames.VarRef _ -> assert false
-  | Globnames.ConstRef cst ->
+  | VarRef _ -> assert false
+  | ConstRef cst ->
       let cb = Environ.lookup_constant cst (Global.env()) in
       let cl = match Global.body_of_constant_body cb with
          Some (e,_) -> [e]
 	| None -> [] in
       let cl = cb.Declarations.const_type :: cl in
       List.fold_right collect_long_names cl Data.empty
-  | Globnames.IndRef i | Globnames.ConstructRef (i,_) ->
+  | IndRef i | ConstructRef (i,_) ->
       let _, indbody = Global.lookup_inductive i in
       let ca = indbody.Declarations.mind_user_lc in
         Array.fold_right collect_long_names ca Data.empty
