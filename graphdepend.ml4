@@ -34,7 +34,7 @@ let get_dirlist_grefs dirlist =
 
 let is_prop gref id =
 try
-  let t, ctx = Universes.type_of_global gref in
+  let t, ctx = UnivGen.type_of_global gref in
   let env = Environ.push_context_set ctx (Global.env ()) in
   let s = (Typeops.infer_type env t).Environ.utj_type in
   Sorts.is_prop s
