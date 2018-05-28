@@ -71,7 +71,8 @@ exception NoDef of Names.GlobRef.t
 
 let collect_dependance gref =
   (* This will change to Names.GlobRef in 8.10 *)
-  let open Names.GlobRef in
+  let open Names in
+  let open GlobRef in
   match gref with
   | VarRef _ -> assert false
   | ConstRef cst ->
