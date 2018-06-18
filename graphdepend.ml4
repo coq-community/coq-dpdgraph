@@ -88,9 +88,11 @@ module G = struct
 
   module Edges = Set.Make (Edge)
 
-  type t = (Names.GlobRef.t, int) Hashtbl.t * Edges.t
+  module GMap = Map.Make (Globnames.RefOrdered_env)
 
-  let empty () = Hashtbl.create 10, Edges.empty
+  type t = int GMap.t * Edges.t
+
+  let empty = GMap.empty, Edges.empty
 
   (** new numbers to store global references in nodes *)
   let gref_cpt = ref 0
@@ -98,7 +100,7 @@ module G = struct
   let nb_vertex (nds, _eds) = Hashtbl.length nds
 
   let get_node (nds, eds) gref =
-    try Some (Hashtbl.find nds gref, gref)
+    try Some (GMap.find gref nds, gref)
     with Not_found -> None
 
   (** *)
@@ -107,9 +109,9 @@ module G = struct
       | Some n -> g, n
       | None ->
           gref_cpt := !gref_cpt + 1;
-          Hashtbl.add nds gref !gref_cpt;
+          let nds = GMap.add gref !gref_cpt nds in
           let n = (!gref_cpt, gref) in
-            g, n
+          (nds, eds), n
 
   let add_edge (nds, eds) n1 n2 nb = nds, Edges.add (n1, n2, nb) eds
 
@@ -125,7 +127,7 @@ module G = struct
    *)
 
   let iter_vertex fv (nds, _eds) =
-    Hashtbl.iter (fun gref id -> fv (id, gref)) nds
+    GMap.iter (fun gref id -> fv (id, gref)) nds
 
   let iter_edges_e fe (_nds, eds) = Edges.iter fe eds
 end
@@ -235,13 +237,13 @@ end = struct
 end
 
 let mk_dpds_graph gref =
-  let graph = G.empty () in
+  let graph = G.empty in
   let all = true in (* get all the dependencies recursively *)
   let graph = add_gref_list_and_dpds graph ~all [gref] in
     Out.file graph
 
 let file_graph_depend dirlist =
-  let graph = G.empty () in
+  let graph = G.empty in
   let grefs = get_dirlist_grefs dirlist in
   let all = false in (* then add the dependencies only to existing nodes *)
   let graph = add_gref_list_and_dpds graph ~all grefs in
