@@ -249,14 +249,11 @@ let file_graph_depend dirlist =
   let graph = add_gref_list_and_dpds graph ~all grefs in
     Out.file graph
 
-let locate_mp_dirpath ref =
-  let {CAst.loc=loc;v=qid} = Libnames.qualid_of_reference ref in
+let locate_mp_dirpath qid =
   try Nametab.dirpath_of_module (Nametab.locate_module qid)
   with Not_found ->
     let msg = str "Unknown module" ++ spc() ++ Libnames.pr_qualid qid in
-    match loc with
-    | None -> CErrors.user_err msg
-    | Some loc -> CErrors.user_err ~loc msg
+    CErrors.user_err ?loc:qid.CAst.loc msg
 
 VERNAC COMMAND EXTEND DependGraphSetFile CLASSIFIED AS QUERY
   | ["Set" "DependGraph" "File" string(str)] -> [ filename := str ]
