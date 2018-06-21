@@ -67,11 +67,12 @@ let collect_long_names (c:Constr.t) (acc:Data.t) =
           add c acc
   in add c acc
 
-exception NoDef of Names.global_reference
+exception NoDef of Names.GlobRef.t
 
 let collect_dependance gref =
   (* This will change to Names.GlobRef in 8.10 *)
-  let open Globnames in
+  let open Names in
+  let open GlobRef in
   match gref with
   | VarRef _ -> assert false
   | ConstRef cst ->
