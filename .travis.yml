@@ -15,7 +15,7 @@ install:
 - opam repo add coq-core-dev https://coq.inria.fr/opam/core-dev || true
 - opam install -y ocamlfind ocamlgraph
 - git clone --depth=1 https://github.com/coq/coq
-- opam show -- field=source-hash coq
+- opam show --field=source-hash coq
 - sed -e 's/\(.\{8\}\).*/\1/' coq/.git/refs/heads/master
 - if [ "$(opam show --field=source-hash coq)" = "$(sed -e 's/\(.\{8\}\).*/\1/' coq/.git/refs/heads/master)" ] ; then true is $(opam show --field=source-hash coq) ; else opam uninstall coq ; fi ; rm -rf coq
 - travis_wait opam install -y coq.dev
