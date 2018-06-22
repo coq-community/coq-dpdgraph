@@ -48,7 +48,7 @@ with _ ->
 module G = struct
 
   module Node = struct
-    type t = int * Globnames.global_reference
+    type t = int * Names.global_reference
     let id n = fst n
     let gref n = snd n
     let compare n1 n2 = Pervasives.compare (id n1) (id n2)
@@ -88,7 +88,7 @@ module G = struct
 
   module Edges = Set.Make (Edge)
 
-  type t = (Globnames.global_reference, int) Hashtbl.t * Edges.t
+  type t = (Names.global_reference, int) Hashtbl.t * Edges.t
 
   let empty () = Hashtbl.create 10, Edges.empty
 
