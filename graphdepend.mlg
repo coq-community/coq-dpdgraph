@@ -9,6 +9,8 @@
 
 DECLARE PLUGIN "dpdgraph"
 
+{
+
 open Pp
 open Stdarg
 
@@ -255,24 +257,26 @@ let locate_mp_dirpath qid =
     let msg = str "Unknown module" ++ spc() ++ Libnames.pr_qualid qid in
     CErrors.user_err ?loc:qid.CAst.loc msg
 
+}
+
 VERNAC COMMAND EXTEND DependGraphSetFile CLASSIFIED AS QUERY
-  | ["Set" "DependGraph" "File" string(str)] -> [ filename := str ]
+| ["Set" "DependGraph" "File" string(str)] -> { filename := str }
 END
 
 (*
 VERNAC ARGUMENT EXTEND dirpath
-  [ string(str) ] -> [ Globnames.dirpath_of_string str ]
+| [ string(str) ] -> { Globnames.dirpath_of_string str }
 END
 
 VERNAC ARGUMENT EXTEND dirlist
-  | [ dirpath(d) dirlist(l)] -> [ d::l ]
-  | [ dirpath(d) ] -> [ [d] ]
+  | [ dirpath(d) dirlist(l)] -> { d::l }
+  | [ dirpath(d) ] -> { [d] }
 END
 *)
 
 VERNAC COMMAND EXTEND DependGraph CLASSIFIED AS QUERY
   | ["Print" "DependGraph" reference(ref) ] ->
-      [ mk_dpds_graph (Nametab.global ref) ]
+      { mk_dpds_graph (Nametab.global ref) }
   | ["Print" "FileDependGraph" reference_list(dl) ] ->
-      [ file_graph_depend (List.map locate_mp_dirpath dl) ]
+      { file_graph_depend (List.map locate_mp_dirpath dl) }
 END

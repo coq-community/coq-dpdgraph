@@ -1,6 +1,6 @@
 -I .
 -R . dpdgraph
-searchdepend.ml4
-graphdepend.ml4
+searchdepend.mlg
+graphdepend.mlg
 dpdgraph.mllib
 dpdgraph.v
