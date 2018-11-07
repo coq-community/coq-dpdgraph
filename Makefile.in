@@ -56,9 +56,9 @@ OCAMLOPTFLAGS = -c
 COQ_MAKEFILE=@COQ_MAKEFILE@
 # COQDEP=$(OCAMLDEP)
 
-COQEXTFILES=searchdepend.ml4 graphdepend.ml4
+COQEXTFILES=searchdepend.mlg graphdepend.mlg
 
-GENERATED+=$(COQEXTFILES:%.ml4=%.o) $(COQEXTFILES:%.ml4=%.cmx) dpdgraph.cmxs
+GENERATED+=$(COQEXTFILES:%.mlg=%.o) $(COQEXTFILES:%.mlg=%.cmx) dpdgraph.cmxs
 
 DISTRIBUTED+=$(COQEXTFILES) dpdgraph.mllib
 DISTRIBUTED+=Make

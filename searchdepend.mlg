@@ -8,6 +8,8 @@
 (*        (see the enclosed LICENSE file for mode details)                    *)
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
 
+{
+
 open Pp
 open Stdarg
 
@@ -97,6 +99,8 @@ let display_dependance gref =
   with NoDef gref ->
     CErrors.user_err (Printer.pr_global gref ++ str " has no value")
 
+}
+
 VERNAC COMMAND EXTEND Searchdepend CLASSIFIED AS QUERY
-   ["SearchDepend" global(ref) ] -> [ display_dependance (Nametab.global ref) ]
+| ["SearchDepend" global(ref) ] -> { display_dependance (Nametab.global ref) }
 END

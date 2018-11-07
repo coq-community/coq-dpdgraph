@@ -8,7 +8,7 @@
 *.cmx
 *.cmxs
 *.cmxa
-*.ml4.d
+*.mlg.d
 version.ml
 
 autom4te.cache
