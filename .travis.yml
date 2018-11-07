@@ -9,6 +9,7 @@ install:
 - sudo add-apt-repository --yes ppa:avsm/ppa
 - sudo apt-get update -qq
 - sudo apt-get install -qq -y opam
+- opam --version
 - opam init -y
 - opam switch create ocaml-base-compiler.4.07.0
 - opam switch set ocaml-base-compiler.4.07.0
