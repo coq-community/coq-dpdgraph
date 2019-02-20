@@ -90,7 +90,7 @@ module G = struct
 
   module Edges = Set.Make (Edge)
 
-  module GMap = Map.Make (Globnames.RefOrdered_env)
+  module GMap = Map.Make (Names.GlobRef.Ordered_env)
 
   type t = int GMap.t * Edges.t
 
@@ -187,6 +187,7 @@ end = struct
     let acc = match cb.Declarations.const_body with
       | Declarations.OpaqueDef _
       | Declarations.Def _ -> ("body", "yes")::acc
+      | Declarations.Primitive _
       | Declarations.Undef _  -> ("body", "no")::acc
     in acc
 
