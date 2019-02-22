@@ -11,7 +11,7 @@ install:
 - sudo apt-get install -qq -y opam
 - opam --version
 - opam init -y
-- opam switch create 4.07.0
+- opam switch 4.07.0 || opam switch create 4.07.0
 - eval $(opam config env)
 - opam config var root
 - opam repo add coq-core-dev https://coq.inria.fr/opam/core-dev || true
