@@ -13,7 +13,7 @@ First of all, it is a small tool (a Coq plug-in) that extracts the
 dependencies between Coq objects, and produces a file (we suggest using
 the suffix .dpd) with this information.
 
-The idea is that other small tools can be then developed to process
+The idea is that other small tools can then process
 the .dpd files. At the moment, there is:
 - `dpd2dot` that reads these .dpd files and produces a graph file
 using .dot format (cf. http://www.graphviz.org/) that makes possible to view
@@ -33,9 +33,9 @@ You can:
 
 #### Requirements
 
-- The latest version runs with Coq 8.7.0
+- The latest released version runs with Coq 8.9.0
 - it has been tested with a version of Coq installed using opam and with
-  Ocaml version 4.04.2
+  Ocaml version 4.07.0
 - [ocamlgraph](http://ocamlgraph.lri.fr/) (for dpd2dot tool)
   Any version should work since only the basic feature are used.
 
