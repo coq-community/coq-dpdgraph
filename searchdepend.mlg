@@ -14,16 +14,16 @@ open Pp
 open Stdarg
 
 module Data = struct
-  type t = int Globnames.Refmap.t
+  type t = int Names.GlobRef.Map.t
 
-  let empty = Globnames.Refmap.empty
+  let empty = Names.GlobRef.Map.empty
 
   let add gref d =
-    let n = try  Globnames.Refmap.find gref d with Not_found -> 0 in
-    Globnames.Refmap.add gref (n+1) d
+    let n = try  Names.GlobRef.Map.find gref d with Not_found -> 0 in
+    Names.GlobRef.Map.add gref (n+1) d
 
       (* [f gref n acc] *)
-  let fold f d acc = Globnames.Refmap.fold f d acc
+  let fold f d acc = Names.GlobRef.Map.fold f d acc
 end
 
 let add_identifier (x:Names.Id.t)(d:Data.t) =

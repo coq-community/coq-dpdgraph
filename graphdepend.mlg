@@ -36,8 +36,11 @@ let get_dirlist_grefs dirlist =
 
 let is_prop gref id =
 try
-  let t, ctx = UnivGen.type_of_global gref in
-  let env = Environ.push_context_set ctx (Global.env ()) in
+  let t, ctx = Typeops.type_of_global_in_context (Global.env()) gref in
+(* Beware of this code, not considered entirely correct, but I don't know
+   how to fix it. *)
+  let env = Environ.push_context ~strict:false (Univ.AUContext.repr ctx)
+            (Global.env ()) in
   let s = (Typeops.infer_type env t).Environ.utj_type in
   Sorts.is_prop s
 with _ ->
@@ -90,7 +93,7 @@ module G = struct
 
   module Edges = Set.Make (Edge)
 
-  module GMap = Map.Make (Globnames.RefOrdered_env)
+  module GMap = Map.Make (Names.GlobRef.Ordered_env)
 
   type t = int GMap.t * Edges.t
 
@@ -188,6 +191,7 @@ end = struct
       | Declarations.OpaqueDef _
       | Declarations.Def _ -> ("body", "yes")::acc
       | Declarations.Undef _  -> ("body", "no")::acc
+      | Declarations.Primitive _ -> ("body", "no")::acc
     in acc
 
   let add_gref_attrib acc gref id =
