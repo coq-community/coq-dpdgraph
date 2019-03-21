@@ -51,7 +51,7 @@ let collect_long_names (c:Constr.t) (acc:Data.t) =
       | Const cst -> add_constant (Univ.out_punivs cst) acc
       | Ind i -> add_inductive (Univ.out_punivs i) acc
       | Construct cnst -> add_constructor (Univ.out_punivs cnst) acc
-      | Case({ci_ind=i},_,_,_,_) ->
+      | Case({ci_ind=i},_,_,_,_,_,_) ->
           add_inductive i (Constr.fold add acc c)
       | _ -> Constr.fold add acc c
   in add acc c
