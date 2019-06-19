@@ -67,7 +67,7 @@ let collect_dependance gref =
   | ConstRef cst ->
       let cb = Environ.lookup_constant cst (Global.env()) in
       let cl = match Global.body_of_constant_body Library.indirect_accessor cb with
-         Some (e,_) -> [e]
+         Some (e,_,_) -> [e]
 	| None -> [] in
       let cl = cb.Declarations.const_type :: cl in
       List.fold_right collect_long_names cl Data.empty
