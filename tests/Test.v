@@ -82,7 +82,7 @@ End Lists.
 
 (** Exporting list notations and tactics *)
 
-Arguments nil [A].
+Arguments nil {A}.
 Infix "::" := cons (at level 60, right associativity) : list_scope.
 Infix "++" := app (right associativity, at level 60) : list_scope.
 
