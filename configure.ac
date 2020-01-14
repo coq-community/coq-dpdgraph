@@ -10,7 +10,7 @@
 # will set several variables: (see AC_SUBST at the end of this file)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-AC_INIT(coq-dpdgraph,0.6.4)
+AC_INIT(coq-dpdgraph,0.6.5)
 AC_MSG_NOTICE(AC_PACKAGE_NAME version AC_PACKAGE_VERSION)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
