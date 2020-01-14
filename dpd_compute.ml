@@ -88,7 +88,7 @@ module Node = struct
 
   let hash n = id n
   let equal n1 n2 = id n1 = id n2
-  let compare n1 n2 = Pervasives.compare (id n1) (id n2)
+  let compare n1 n2 = Stdlib.compare (id n1) (id n2)
 end
 module Edge = struct
   type t = (string * string) list
@@ -96,7 +96,7 @@ module Edge = struct
   let get_attrib a e = get_attrib a e
   let bool_attrib a e = bool_attrib a e
 
-  let compare e1 e2 = Pervasives.compare e1 e2
+  let compare e1 e2 = Stdlib.compare e1 e2
   let default = []
 end
 module G = Graph.Imperative.Digraph.ConcreteLabeled(Node)(Edge)
