@@ -33,9 +33,9 @@ You can:
 
 #### Requirements
 
-- The latest version runs with Coq 8.7.0
+- The latest version runs with Coq 8.10.0
 - it has been tested with a version of Coq installed using opam and with
-  Ocaml version 4.04.2
+  Ocaml version 4.09.0
 - [ocamlgraph](http://ocamlgraph.lri.fr/) (for dpd2dot tool)
   Any version should work since only the basic feature are used.
 
@@ -63,6 +63,15 @@ Depending on how you got hold of the archive, you may be in one of three situati
 
     $ autoconf
     $ configure && make && make install
+
+#### lenient compilation
+
+   By default, compilation will fail if there is any warning emitted by
+   the ocaml compiler.  This can be disabled by type
+
+      make WARN_ERR=
+
+   instead of `make` in all previous commands.
 
 #### install using opam
 
