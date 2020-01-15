@@ -33,7 +33,7 @@ You can:
 
 #### Requirements
 
-- The latest version runs with Coq 8.10.0
+- The latest version runs with Coq 8.11
 - it has been tested with a version of Coq installed using opam and with
   Ocaml version 4.09.0
 - [ocamlgraph](http://ocamlgraph.lri.fr/) (for dpd2dot tool)
