@@ -1261,7 +1261,7 @@ End Fold_Right_Recursor.
       inversion H.
       firstorder.
       destruct (orb_prop _ _ H1); firstorder.
-      firstorder.
+      firstorder auto with bool.
       subst.
       rewrite H2; auto.
     Qed.
