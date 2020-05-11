@@ -26,12 +26,12 @@ let filename = ref "graph.dpd"
 
 let get_dirlist_grefs dirlist =
   let selected_gref = ref [] in
-  let select gref env constr =
-    if Search.module_filter (dirlist, false) gref env constr then
+  let select gref kind env constr =
+    if Search.module_filter (dirlist, false) gref kind env (Evd.from_env env) constr then
     (debug (str "Select " ++ Printer.pr_global gref);
      selected_gref := gref::!selected_gref)
   in
-    Search.generic_search None select;
+    Search.generic_search (Global.env()) select;
     !selected_gref
 
 let is_prop gref id =
