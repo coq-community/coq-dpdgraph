@@ -171,16 +171,16 @@ test-suite:
 	rm tests.ok
 
 $(TESTDIR)/%.dpdusage.log: $(TESTDIR)/%.dpd $(DPDUSAGE)
-	$(DPDUSAGE) $< > $@
+	$(DPDUSAGE) $< | sort > $@
 
 $(TESTDIR)/file_not_found.err.log: $(DPD2DOT)
-	$(DPD2DOT) file_not_found.err.dpd  > $@ 2>&1
+	$(DPD2DOT) file_not_found.err.dpd  | sort > $@ 2>&1
 
 $(TESTDIR)/%.err.log: $(TESTDIR)/%.err.dpd $(DPD2DOT)
-	$(DPD2DOT) $< > $@ 2>&1
+	$(DPD2DOT) $< | sort > $@ 2>&1
 
 %.log : %
-	cp $< $@
+	sort $< > $@
 
 %.vo : %.v
 	coqc -q -R . dpdgraph $<
@@ -215,7 +215,7 @@ $(TESTDIR)/PrimitiveProjections.dpd $(TESTDIR)/PrimitiveProjections2.dpd: \
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
 	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph 2> /dev/null \
-	  | sed -e 's/Welcome to Coq.*/Welcome to Coq/' > $@
+	  | sed -e 's/Welcome to Coq.*/Welcome to Coq/' | sort > $@
 
 %.dot : %.dpd  $(DPD2DOT)
 	$(DPD2DOT) $< > /dev/null
