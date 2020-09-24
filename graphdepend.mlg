@@ -93,7 +93,7 @@ module G = struct
 
   module Edges = Set.Make (Edge)
 
-  module GMap = Map.Make (Names.GlobRef.Ordered_env)
+  module GMap = Names.GlobRef.Map_env
 
   type t = int GMap.t * Edges.t
 
