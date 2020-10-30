@@ -19,6 +19,8 @@ Set Implicit Arguments.
 
 (** ** Definitions *)
 
+Declare Scope test_list_scope.
+
 Section Lists.
 
   Variable A : Type.
@@ -27,9 +29,9 @@ Section Lists.
     | nil : list
     | cons : A -> list -> list.
 
-  Infix "::" := cons (at level 60, right associativity) : list_scope.
+  Infix "::" := cons (at level 60, right associativity) : test_list_scope.
 
-  Open Scope list_scope.
+  Open Scope test_list_scope.
 
   (** Head and tail        *)
   Definition head (l:list) :=
@@ -76,21 +78,21 @@ Axiom size_nil : size nil = 0.
       | a :: l1 => a :: app l1 m
     end.
 
-  Infix "++" := app (right associativity, at level 60) : list_scope.
+  Infix "++" := app (right associativity, at level 60) : test_list_scope.
 
 End Lists.
 
 (** Exporting list notations and tactics *)
 
 Arguments nil {A}.
-Infix "::" := cons (at level 60, right associativity) : list_scope.
-Infix "++" := app (right associativity, at level 60) : list_scope.
+Infix "::" := cons (at level 60, right associativity) : test_list_scope.
+Infix "++" := app (right associativity, at level 60) : test_list_scope.
 
-Open Scope list_scope.
+Open Scope test_list_scope.
 
-Delimit Scope list_scope with list.
+Delimit Scope test_list_scope with lst.
 
-Bind Scope list_scope with list.
+Bind Scope test_list_scope with list.
 
 Arguments list _%type_scope.
 
@@ -211,7 +213,7 @@ Section Facts.
     now_show (a :: (l ++ m) ++ n = a :: l ++ m ++ n).
     rewrite <- IHl; auto.
   Qed.
-  Hint Resolve app_ass.
+  Hint Resolve app_ass : core.
 
   Theorem ass_app : forall l m n:list A, l ++ m ++ n = (l ++ m) ++ n.
   Proof.
@@ -412,7 +414,7 @@ Section Elts.
   Proof.
     unfold lt in |- *; induction n as [| n hn]; simpl in |- *.
     destruct l; simpl in |- *; [ inversion 2 | auto ].
-    destruct l as [| a l hl]; simpl in |- *.
+    destruct l as [| a l ]; simpl in |- *.
     inversion 2.
     intros d ie; right; apply hn; auto with arith.
   Qed.
@@ -786,7 +788,7 @@ Section ListOps.
       | perm_swap: forall (x y:A) (l:list A), Permutation (cons y (cons x l)) (cons x (cons y l))
       | perm_trans: forall (l l' l'':list A), Permutation l l' -> Permutation l' l'' -> Permutation l l''.
 
-    Hint Constructors Permutation.
+    Hint Constructors Permutation : core.
 
   (** Some facts about [Permutation] *)
 
@@ -821,7 +823,7 @@ Section ListOps.
       exact perm_trans.
     Qed.
 
-    Hint Resolve Permutation_refl Permutation_sym Permutation_trans.
+    Hint Resolve Permutation_refl Permutation_sym Permutation_trans : core.
 
   (** Compatibility with others operations on lists *)
 
@@ -876,7 +878,7 @@ Section ListOps.
     apply perm_swap; auto.
     apply perm_skip; auto.
     Qed.
-    Hint Resolve Permutation_cons_app.
+    Hint Resolve Permutation_cons_app : core.
 
     Theorem Permutation_length : forall (l l' : list A), Permutation l l' -> length l = length l'.
     Proof.
@@ -1075,7 +1077,7 @@ Section Map.
     rewrite IHl; auto.
   Qed.
 
-  Hint Constructors Permutation.
+  Hint Constructors Permutation : core.
 
   Lemma Permutation_map :
     forall l l', Permutation l l' -> Permutation (map l) (map l').
@@ -1591,19 +1593,19 @@ Section SetIncl.
   Variable A : Type.
 
   Definition incl (l m:list A) := forall a:A, In a l -> In a m.
-  Hint Unfold incl.
+  Hint Unfold incl : core.
 
   Lemma incl_refl : forall l:list A, incl l l.
   Proof.
     auto.
   Qed.
-  Hint Resolve incl_refl.
+  Hint Resolve incl_refl : core.
 
   Lemma incl_tl : forall (a:A) (l m:list A), incl l m -> incl l (a :: m).
   Proof.
     auto with datatypes.
   Qed.
-  Hint Immediate incl_tl.
+  Hint Immediate incl_tl : core.
 
   Lemma incl_tran : forall l m n:list A, incl l m -> incl m n -> incl l n.
   Proof.
@@ -1614,13 +1616,13 @@ Section SetIncl.
   Proof.
     auto with datatypes.
   Qed.
-  Hint Immediate incl_appl.
+  Hint Immediate incl_appl : core.
 
   Lemma incl_appr : forall l m n:list A, incl l n -> incl l (m ++ n).
   Proof.
     auto with datatypes.
   Qed.
-  Hint Immediate incl_appr.
+  Hint Immediate incl_appr : core.
 
   Lemma incl_cons :
     forall (a:A) (l m:list A), In a m -> incl l m -> incl (a :: l) m.
@@ -1635,7 +1637,7 @@ Section SetIncl.
     now_show (In a0 l -> In a0 m).
     auto.
   Qed.
-  Hint Resolve incl_cons.
+  Hint Resolve incl_cons : core.
 
   Lemma incl_app : forall l m n:list A, incl l n -> incl m n -> incl (l ++ m) n.
   Proof.
@@ -1643,7 +1645,7 @@ Section SetIncl.
     now_show (In a n).
     elim (in_app_or _ _ _ H1); auto.
   Qed.
-  Hint Resolve incl_app.
+  Hint Resolve incl_app : core.
 
 End SetIncl.
 
@@ -1733,6 +1735,8 @@ End Cutting.
 
 Module ReDun.
 
+  Section Dummy.
+    
   Variable A : Type.
 
   Inductive NoDup : list A -> Prop :=
@@ -1790,6 +1794,7 @@ Module ReDun.
   destruct (NoDup_remove_2 _ _ _ H0 H).
   Qed.
 
+  End Dummy.
 End ReDun.
 
 
