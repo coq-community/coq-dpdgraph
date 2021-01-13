@@ -10,7 +10,7 @@
 # will set several variables: (see AC_SUBST at the end of this file)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-AC_INIT(coq-dpdgraph,0.6.7)
+AC_INIT(coq-dpdgraph,0.6.9)
 AC_MSG_NOTICE(AC_PACKAGE_NAME version AC_PACKAGE_VERSION)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -184,8 +184,8 @@ COQVERSION=$($COQC -v | sed -n -e 's|.*version *\(.*\)$|\1|p' )
 AC_MSG_RESULT($COQVERSION)
 
 case $COQVERSION in
-  8.[[0-9]][[^0-9]]*|8.10*)
-    AC_MSG_ERROR(AC_PACKAGE_NAME needs Coq version 8.11 or higher)
+  8.[[0-9]][[^0-9]]*|8.12*)
+    AC_MSG_ERROR(AC_PACKAGE_NAME needs Coq version 8.13 or higher)
     ;;
 esac
 
