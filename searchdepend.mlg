@@ -34,13 +34,13 @@ let add_identifier (x:Names.Id.t)(d:Data.t) =
 let add_sort (s:Sorts.t)(d:Data.t) = d
 
 let add_constant (cst:Names.Constant.t)(d:Data.t) =
-  Data.add (Globnames.ConstRef cst) d
+  Data.add (Names.GlobRef.ConstRef cst) d
 
 let add_inductive ((k,i):Names.inductive)(d:Data.t) =
-  Data.add (Globnames.IndRef (k, i)) d
+  Data.add (Names.GlobRef.IndRef (k, i)) d
 
 let add_constructor(((k,i),j):Names.constructor)(d:Data.t) =
-  Data.add (Globnames.ConstructRef ((k,i),j)) d
+  Data.add (Names.GlobRef.ConstructRef ((k,i),j)) d
 
 let collect_long_names (c:Constr.t) (acc:Data.t) =
   let rec add acc c =
