@@ -42,15 +42,15 @@ let add_inductive ((k,i):Names.inductive)(d:Data.t) =
 let add_constructor(((k,i),j):Names.constructor)(d:Data.t) =
   Data.add (Names.GlobRef.ConstructRef ((k,i),j)) d
 
-let collect_long_names (c:Constr.t) (acc:Data.t) =
+let collect_long_names avoid (c:Constr.t) (acc:Data.t) =
   let rec add acc c =
     let open Constr in
     match kind c with
       | Var x -> add_identifier x acc
       | Sort s -> add_sort s acc
       | Const cst -> add_constant (Univ.out_punivs cst) acc
-      | Ind i -> add_inductive (Univ.out_punivs i) acc
-      | Construct cnst -> add_constructor (Univ.out_punivs cnst) acc
+      | Ind (i,_) when not (List.exists (Names.MutInd.CanOrd.equal (fst i)) avoid) -> add_inductive i acc
+      | Construct (cnst,_) when not (List.exists (Names.MutInd.CanOrd.equal (fst (fst cnst))) avoid) -> add_constructor cnst acc
       | Case({ci_ind=i},_,_,_,_,_,_) ->
           add_inductive i (Constr.fold add acc c)
       | _ -> Constr.fold add acc c
@@ -70,11 +70,11 @@ let collect_dependance gref =
          Some (e,_,_) -> [e]
 	| None -> [] in
       let cl = cb.Declarations.const_type :: cl in
-      List.fold_right collect_long_names cl Data.empty
+      List.fold_right (collect_long_names []) cl Data.empty
   | IndRef i | ConstructRef (i,_) ->
       let _, indbody = Global.lookup_inductive i in
       let ca = indbody.Declarations.mind_user_lc in
-        Array.fold_right collect_long_names ca Data.empty
+        Array.fold_right (collect_long_names [fst i]) ca Data.empty
 
 let display_dependance gref =
   let display d =

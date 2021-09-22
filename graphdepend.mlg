@@ -39,7 +39,7 @@ try
   let t, ctx = Typeops.type_of_global_in_context (Global.env()) gref in
 (* Beware of this code, not considered entirely correct, but I don't know
    how to fix it. *)
-  let env = Environ.push_context ~strict:false (Univ.AUContext.repr ctx)
+  let env = Environ.push_context ~strict:false (Univ.AbstractContext.repr ctx)
             (Global.env ()) in
   let s = (Typeops.infer_type env t).Environ.utj_type in
   Sorts.is_prop s
