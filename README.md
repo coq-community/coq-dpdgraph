@@ -1,15 +1,53 @@
-coq-dpdgraph
-============
+<!---
+This file was generated from `meta.yml`, please do not edit manually.
+Follow the instructions on https://github.com/coq-community/templates to regenerate.
+--->
+# coq-dpdgraph
 
-Build dependency graphs between Coq objects,
-where Coq is the famous formal proof management system (see
-http://coq.inria.fr/).
+[![Docker CI][docker-action-shield]][docker-action-link]
+[![Contributing][contributing-shield]][contributing-link]
+[![Code of Conduct][conduct-shield]][conduct-link]
+[![Zulip][zulip-shield]][zulip-link]
 
-Travis CI status on master branch: [![Build Status](https://travis-ci.org/Karmaki/coq-dpdgraph.svg?branch=master)](https://travis-ci.org/Karmaki/coq-dpdgraph)
+[docker-action-shield]: https://github.com/coq-community/coq-dpdgraph/workflows/Docker%20CI/badge.svg?branch=coq-v8.14
+[docker-action-link]: https://github.com/coq-community/coq-dpdgraph/actions?query=workflow:"Docker%20CI"
 
-## What's inside ?
+[contributing-shield]: https://img.shields.io/badge/contributions-welcome-%23f7931e.svg
+[contributing-link]: https://github.com/coq-community/manifesto/blob/master/CONTRIBUTING.md
 
-First of all, it is a small tool (a Coq plug-in) that extracts the
+[conduct-shield]: https://img.shields.io/badge/%E2%9D%A4-code%20of%20conduct-%23f15a24.svg
+[conduct-link]: https://github.com/coq-community/manifesto/blob/master/CODE_OF_CONDUCT.md
+
+[zulip-shield]: https://img.shields.io/badge/chat-on%20zulip-%23c1272d.svg
+[zulip-link]: https://coq.zulipchat.com/#narrow/stream/237663-coq-community-devs.20.26.20users
+
+
+
+Coq plugin that extracts the dependencies between Coq objects,
+and produces files with dependency information. Includes tools
+to visualize dependency graphs and find unused definitions.
+
+## Meta
+
+- Author(s):
+  - Anne Pacalet
+  - Yves Bertot
+  - Olivier Pons
+- Coq-community maintainer(s):
+  - Anne Pacalet ([**@Karmaki**](https://github.com/Karmaki))
+  - Yves Bertot ([**@ybertot**](https://github.com/ybertot))
+- License: [GNU Lesser General Public License v2.1](LICENSE)
+- Compatible Coq versions: 8.14 (use the corresponding branch or release for other Coq versions)
+- Compatible OCaml versions: 4.05.0 or later
+- Additional dependencies:
+  - autoconf (except for releases)
+  - [OCamlgraph](https://github.com/backtracking/ocamlgraph)
+- Coq namespace: `dpdgraph`
+- Related publication(s): none
+
+## What's inside?
+
+First of all, it is a small tool (a Coq plugin) that extracts the
 dependencies between Coq objects, and produces a file (we suggest using
 the suffix .dpd) with this information.
 
@@ -25,25 +63,16 @@ Hope other tools later on to do more things. Feel free to contribute!
 ## How to get it
 
 You can:
-- either clone it from GitHub at: https://github.com/Karmaki/coq-dpdgraph
+- either clone it from GitHub at: https://github.com/coq-community/coq-dpdgraph
 - or get the opam package named `coq-dpdgraph` from the opam-coq archive (repository "released")
-- or get the
-[latest distributed version](https://github.com/Karmaki/coq-dpdgraph/releases)
+- or get the [latest distributed version](https://github.com/coq-community/coq-dpdgraph/releases)
+
 ### Compilation
 
-#### Requirements
+First download the archive and unpack it (or clone the repository),
+and change directory to the `coq-dpdgraph` directory.
 
-- The latest version runs with Coq 8.11
-- it has been tested with a version of Coq installed using opam and with
-  Ocaml version 4.09.0
-- [ocamlgraph](http://ocamlgraph.lri.fr/) (for dpd2dot tool)
-  Any version should work since only the basic feature are used.
-
-#### Compile from the pre-packaged source archive or the git repository
-
-First download the archive, unpack it, and change directory to the `coq-dpdgraph` directory.
-
-Depending on how you got hold of the archive, you may be in one of three situations:
+Depending on how you got hold of the directory, you may be in one of three situations:
 
  1/ Makefile is present
 
@@ -64,23 +93,21 @@ Depending on how you got hold of the archive, you may be in one of three situati
     $ autoconf
     $ configure && make && make install
 
-#### lenient compilation
+By default, compilation will fail if there is any warning emitted by
+the ocaml compiler.  This can be disabled by type
 
-   By default, compilation will fail if there is any warning emitted by
-   the ocaml compiler.  This can be disabled by type
+    make WARN_ERR=
 
-      make WARN_ERR=
+instead of `make` in all previous commands.
 
-   instead of `make` in all previous commands.
+### Install using opam
 
-#### install using opam
-
-If you use opam, you can install `coq-dpdgraph` and `ocamlgraph`
+If you use opam, you can install `coq-dpdgraph` and `ocamlgraph` using
 
     $ opam repo add coq-released https://coq.inria.fr/opam/released
     $ opam install coq-dpdgraph
 
-#### Test
+### Test
 
 If you install the archive by cloning the git repository, you have
 a sub-directory containing test files.  These can be tested using the
@@ -96,13 +123,12 @@ to check if everything is ok.
 
 - to have compiled the tools (see above)
 - a compiled Coq file.
-  You can for instance use ``tests/Test.v`` (a modified clone of Coq ``List.v``)
-   and compile it doing :
-```
+  You can for instance use `tests/Test.v` (a modified clone of Coq `List.v`)
+  and compile it doing :
+```shell
   $ coqc tests/Test.v
 ```
-
-
+  
 ### Generation of .dpd files
 
 The available commands are :
@@ -237,7 +263,7 @@ references 0 times.  You can specify max number of references allowed
 
 ## Development information
 
-#### Generated ``.dpd`` format description
+### Generated ``.dpd`` format description
 
 ```
 graph : obj_list
@@ -278,10 +304,9 @@ Each tool can then pick the attributes that it is able to handle;
   they are not supposed to raise an error whenever there is
   an unknown attribute.
 
-
 ## More information
 
 Also see:
 - [CHANGES](CHANGES.md)
 - [distributed versions](https://anne.pacalet.fr/dev/dpdgraph/)
-- [coq-dpdgraph in Travis CI](https://travis-ci.org/Karmaki/coq-dpdgraph/)
+
