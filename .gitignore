@@ -10,10 +10,14 @@
 *.cmxa
 *.mlg.d
 version.ml
+graphdepend.ml
+searchdepend.ml
 
 autom4te.cache
 configure
 Makefile
+Make_coq.conf
+.Make_coq.d
 config.log
 config.status
 *.aux
@@ -21,6 +25,8 @@ config.status
 *.mllib.d
 *.v.d
 *.vo
+*.vok
+*.vos
 
 coqthmdep
 dpd2dot
