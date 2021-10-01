@@ -6,7 +6,7 @@ organization: coq-community
 community: true
 action: true
 plugin: true
-branch: master
+branch: 'coq-master'
 
 synopsis: >-
   Compute dependencies between Coq objects (definitions, theorems) and produce graphs
