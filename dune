@@ -1,0 +1,49 @@
+(ocamllex dpd_lex)
+
+(ocamlyacc dpd_parse)
+
+(coq.pp (modules graphdepend))
+
+(coq.pp (modules searchdepend))
+
+(library
+ (name dpdgraph)
+ (public_name coq-dpdgraph.plugin)
+ (flags :standard -rectypes -w -3-9-27-32)
+ (modules searchdepend graphdepend)
+ (libraries coq-core.plugins.ltac))
+
+(library
+ (name version) 
+ (modules version))
+
+(library
+ (name dpd_compute)
+ (modules dpd_compute)
+ (libraries ocamlgraph))
+
+(library
+ (name dpd_lex)
+ (modules dpd_lex dpd_parse)
+ (libraries dpd_compute))
+
+(executable
+ (name dpd2dot)
+ (public_name dpd2dot)
+ (libraries dpd_compute dpd_lex version)
+ (modules dpd2dot dpd_dot)
+ (package coq-dpdgraph))
+
+(executable
+ (name dpdusage)
+ (public_name dpdusage)
+ (libraries dpd_compute dpd_lex version)
+ (modules dpdusage)
+ (package coq-dpdgraph))
+
+(coq.theory
+ (name dpdgraph)
+ (package coq-dpdgraph)
+ (synopsis "Compute dependencies between Coq objects (definitions, theorems) and produce graphs")
+ (libraries coq-dpdgraph.plugin)
+ (flags -w +default))
