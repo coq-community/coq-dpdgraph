@@ -1,7 +1,0 @@
--generate-meta-for-package coq-dpdgraph
--I .
--R . dpdgraph
-searchdepend.mlg
-graphdepend.mlg
-dpdgraph.mllib
-dpdgraph.v

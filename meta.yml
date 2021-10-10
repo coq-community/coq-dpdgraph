@@ -7,6 +7,7 @@ community: true
 action: true
 plugin: true
 branch: 'coq-master'
+dune: true
 
 synopsis: >-
   Compute dependencies between Coq objects (definitions, theorems) and produce graphs
@@ -44,11 +45,6 @@ supported_ocaml_versions:
     opam: '{>= "4.05.0"}'
 
 dependencies:
-- opam:
-    name: conf-autoconf
-    version: '{build & dev}'
-  description: |-
-    autoconf (except for releases)
 - opam:
     name: ocamlgraph
   description: |-
