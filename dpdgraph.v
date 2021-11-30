@@ -1,1 +1,1 @@
-Declare ML Module "dpdgraph".
+Declare ML Module "coq-dpdgraph.plugin".

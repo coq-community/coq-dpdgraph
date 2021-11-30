@@ -214,7 +214,7 @@ $(TESTDIR)/PrimitiveProjections.dpd $(TESTDIR)/PrimitiveProjections2.dpd: \
 	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < $(*F).cmd > /dev/null 2>&1
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
-	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph 2> /dev/null \
+	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph -I . 2> /dev/null \
 	  | sed -e 's/Welcome to Coq.*/Welcome to Coq/' > $@
 
 %.dot : %.dpd  $(DPD2DOT)

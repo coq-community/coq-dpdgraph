@@ -7,7 +7,7 @@
 (*        (see the enclosed LICENSE file for mode details)                    *)
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
 
-DECLARE PLUGIN "dpdgraph"
+DECLARE PLUGIN "coq-dpdgraph.plugin"
 
 {
 
