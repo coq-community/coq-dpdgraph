@@ -18,7 +18,7 @@ build: [
   ["./configure"]
   [make "-j%{jobs}%" "WARN_ERR="]
 ]
-run-test: [make "test"]
+run-test: [make "test-suite"]
 install: [make "install" "BINDIR=%{bin}%"]
 depends: [
   "ocaml" {>= "4.05.0"}
