@@ -57,7 +57,7 @@ There are only few operations to perform, thanks to the coq-community templates.
    official, then this opam file can be added directly in the
    `released` directory.  The name of the directory for this file
    should be the similar to the name of the tag
-   (`v` being replace by `coq-dpdgraph.`).  The opam file should be
+   (`v` being replaced by `coq-dpdgraph.`).  The opam file should be
    inspired from the opam file for the previous revision except that
    the url src and checksum should be adapted to the new name and its
    checksum (obtained using `sha512sum`.
