@@ -9,7 +9,7 @@ Follow the instructions on https://github.com/coq-community/templates to regener
 [![Code of Conduct][conduct-shield]][conduct-link]
 [![Zulip][zulip-shield]][zulip-link]
 
-[docker-action-shield]: https://github.com/coq-community/coq-dpdgraph/workflows/Docker%20CI/badge.svg?branch=coq-master
+[docker-action-shield]: https://github.com/coq-community/coq-dpdgraph/workflows/Docker%20CI/badge.svg?branch=coq-v8.15
 [docker-action-link]: https://github.com/coq-community/coq-dpdgraph/actions?query=workflow:"Docker%20CI"
 
 [contributing-shield]: https://img.shields.io/badge/contributions-welcome-%23f7931e.svg
@@ -37,7 +37,7 @@ to visualize dependency graphs and find unused definitions.
   - Anne Pacalet ([**@Karmaki**](https://github.com/Karmaki))
   - Yves Bertot ([**@ybertot**](https://github.com/ybertot))
 - License: [GNU Lesser General Public License v2.1](LICENSE)
-- Compatible Coq versions: master (use the corresponding branch or release for other Coq versions)
+- Compatible Coq versions: 8.15 (use the corresponding branch or release for other Coq versions)
 - Compatible OCaml versions: 4.05.0 or later
 - Additional dependencies:
   - autoconf (except for releases)
