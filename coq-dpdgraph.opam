@@ -1,6 +1,3 @@
-# This file was generated from `meta.yml`, please do not edit manually.
-# Follow the instructions on https://github.com/coq-community/templates to regenerate.
-
 opam-version: "2.0"
 maintainer: "palmskog@gmail.com"
 version: "8.15.dev"
@@ -16,8 +13,13 @@ Coq plugin that extracts the dependencies between Coq objects,
 and produces files with dependency information. Includes tools
 to visualize dependency graphs and find unused definitions."""
 
-build: [make "-j%{jobs}%"]
-install: [make "install"]
+build: [
+  ["autoconf"] {dev}
+  ["./configure"]
+  [make "-j%{jobs}%" "WARN_ERR="]
+]
+run-test: [make "test-suite"]
+install: [make "install" "BINDIR=%{bin}%"]
 depends: [
   "ocaml" {>= "4.05.0"}
   "coq" {>= "8.15"& < "8.16~"}
