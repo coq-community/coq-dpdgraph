@@ -50,7 +50,7 @@ OCAMLLEX=@OCAMLLEX@
 OCAMLYACC=@OCAMLYACC@
 
 WARN_ERR := -warn-error +a
-OCAMLFLAGS :=  -w +a $(WARN_ERR) -g -dtypes $(INCLUDES) -c
+OCAMLFLAGS :=  -w +a $(WARN_ERR) -g -dtypes $(INCLUDES) -c -w -70
 OCAMLFLAGS += $(OCAML_EXTRA_OPTS)
 OCAMLOPTFLAGS = -c
 
