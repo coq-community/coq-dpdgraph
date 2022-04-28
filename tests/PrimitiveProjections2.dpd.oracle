@@ -1,5 +1,0 @@
-N: 8 "foo" [body=yes, kind=cnst, prop=no, path="PrimitiveProjections", ];
-N: 9 "sigT" [kind=inductive, prop=no, path="PrimitiveProjections", ];
-N: 10 "existT" [kind=construct, prop=no, path="PrimitiveProjections", ];
-E: 8 9 [weight=8, ];
-E: 8 10 [weight=2, ];
