@@ -1,40 +1,9 @@
-  $ cat > PrimitiveProjections.v <<EOF 
-  > Set Primitive Projections.
-  > Set Implicit Arguments.
-  > 
-  > Record sigT {A} (P : A -> Type) := existT { projT1 : A ; projT2 : P projT1 }.
-  > 
-  > Notation "{ x : A  & P }" := (sigT (A:=A) (fun x => P)) : type_scope.
-  > 
-  > Definition bar := @projT1.
-  > Definition baz A P (x : @sigT A P) := projT1 x.
-  > 
-  > Definition foo (A: Type) (B: A -> Type) (C: A -> Type) (c: {x : A & {_ : B x & C x}}) : {x : A & {_ : C x & B x}}.
-  > Proof.
-  >   exists (projT1 c).
-  >   exists (projT2 (projT2 c)).
-  >   destruct c as [a [b c]].
-  >   exact b.
-  > Defined.
-  > EOF
-
   $ coqc -R .. dpdgraph PrimitiveProjections.v
   File "./PrimitiveProjections.v", line 6, characters 0-69:
   Warning: Notation "{ _ : _ & _ }" was already used in scope type_scope.
   [notation-overridden,parsing]
 
-  $ cat > PrimitiveProjections.cmd <<EOF
-  > Require Import dpdgraph.dpdgraph.
-  > 
-  > Require PrimitiveProjections.
-  > Set DependGraph File "PrimitiveProjections.dpd".
-  > Print FileDependGraph PrimitiveProjections.
-  > Set DependGraph File "PrimitiveProjections2.dpd".
-  > 
-  > Print DependGraph PrimitiveProjections.foo.
-  > EOF
-
-  $ coqtop -R .. dpdgraph -I .. < PrimitiveProjections.cmd | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
+  $ coqtop -R .. dpdgraph -I .. < PrimitiveProjectionsCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
   
   Coq < 
   Coq < Coq < 

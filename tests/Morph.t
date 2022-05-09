@@ -1,56 +1,6 @@
-  $ cat > Morph.v <<EOF 
-  > Require Import Setoid.
-  > 
-  > Parameter F : Type.
-  > Parameter Fequiv : F -> F -> Prop.
-  > 
-  > Axiom Fequiv_refl : forall f, Fequiv f f.
-  > Axiom Fequiv_sym : forall f1 f2, Fequiv f1 f2 -> Fequiv f2 f1.
-  > Axiom Fequiv_trans : forall f1 f2 f3, Fequiv f1 f2 -> Fequiv f2 f3 -> Fequiv f1 f3.
-  > 
-  > Add Parametric Relation : F Fequiv
-  >   reflexivity proved by Fequiv_refl
-  >   symmetry proved by Fequiv_sym
-  >   transitivity proved by Fequiv_trans
-  > as FequivR.
-  > 
-  > Parameter Fsmp : F -> F.
-  > 
-  > Add Parametric Morphism : Fsmp
-  >   with signature  Fequiv ==> Fequiv
-  > as FsmpM.
-  > Proof.
-  > Admitted.
-  > 
-  > 
-  > Theorem rw : forall f1 f2,  Fequiv f2 f1 -> Fequiv f1 (Fsmp f1) -> Fequiv f1 (Fsmp f2).
-  > Proof.
-  > intros f1 f2 He H1.
-  > rewrite He.
-  > trivial.
-  > Qed.
-  > 
-  > 
-  > (* Print rw. *)
-  > 
-  > EOF
-
   $ coqc -R .. dpdgraph Morph.v
 
-  $ cat > Morph.cmd <<EOF
-  > Require Import dpdgraph.dpdgraph.
-  > 
-  > Require Morph.
-  > 
-  > Set DependGraph File "Morph.dpd".
-  > Print FileDependGraph Morph.
-  > 
-  > Set DependGraph File "Morph_rw.dpd".
-  > Print DependGraph Morph.rw.
-  > 
-  > EOF
-
-  $ coqtop -R .. dpdgraph -I .. < Morph.cmd | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
+  $ coqtop -R .. dpdgraph -I .. < MorphCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
   
   Coq < 
   Coq < Coq < 
@@ -58,13 +8,14 @@
   Coq < 
   Coq < Coq < 
   Coq < 
-  Coq < Coq < 
+  Coq < 
   Welcome to Coq
   [Loading ML file coq-dpdgraph.plugin ... done]
   Fetching opaque proofs from disk for dpdgraph.tests.Morph
   Info: output dependencies in file Morph.dpd
   Fetching opaque proofs from disk for Coq.Classes.Morphisms
   Info: output dependencies in file Morph_rw.dpd
+
   $ cat Morph.dpd
   N: 14 "F" [body=no, kind=cnst, prop=no, path="Morph", ];
   N: 13 "Fequiv" [body=no, kind=cnst, prop=no, path="Morph", ];
@@ -116,9 +67,11 @@
   E: 12 13 [weight=1, ];
   E: 12 14 [weight=1, ];
   E: 13 14 [weight=2, ];
+
   $ dpd2dot Morph.dpd
   Info: read file Morph.dpd
   Info: Graph output in Morph.dot
+
   $ cat Morph.dot
   digraph Morph {
     graph [ratio=0.5]

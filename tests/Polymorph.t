@@ -1,25 +1,6 @@
-  $ cat > Polymorph.v <<EOF 
-  > Set Universe Polymorphism.
-  > 
-  > Definition foo (A: Type) (B: A -> Type) (C: A -> Type) (c: {x : A & {_ : B x & C x}}) : {x : A & {_ : C x & B x}}.
-  > Proof.
-  > destruct c as [a [b c]].
-  > exists a, c. exact b.
-  > Defined.
-  > EOF
-
   $ coqc -R .. dpdgraph Polymorph.v
 
-  $ cat > Polymorph.cmd <<EOF
-  > Require Import dpdgraph.dpdgraph.
-  > 
-  > Require Polymorph.
-  > Set DependGraph File "Polymorph.dpd".
-  > 
-  > Print DependGraph Polymorph.foo.
-  > EOF
-
-  $ coqtop -R .. dpdgraph -I .. < Polymorph.cmd | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
+  $ coqtop -R .. dpdgraph -I .. < PolymorphCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'  
   
   Coq < 
   Coq < Coq < 

@@ -1,14 +1,6 @@
   $ coqc -R .. dpdgraph Test.v > /dev/null 2>&1
 
-  $ cat > search.cmd <<EOF
-  > Require Import dpdgraph.dpdgraph.
-  > 
-  > Require Import Test.
-  > 
-  > SearchDepend Test.Permutation_app_swap.
-  > EOF
-
-  $ coqtop -R .. dpdgraph -I .. < search.cmd | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
+  $ coqtop -R .. dpdgraph -I .. < searchCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
   
   Coq < 
   Coq < Coq < Toplevel input, characters 1-21:
