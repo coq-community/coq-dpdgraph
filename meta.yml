@@ -8,6 +8,7 @@ action: true
 plugin: true
 branch: 'coq-master'
 dune: true
+dune_version: '3.0.2'
 
 synopsis: >-
   Compute dependencies between Coq objects (definitions, theorems) and produce graphs

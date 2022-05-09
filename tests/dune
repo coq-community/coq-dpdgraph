@@ -10,7 +10,6 @@
   TestCmd.v
   Test.v
   ../theories/dpdgraph.vo
-  (package coq-dpdgraph)
   %{bin:dpd2dot}
   %{bin:dpdusage}
-  ))
+  (package coq-dpdgraph)))
