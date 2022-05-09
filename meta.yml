@@ -40,10 +40,6 @@ supported_coq_versions:
   text: master (use the corresponding branch or release for other Coq versions)
   opam: '{= "dev"}'
 
-supported_ocaml_versions:
-    text: 4.09.0 or later
-    opam: '{>= "4.09.0"}'
-
 dependencies:
 - opam:
     name: ocamlgraph
