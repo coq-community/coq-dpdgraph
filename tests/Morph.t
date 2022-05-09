@@ -1,6 +1,6 @@
-  $ coqc -R .. dpdgraph Morph.v
+  $ coqc -R . dpdgraph.tests Morph.v
 
-  $ coqtop -R .. dpdgraph -I .. < MorphCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
+  $ coqtop -R . dpdgraph.tests -R ../theories dpdgraph -I ../src < MorphCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
   
   Coq < 
   Coq < Coq < 

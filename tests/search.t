@@ -1,6 +1,6 @@
-  $ coqc -R .. dpdgraph Test.v > /dev/null 2>&1
+  $ coqc -R . dpdgraph.tests Test.v > /dev/null 2>&1
 
-  $ coqtop -R .. dpdgraph -I .. < searchCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
+  $ coqtop -R . dpdgraph.tests -R ../theories dpdgraph -I ../src < searchCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
   
   Coq < 
   Coq < Coq < Toplevel input, characters 1-21:

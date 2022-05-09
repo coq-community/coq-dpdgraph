@@ -40,10 +40,3 @@
  (libraries dpd_compute dpd_lex version)
  (modules dpdusage)
  (package coq-dpdgraph))
-
-(coq.theory
- (name dpdgraph)
- (package coq-dpdgraph)
- (synopsis "Compute dependencies between Coq objects (definitions, theorems) and produce graphs")
- (libraries coq-dpdgraph.plugin)
- (flags -w +default))

@@ -8,9 +8,9 @@
   > 
   > EOF
 
-  $ coqc -R .. dpdgraph Test.v > /dev/null 2>&1
+  $ coqc -R . dpdgraph.tests Test.v > /dev/null 2>&1
 
-  $ coqtop -R .. dpdgraph -I .. < Test.cmd | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
+  $ coqtop  -R . dpdgraph.tests -R ../theories dpdgraph -I ../src < Test.cmd | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
   
   Coq < 
   Coq < Coq < 

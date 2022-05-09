@@ -9,8 +9,8 @@
   searchCmd.v
   TestCmd.v
   Test.v
+  ../theories/dpdgraph.vo
   (package coq-dpdgraph)
-  ../dpdgraph.vo
   %{bin:dpd2dot}
   %{bin:dpdusage}
   ))

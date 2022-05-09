@@ -1,0 +1,6 @@
+(coq.theory
+ (name dpdgraph)
+ (package coq-dpdgraph)
+ (synopsis "Compute dependencies between Coq objects (definitions, theorems) and produce graphs")
+ (libraries coq-dpdgraph.plugin)
+ (flags :standard -w +default))
