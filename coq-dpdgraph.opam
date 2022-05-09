@@ -17,8 +17,9 @@ and produces files with dependency information. Includes tools
 to visualize dependency graphs and find unused definitions."""
 
 build: ["dune" "build" "-p" name "-j" jobs]
+run-test: ["dune" "build" "-p" name "test"]
 depends: [
-  "ocaml" {>= "4.05.0"}
+  "ocaml" {>= "4.09.0"}
   "dune" {>= "2.5"}
   "coq" {= "dev"}
   "ocamlgraph" 

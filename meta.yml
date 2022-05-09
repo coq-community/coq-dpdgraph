@@ -41,8 +41,8 @@ supported_coq_versions:
   opam: '{= "dev"}'
 
 supported_ocaml_versions:
-    text: 4.05.0 or later
-    opam: '{>= "4.05.0"}'
+    text: 4.09.0 or later
+    opam: '{>= "4.09.0"}'
 
 dependencies:
 - opam:
