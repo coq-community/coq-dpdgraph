@@ -1,6 +1,6 @@
-  $ coqc -R . dpdgraph.tests Polymorph.v
+  $ coqc -R . dpdgraphtests Polymorph.v
 
-  $ coqtop -R . dpdgraph.tests -R ../theories dpdgraph -I ../src < PolymorphCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'  
+  $ coqtop -R . dpdgraphtests -R ../theories dpdgraph -I ../src < PolymorphCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'  
   
   Coq < 
   Coq < Coq < 

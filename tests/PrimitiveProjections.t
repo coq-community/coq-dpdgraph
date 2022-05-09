@@ -1,9 +1,9 @@
-  $ coqc -R . dpdgraph.tests PrimitiveProjections.v
+  $ coqc -R . dpdgraphtests PrimitiveProjections.v
   File "./PrimitiveProjections.v", line 6, characters 0-69:
   Warning: Notation "{ _ : _ & _ }" was already used in scope type_scope.
   [notation-overridden,parsing]
 
-  $ coqtop -R . dpdgraph.tests -R ../theories dpdgraph -I ../src < PrimitiveProjectionsCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
+  $ coqtop -R . dpdgraphtests -R ../theories dpdgraph -I ../src < PrimitiveProjectionsCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
   
   Coq < 
   Coq < Coq < 
