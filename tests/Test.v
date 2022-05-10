@@ -339,11 +339,11 @@ Section Facts.
 
 End Facts.
 
-Hint Resolve app_nil_end ass_app app_ass: datatypes v62.
-Hint Resolve app_comm_cons app_cons_not_nil: datatypes v62.
-Hint Immediate app_eq_nil: datatypes v62.
-Hint Resolve app_eq_unit app_inj_tail: datatypes v62.
-Hint Resolve in_eq in_cons in_inv in_nil in_app_or in_or_app: datatypes v62.
+#[global] Hint Resolve app_nil_end ass_app app_ass: datatypes v62.
+#[global] Hint Resolve app_comm_cons app_cons_not_nil: datatypes v62.
+#[global] Hint Immediate app_eq_nil: datatypes v62.
+#[global] Hint Resolve app_eq_unit app_inj_tail: datatypes v62.
+#[global] Hint Resolve in_eq in_cons in_inv in_nil in_app_or in_or_app: datatypes v62.
 
 
 
@@ -1578,7 +1578,7 @@ Section length_order.
   Qed.
 End length_order.
 
-Hint Resolve lel_refl lel_cons_cons lel_cons lel_nil lel_nil nil_cons:
+#[global] Hint Resolve lel_refl lel_cons_cons lel_cons lel_nil lel_nil nil_cons:
   datatypes v62.
 
 
@@ -1647,7 +1647,7 @@ Section SetIncl.
 
 End SetIncl.
 
-Hint Resolve incl_refl incl_tl incl_tran incl_appl incl_appr incl_cons
+#[global] Hint Resolve incl_refl incl_tl incl_tran incl_appl incl_appr incl_cons
   incl_app: datatypes v62.
 
 
@@ -1840,7 +1840,7 @@ End NatSeq.
   (** * Exporting hints and tactics *)
 
 
-Hint Rewrite
+#[global] Hint Rewrite
   rev_involutive (* rev (rev l) = l *)
   rev_unit (* rev (l ++ a :: nil) = a :: rev l *)
   map_nth (* nth n (map f l) (f d) = f (nth n l d) *)
@@ -1850,7 +1850,7 @@ Hint Rewrite
   rev_length (* length (rev l) = length l *)
   : list.
 
-Hint Rewrite <-
+#[global] Hint Rewrite <-
   app_nil_end (* l = l ++ nil *)
   : list.
 
