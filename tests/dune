@@ -1,15 +1,15 @@
 (cram
  (deps
-  MorphCmd.v
-  Morph.v
-  PolymorphCmd.v
-  Polymorph.v
-  PrimitiveProjectionsCmd.v
-  PrimitiveProjections.v
-  searchCmd.v
-  TestCmd.v
-  Test.v
-  ../theories/dpdgraph.vo
-  %{bin:dpd2dot}
-  %{bin:dpdusage}
-  (package coq-dpdgraph)))
+   Morph.v
+   MorphCmd.v
+   Polymorph.v
+   PolymorphCmd.v
+   PrimitiveProjections.v
+   PrimitiveProjectionsCmd.v
+   Test.v
+   TestCmd.v
+   searchCmd.v
+   ../theories/dpdgraph.vo
+   %{bin:dpd2dot}
+   %{bin:dpdusage}
+   (package coq-dpdgraph)))

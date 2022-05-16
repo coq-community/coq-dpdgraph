@@ -1,23 +1,13 @@
-  $ cat > Test.cmd << EOF
-  > Require Import dpdgraph.dpdgraph.
-  > 
-  > Require Test.
-  > Print FileDependGraph Test.
-  > Set DependGraph File "graph2.dpd".
-  > Print DependGraph Test.Permutation_app_swap.
-  > 
-  > EOF
-
   $ coqc -R . dpdgraph.tests Test.v > /dev/null 2>&1
 
-  $ coqtop  -R . dpdgraph.tests -R ../theories dpdgraph -I ../src < Test.cmd | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
+  $ coqtop  -R . dpdgraph.tests -R ../theories dpdgraph -I ../src < TestCmd.v | sed -e 's/Welcome to Coq.*/Welcome to Coq/'
   
   Coq < 
   Coq < Coq < 
   Coq < 
   Coq < 
   Coq < 
-  Coq < Coq < 
+  Coq < 
   Welcome to Coq
   [Loading ML file coq-dpdgraph.plugin ... done]
   Fetching opaque proofs from disk for dpdgraph.tests.Test
