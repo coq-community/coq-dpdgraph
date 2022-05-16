@@ -48,7 +48,7 @@ dependencies:
     [OCamlgraph](https://github.com/backtracking/ocamlgraph)
 
 tested_coq_opam_versions:
-- version: dev
+- version: dev-ocaml-4.13.1-flambda
 
 namespace: dpdgraph
 

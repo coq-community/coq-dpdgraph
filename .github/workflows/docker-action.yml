@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:dev'
+          - 'coqorg/coq:dev-ocaml-4.13.1-flambda'
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
