@@ -32,7 +32,7 @@ DISTRIBUTED = $(PRE)_compute.ml $(PRE)_dot.ml \
 
 DISTRIBUTED+=dpdgraph.v
 
-ML_COMMON = version.ml $(PRE)_compute.ml $(PRE)_dot.ml \
+ML_COMMON = version.ml version.mli $(PRE)_compute.ml $(PRE)_dot.ml \
           $(PRE)_parse.ml  $(PRE)_lex.ml
 ML_DPD2DOT = $(PRE)2dot.ml
 ML_DPDUSAGE = $(PRE)usage.ml
