@@ -34,12 +34,17 @@ DISTRIBUTED+=dpdgraph.v
 
 ML_COMMON = version.ml $(PRE)_compute.ml $(PRE)_dot.ml \
           $(PRE)_parse.ml  $(PRE)_lex.ml
+MLI_COMMON =  version.mli $(PRE)_compute.mli $(PRE)_dot.mli $(PRE)_lex.mli
 ML_DPD2DOT = $(PRE)2dot.ml
+MLI_DPD2DOT = $(PRE)2dot.mli
 ML_DPDUSAGE = $(PRE)usage.ml
+MLI_DPDUSAGE = $(PRE)usage.mli
 
 ML_ALL = $(ML_COMMON) $(ML_DPD2DOT) $(ML_DPDUSAGE)
 
+CMIS_DPD2DOT=$(MLI_COMMON:%.ml=%.cmo) $(MLI_DPD2DOT:%.ml=%.cmo)
 CMOS_DPD2DOT=$(ML_COMMON:%.ml=%.cmo) $(ML_DPD2DOT:%.ml=%.cmo)
+CMIS_DPDUSAGE=$(MLI_COMMON:%.ml=%.cmo) $(MLI_DPDUSAGE:%.ml=%.cmo)
 CMOS_DPDUSAGE=$(ML_COMMON:%.ml=%.cmo) $(ML_DPDUSAGE:%.ml=%.cmo)
 CMXS=$(ML_ALL:%.ml=%.cmx)
 
@@ -85,11 +90,11 @@ version.ml : configure
 
 GENERATED+=version.ml
 
-$(DPD2DOT) : $(CMOS_DPD2DOT)
+$(DPD2DOT) : $(CMOS_DPD2DOT) $(CMIS_DPD2DOT)
 	$(ECHO_CIBLE)
 	$(OCAMLC) -g $(INCLUDES) -o $@ graph.cma $(CMOS_DPD2DOT)
 
-$(DPDUSAGE) : $(CMOS_DPDUSAGE)
+$(DPDUSAGE) : $(CMOS_DPDUSAGE) $(CMIS_DPDUSAGE)
 	$(ECHO_CIBLE)
 	$(OCAMLC) -g $(INCLUDES) -o $@ graph.cma $(CMOS_DPDUSAGE)
 
