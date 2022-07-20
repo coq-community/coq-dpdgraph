@@ -58,7 +58,7 @@ module G :
       sig
         type t = Node.t * Edge.t * Node.t
         val compare : t -> t -> int
-        type vertex = vertex
+        type vertex = V.t
         val src : t -> vertex
         val dst : t -> vertex
         type label = Edge.t
