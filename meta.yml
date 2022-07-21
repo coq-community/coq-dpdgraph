@@ -6,7 +6,7 @@ organization: coq-community
 community: true
 action: true
 plugin: true
-branch: 'coq-master'
+branch: 'coq-v8.16'
 
 synopsis: >-
   Compute dependencies between Coq objects (definitions, theorems) and produce graphs
@@ -29,15 +29,15 @@ maintainers:
 
 opam-file-maintainer: palmskog@gmail.com
 
-opam-file-version: dev
+opam-file-version: 8.16.dev
 
 license:
   fullname: GNU Lesser General Public License v2.1
   identifier: LGPL-2.1-only
 
 supported_coq_versions:
-  text: master (use the corresponding branch or release for other Coq versions)
-  opam: '{= "dev"}'
+  text: 8.16 (use the corresponding branch or release for other Coq versions)
+  opam: '{>= "8.16" & "8.17~"}'
 
 supported_ocaml_versions:
     text: 4.05.0 or later
@@ -55,7 +55,7 @@ dependencies:
     [OCamlgraph](https://github.com/backtracking/ocamlgraph)
 
 tested_coq_opam_versions:
-- version: dev
+- version: 8.16
 
 namespace: dpdgraph
 
