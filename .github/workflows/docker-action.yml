@@ -5,7 +5,7 @@ name: Docker CI
 on:
   push:
     branches:
-      - coq-master
+      - coq-v8.16
   pull_request:
     branches:
       - '**'
@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:dev'
+          - 'coqorg/coq:8.16'
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
