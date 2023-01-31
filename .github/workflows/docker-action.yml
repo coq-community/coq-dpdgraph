@@ -17,17 +17,15 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:dev-ocaml-4.13.1-flambda'
+          - 'coqorg/coq:dev-ocaml-4.14.1'
       fail-fast: false
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-dpdgraph.opam'
           custom_image: ${{ matrix.image }}
-          export: 'OPAMWITHTEST'
-        env:
-          OPAMWITHTEST: 'true'
+
 
 # See also:
 # https://github.com/coq-community/docker-coq-action#readme

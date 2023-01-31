@@ -10,16 +10,16 @@ dev-repo: "git+https://github.com/coq-community/coq-dpdgraph.git"
 bug-reports: "https://github.com/coq-community/coq-dpdgraph/issues"
 license: "LGPL-2.1-only"
 
-synopsis: "Compute dependencies between Coq objects (definitions, theorems) and produce graphs"
+synopsis: "Compute dependencies between Coq objects (definitions, theorems) and produce
+graphs"
 description: """
 Coq plugin that extracts the dependencies between Coq objects,
 and produces files with dependency information. Includes tools
 to visualize dependency graphs and find unused definitions."""
 
 build: ["dune" "build" "-p" name "-j" jobs]
-run-test: ["dune" "runtest" "-p" name "-j" jobs]
 depends: [
-  "dune" {>= "2.8"}
+  "dune" {>= "2.5"}
   "coq" {= "dev"}
   "ocamlgraph" 
 ]
