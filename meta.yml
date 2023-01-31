@@ -49,7 +49,7 @@ dependencies:
     [OCamlgraph](https://github.com/backtracking/ocamlgraph)
 
 tested_coq_opam_versions:
-- version: dev-ocaml-4.14.1
+- version: dev
 
 namespace: dpdgraph
 
