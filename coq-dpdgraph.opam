@@ -17,8 +17,7 @@ Coq plugin that extracts the dependencies between Coq objects,
 and produces files with dependency information. Includes tools
 to visualize dependency graphs and find unused definitions."""
 
-build: ["dune" "build" "-p" name "-j" jobs]
-test: ["dune" "runtest" "-j" jobs]
+build: ["dune" "build" "-p" name "-j" jobs "@runtest" {with-test}]
 depends: [
   "dune" {>= "3.3"}
   "coq" {= "dev"}
