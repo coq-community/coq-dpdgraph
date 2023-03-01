@@ -1,3 +1,6 @@
+# This file was generated from `meta.yml`, please do not edit manually.
+# Follow the instructions on https://github.com/coq-community/templates to regenerate.
+
 opam-version: "2.0"
 maintainer: "palmskog@gmail.com"
 version: "dev"
@@ -7,23 +10,17 @@ dev-repo: "git+https://github.com/coq-community/coq-dpdgraph.git"
 bug-reports: "https://github.com/coq-community/coq-dpdgraph/issues"
 license: "LGPL-2.1-only"
 
-synopsis: "Compute dependencies between Coq objects (definitions, theorems) and produce graphs"
+synopsis: "Compute dependencies between Coq objects (definitions, theorems) and produce
+graphs"
 description: """
 Coq plugin that extracts the dependencies between Coq objects,
 and produces files with dependency information. Includes tools
 to visualize dependency graphs and find unused definitions."""
 
-build: [
-  ["autoconf"] {dev}
-  ["./configure"]
-  [make "-j%{jobs}%" "WARN_ERR="]
-]
-run-test: [make "test-suite"]
-install: [make "install" "BINDIR=%{bin}%"]
+build: ["dune" "build" "-p" name "-j" jobs "@runtest" {with-test}]
 depends: [
-  "ocaml" {>= "4.05.0"}
+  "dune" {>= "3.3"}
   "coq" {= "dev"}
-  "conf-autoconf" {build & dev}
   "ocamlgraph" 
 ]
 

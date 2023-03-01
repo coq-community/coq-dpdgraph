@@ -1,2 +1,0 @@
-Info: read file tests/attributes.err.dpd
-Error: no node with number 10: cannot build edge.
