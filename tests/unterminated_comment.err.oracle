@@ -1,0 +1,2 @@
+Info: read file tests/unterminated_comment.err.dpd
+Error: unterminated comment (started near (line:3, character:13)).
