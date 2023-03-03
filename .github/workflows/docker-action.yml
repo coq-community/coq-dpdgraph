@@ -20,7 +20,7 @@ jobs:
           - 'coqorg/coq:dev'
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-dpdgraph.opam'
@@ -28,7 +28,6 @@ jobs:
           export: 'OPAMWITHTEST'
         env:
           OPAMWITHTEST: 'true'
-
 
 # See also:
 # https://github.com/coq-community/docker-coq-action#readme
