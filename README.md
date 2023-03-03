@@ -38,10 +38,9 @@ to visualize dependency graphs and find unused definitions.
   - Yves Bertot ([**@ybertot**](https://github.com/ybertot))
 - License: [GNU Lesser General Public License v2.1](LICENSE)
 - Compatible Coq versions: master (use the corresponding branch or release for other Coq versions)
-- Compatible OCaml versions: 4.05.0 or later
 - Additional dependencies:
-  - autoconf (except for releases)
   - [OCamlgraph](https://github.com/backtracking/ocamlgraph)
+  - [Dune](https://dune.build) 2.5 or later
 - Coq namespace: `dpdgraph`
 - Related publication(s): none
 
@@ -72,33 +71,12 @@ You can:
 First download the archive and unpack it (or clone the repository),
 and change directory to the `coq-dpdgraph` directory.
 
-Depending on how you got hold of the directory, you may be in one of three situations:
-
- 1/ Makefile is present
-
-   You should type the following command.
+To compile the plugin and the Coq .v files, type
 
     $ make && make install
 
- 2/ configure is present, but no Makefile
-
-   You should type the following command.
-
-    $ ./configure && make && make install
-
- 3/ configure is not present, Makefile is not present
-
-   You should type the following command.
-
-    $ autoconf
-    $ configure && make && make install
-
-By default, compilation will fail if there is any warning emitted by
-the ocaml compiler.  This can be disabled by type
-
-    make WARN_ERR=
-
-instead of `make` in all previous commands.
+The plugin is built using Dune.  The `Makefile` is just a wrapper around
+common Dune commands.
 
 ### Install using opam
 
@@ -113,9 +91,9 @@ If you install the archive by cloning the git repository, you have
 a sub-directory containing test files.  These can be tested using the
 following command.
 
-    $ make -s test
+    $ make test
 
-to check if everything is ok.
+to check if everything is ok. The tests are run using Dune.
 
 ## How to use it
 
@@ -303,6 +281,42 @@ The parser accept .dpd files as described above,
 Each tool can then pick the attributes that it is able to handle;
   they are not supposed to raise an error whenever there is
   an unknown attribute.
+
+## Dune
+
+The plugin, .v files and tests are built using Dune. The Makefile is a wrapper
+around the common Dune commands. You can also use Dune directly, for example
+
+  $ dune build theories/
+
+Which will build the plugin and the .v files. The tests can be built with
+
+  $ dune test tests/
+
+The tests are [cram
+tests](https://dune.readthedocs.io/en/stable/tests.html#cram-tests) and are
+simply shell commands followed by expected outputs.
+
+When a test fails due to a differing output, Dune will complain. In order to
+update the tests you can do
+
+  $ make promote
+
+Which calls `dune promote` and updates the tests.
+
+## Nix
+
+In order to quickly setup a development environment, you can use Nix. The
+commands you need to run are:
+
+```
+nix-shell -p coq_8_16 \
+  coq_8_16.ocamlPackages.ocamlgraph \
+  coq_8_16.ocamlPackages.findlib \
+  coq_8_16.ocamlPackages.ocaml \
+  coq_8_16.ocamlPackages.dune_3 \
+  coq_8_16.ocamlPackages.ocaml-lsp
+```
 
 ## More information
 

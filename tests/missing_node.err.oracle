@@ -1,2 +1,0 @@
-Info: read file tests/missing_node.err.dpd
-Error: no node with number 3: cannot build edge.

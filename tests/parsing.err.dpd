@@ -1,5 +1,0 @@
-N: 1 "one";
-N: 2 "two" xyz;
-N: 4 "four";
-E: 1 3;
-

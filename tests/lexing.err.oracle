@@ -1,2 +1,0 @@
-Info: read file tests/lexing.err.dpd
-Error: (line:2, character:11): illegal character '!'.
