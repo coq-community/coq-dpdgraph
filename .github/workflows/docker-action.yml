@@ -5,7 +5,7 @@ name: Docker CI
 on:
   push:
     branches:
-      - coq-master
+      - coq-v8.17
   pull_request:
     branches:
       - '**'
@@ -17,17 +17,15 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:dev'
+          - 'coqorg/coq:8.17'
       fail-fast: false
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-dpdgraph.opam'
           custom_image: ${{ matrix.image }}
-          export: 'OPAMWITHTEST'
-        env:
-          OPAMWITHTEST: 'true'
+
 
 # See also:
 # https://github.com/coq-community/docker-coq-action#readme
