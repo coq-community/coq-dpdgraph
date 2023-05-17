@@ -8,6 +8,8 @@
 (*        (see the enclosed LICENSE file for mode details)                    *)
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
 
+DECLARE PLUGIN "coq-dpdgraph.plugin"
+
 {
 
 open Pp
