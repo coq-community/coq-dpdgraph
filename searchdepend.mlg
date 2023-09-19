@@ -50,7 +50,7 @@ let collect_long_names avoid (c:Constr.t) (acc:Data.t) =
     match kind c with
       | Var x -> add_identifier x acc
       | Sort s -> add_sort s acc
-      | Const cst -> add_constant (Univ.out_punivs cst) acc
+      | Const cst -> add_constant (UVars.out_punivs cst) acc
       | Ind (i,_) when not (List.exists (Names.MutInd.CanOrd.equal (fst i)) avoid) -> add_inductive i acc
       | Construct (cnst,_) when not (List.exists (Names.MutInd.CanOrd.equal (fst (fst cnst))) avoid) -> add_constructor cnst acc
       | Case({ci_ind=i},_,_,_,_,_,_) ->
