@@ -8,7 +8,7 @@
 
 (*i $Id: List.v 10999 2008-05-27 15:55:22Z letouzey $ i*)
 
-Require Import Le Gt Minus Min Bool.
+Require Import Arith Bool.
 
 Set Implicit Arguments.
 
@@ -566,7 +566,7 @@ Section Elts.
   Theorem count_occ_In : forall (l : list A) (x : A), In x l <-> count_occ l x > 0.
   Proof.
     induction l as [|y l].
-    simpl; intros; split; [destruct 1 | apply gt_irrefl].
+    simpl; intros; split; [destruct 1 | apply Nat.lt_irrefl].
     simpl. intro x; destruct (eqA_dec y x) as [Heq|Hneq].
     rewrite Heq; intuition.
     pose (IHl x). intuition.
@@ -695,16 +695,13 @@ Section ListOps.
     simpl (rev (a :: l)).
     simpl (length (a :: l) - S n).
     inversion H.
-    rewrite <- minus_n_n; simpl.
+    rewrite Nat.sub_diag; simpl.
     rewrite <- rev_length.
     rewrite app_nth2; auto.
-    rewrite <- minus_n_n; auto.
-    rewrite app_nth1; auto.
-    rewrite (minus_plus_simpl_l_reverse (length l) n 1).
-    replace (1 + length l) with (S (length l)); auto with arith.
-    rewrite <- minus_Sn_m; [|auto with arith].
-    apply IHl ; auto with arith.
-    rewrite rev_length; auto.
+    rewrite Nat.sub_diag; auto.
+    rewrite app_nth1 by (rewrite rev_length; exact H1).
+    rewrite <-Nat.sub_succ, Nat.sub_succ_l by (exact H1).
+    apply IHl; exact H1.
   Qed.
 
 
@@ -1551,7 +1548,7 @@ Section length_order.
   Proof.
     unfold lel in |- *; intros.
     now_show (length l <= length n).
-    apply le_trans with (length m); auto with arith.
+    apply Nat.le_trans with (length m); auto with arith.
   Qed.
 
   Lemma lel_cons_cons : lel l m -> lel (a :: l) (b :: m).
