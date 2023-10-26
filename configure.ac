@@ -10,7 +10,7 @@
 # will set several variables: (see AC_SUBST at the end of this file)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-AC_INIT(coq-dpdgraph,1.0)
+AC_INIT([coq-dpdgraph],[1.0])
 AC_MSG_NOTICE(AC_PACKAGE_NAME version AC_PACKAGE_VERSION)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -174,7 +174,20 @@ fi
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 new_section "Coq"
 
-AC_CHECK_PROG(COQC,coqc,coqc,no)
+#AC_ARG_VAR(COQBIN, [path to Coq executables [empty]])
+#if test ${COQBIN##*/}; then COQBIN=$COQBIN/; fi
+#AC_MSG_RESULT($COQBIN)
+
+if test "a$COQBIN" != "a"; then
+    PATH="$COQBIN:$PATH";
+    if test "a$OCAMLPATH" = "a"; then
+        AC_MSG_WARN(You set COQBIN but not OCAMLPATH.)
+        AC_MSG_WARN(You may want to consider adding:)
+        AC_MSG_WARN(export OCAMLPATH='${COQBIN%/*/}/lib')
+    fi
+fi
+
+AC_PATH_PROG(COQC,coqc,[no], [$PATH])
 if test "$COQC" = no ; then
   AC_MSG_ERROR(Cannot find coqc.)
 fi
@@ -183,19 +196,28 @@ AC_MSG_CHECKING(coq version)
 COQVERSION=$($COQC -v | sed -n -e 's|.*version *\(.*\)$|\1|p' )
 AC_MSG_RESULT($COQVERSION)
 
+AC_PATH_PROG(COQTOP,coqtop,[no], [$PATH])
+if test "$COQTOP" = no ; then
+  AC_MSG_ERROR(Cannot find coqtop.)
+fi
+
+AC_PATH_PROG(COQDOC,coqdoc,[no], [$PATH])
+if test "$COQDOC" = no ; then
+  AC_MSG_ERROR(Cannot find coqdoc.)
+fi
+
 case $COQVERSION in
   8.[[0-9]][[^0-9]]*|8.10*)
     AC_MSG_ERROR(AC_PACKAGE_NAME needs Coq version 8.11 or higher)
     ;;
 esac
 
-AC_CHECK_PROG(COQ_MAKEFILE,coq_makefile,coq_makefile,no)
+AC_PATH_PROG(COQ_MAKEFILE,coq_makefile,no, [$PATH])
 if test "$COQ_MAKEFILE" = no ; then
   AC_MSG_ERROR(cannot find coq_makefile.)
 fi
 
-BINDIR_PRE=$(which coqc)
-BINDIR=$(dirname $BINDIR_PRE)
+BINDIR=$(dirname $COQC)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 new_section "creating Makefile"
@@ -216,13 +238,16 @@ AC_SUBST(OCAMLYACC)
 AC_SUBST(OCAML_EXTRA_OPTS)
 
 AC_SUBST(COQC)
+AC_SUBST(COQTOP)
+AC_SUBST(COQDOC)
 AC_SUBST(COQ_MAKEFILE)
 
 AC_SUBST(BINDIR)
 AC_SUBST(OCAMLGRAPH_PATH)
 
 # Finally create the Makefile from Makefile.in
-AC_OUTPUT(Makefile)
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
 chmod a-w Makefile
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
