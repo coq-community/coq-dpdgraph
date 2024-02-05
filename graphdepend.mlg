@@ -192,6 +192,7 @@ end = struct
       | Declarations.Def _ -> ("body", "yes")::acc
       | Declarations.Undef _  -> ("body", "no")::acc
       | Declarations.Primitive _ -> ("body", "no")::acc
+      | Declarations.Symbol _ -> ("body", "no")::acc
     in acc
 
   let add_gref_attrib acc gref id =
