@@ -28,6 +28,7 @@ config.status
 *.vo
 *.vok
 *.vos
+.*.swp
 
 coqthmdep
 dpd2dot

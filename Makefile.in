@@ -62,6 +62,9 @@ OCAMLFLAGS += $(OCAML_EXTRA_OPTS)
 OCAMLOPTFLAGS = -c
 
 COQ_MAKEFILE=@COQ_MAKEFILE@
+COQTOP=@COQTOP@
+COQC=@COQC@
+COQDOC=@COQDOC@
 # COQDEP=$(OCAMLDEP)
 
 COQEXTFILES=searchdepend.mlg graphdepend.mlg
@@ -190,38 +193,38 @@ $(TESTDIR)/%.err.log: $(TESTDIR)/%.err.dpd $(DPD2DOT)
 	cp $< $@
 
 %.vo : %.v
-	coqc -q -R . dpdgraph $<
+	$(COQC) -q -R . dpdgraph $<
 
 %.html : %.v
-	coqdoc $<
+	$(COQDOC) $<
 
 %.svg : %.dot
 	dot -Tsvg -o$@ $<
 
 $(TESTDIR)/Morph%.dpd : $(TESTDIR)/Morph.vo $(TESTDIR)/Morph.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < Morph.cmd > /dev/null 2>&1
+	cd $(TESTDIR); $(COQTOP) -R .. dpdgraph -I .. < Morph.cmd > /dev/null 2>&1
 
 $(TESTDIR)/Polymorph%.dpd : $(TESTDIR)/Polymorph.vo $(TESTDIR)/Polymorph.cmd \
                             $(DPDPLUGIN)
-	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < Polymorph.cmd
+	cd $(TESTDIR); $(COQTOP) -R .. dpdgraph -I .. < Polymorph.cmd
 
 $(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd: \
 	             $(TESTDIR)/Test.vo $(TESTDIR)/Test.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < Test.cmd > /dev/null 2>&1
+	cd $(TESTDIR); $(COQTOP) -R .. dpdgraph -I .. < Test.cmd > /dev/null 2>&1
 
 $(TESTDIR)/PrimitiveProjections.dpd $(TESTDIR)/PrimitiveProjections2.dpd: \
 	             $(TESTDIR)/PrimitiveProjections.vo $(TESTDIR)/PrimitiveProjections.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < PrimitiveProjections.cmd > /dev/null 2>&1
+	cd $(TESTDIR); $(COQTOP) -R .. dpdgraph -I .. < PrimitiveProjections.cmd > /dev/null 2>&1
 
 %.dpd : %.vo %.cmd
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop -R .. dpdgraph -I .. < $(*F).cmd > /dev/null 2>&1
+	cd $(TESTDIR); $(COQTOP) -R .. dpdgraph -I .. < $(*F).cmd > /dev/null 2>&1
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
-	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph -I . 2> /dev/null \
+	cat $(TESTDIR)/search.cmd | $(COQTOP) -R . dpdgraph -I . 2> /dev/null \
 	  | sed -e 's/Welcome to Coq.*/Welcome to Coq/' > $@
 
 %.dot : %.dpd  $(DPD2DOT)
@@ -292,7 +295,7 @@ clean_test :
 clean_config:
 	rm -rf autom4te.cache
 	rm -f configure config.log config.status
-	rm -r Makefile
+	rm -rf Makefile Make_coq.conf .Make_coq.d Make_coq
 
 clean : clean_coq clean_test
 	rm -f $(GENERATED)
