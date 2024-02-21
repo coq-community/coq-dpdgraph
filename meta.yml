@@ -116,7 +116,7 @@ build: |-
       $ configure && make && make install
 
   By default, compilation will fail if there is any warning emitted by
-  the ocaml compiler.  This can be disabled by type
+  the ocaml compiler.  This can be disabled by typing
 
       make WARN_ERR=
 
