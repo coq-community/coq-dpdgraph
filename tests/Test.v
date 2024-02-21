@@ -568,7 +568,7 @@ Section Elts.
     induction l as [|y l].
     simpl; intros; split; [destruct 1 | apply Nat.lt_irrefl].
     simpl. intro x; destruct (eqA_dec y x) as [Heq|Hneq].
-    rewrite Heq; intuition.
+    rewrite Heq; intuition auto with arith.
     pose (IHl x). intuition.
   Qed.
 
