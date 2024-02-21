@@ -102,10 +102,16 @@ instead of `make` in all previous commands.
 
 ### Install using opam
 
-If you use opam, you can install `coq-dpdgraph` and `ocamlgraph` using
+If you use opam with the latest version of Coq, you can install 
+`coq-dpdgraph` and `ocamlgraph` using
 
     $ opam repo add coq-released https://coq.inria.fr/opam/released
     $ opam install coq-dpdgraph
+
+To install a specific release of `coq-dpdgraph` for a previous version of 
+Coq, add the appropriate suffix, for example,
+
+    $ opam install coq-dpdgraph.1.0+8.16
 
 ### Test
 
