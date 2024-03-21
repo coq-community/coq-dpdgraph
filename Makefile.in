@@ -287,6 +287,7 @@ clean_test :
 	rm -f $(TESTDIR)/Test.vo $(TESTDIR)/Test.glob
 	rm -f $(TESTDIR)/Morph.vo $(TESTDIR)/Morph.glob
 	rm -f $(TESTDIR)/Polymorph.vo $(TESTDIR)/Polymorph.glob
+	rm -f $(TESTDIR)/PrimitiveProjections.vo $(TESTDIR)/PrimitiveProjections.glob
 	rm -f  $(TESTDIR)/.*.vo.aux
 
 clean_config:
