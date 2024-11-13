@@ -569,8 +569,8 @@ Section Elts.
     induction l as [|y l].
     simpl; intros; split; [destruct 1 | apply Nat.lt_irrefl].
     simpl. intro x; destruct (eqA_dec y x) as [Heq|Hneq].
-    rewrite Heq; intuition auto with *.
-    pose (IHl x). intuition auto with *.
+    rewrite Heq; intuition auto with arith.
+    pose (IHl x). intuition auto with arith.
   Qed.
 
   Theorem count_occ_inv_nil : forall (l : list A), (forall x:A, count_occ l x = 0) <-> l = nil.
