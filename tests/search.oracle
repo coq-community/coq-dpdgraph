@@ -1,4 +1,4 @@
-Welcome to Coq
+Welcome to Rocq
 [Loading ML file coq-dpdgraph.plugin ... done]
 [Loading ML file rocq-runtime.plugins.ring ... done]
 Fetching opaque proofs from disk for dpdgraph.tests.Test
