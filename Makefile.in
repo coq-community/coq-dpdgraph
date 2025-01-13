@@ -222,7 +222,7 @@ $(TESTDIR)/PrimitiveProjections.dpd $(TESTDIR)/PrimitiveProjections2.dpd: \
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
 	cat $(TESTDIR)/search.cmd | coqtop -R . dpdgraph -I . 2> /dev/null \
-	  | sed -e 's/Welcome to Coq.*/Welcome to Coq/' > $@
+	  | sed -e 's/Welcome to Rocq.*/Welcome to Rocq/' > $@
 
 %.dot : %.dpd  $(DPD2DOT)
 	$(DPD2DOT) $< > /dev/null
