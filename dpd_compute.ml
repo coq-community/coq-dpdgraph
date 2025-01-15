@@ -10,6 +10,7 @@
 let debug_flag = ref false
 let with_defs = ref true
 let reduce_trans = ref true
+let modules_only = ref false
 
 let pp intro format = Format.printf "%s" intro ; Format.printf format
 
@@ -100,11 +101,62 @@ module Edge = struct
   let default = []
 end
 module G = Graph.Imperative.Digraph.ConcreteLabeled(Node)(Edge)
-
+module GO = Graph.Oper.I(G)
 
 type t_obj = N of Node.t | E of (int * int * (string * string) list)
 
+let hashtbl_incr (ht : ('k,int) Hashtbl.t) (k : 'k) =
+  match Hashtbl.find_opt ht k with
+  | Some i -> Hashtbl.replace ht k (i+1)
+  | None -> Hashtbl.replace ht k 1
+;;
+
+let transform_module_dep lobj =
+  (* create a hash table from module names to module node ids *)
+  let module_name_tbl = Hashtbl.create 10 in
+  let fill_module_name_tbl o = match o with
+    | N (_, _, attr) -> begin
+      match List.find_map (fun (k,v) -> if k="path" then Some v else None) attr with
+      | Some p ->
+        if not (Hashtbl.mem module_name_tbl p)
+        then Hashtbl.replace module_name_tbl p (Hashtbl.length module_name_tbl)
+      | None -> ()
+      end
+    | E _ -> ()
+  in
+  List.iter fill_module_name_tbl lobj;
+
+  (* create a hash table from node ids to module node ids *)
+  let node_id_tbl = Hashtbl.create 10 in
+  let fill_node_id_tbl o = match o with
+    | N (id, _, attr) -> begin
+      match List.find_map (fun (k,v) -> if k="path" then Some v else None) attr with
+      | Some p -> Hashtbl.replace node_id_tbl id (Hashtbl.find module_name_tbl p)
+      | None -> ()
+      end
+    | E _ -> ()
+  in
+  List.iter fill_node_id_tbl lobj;
+
+  (* create a hash table with module edges -> multiplicity *)
+  let edge_tbl = Hashtbl.create 10 in
+  let fill_edge_tbl o = match o with
+    | N _ -> ()
+    | E (id1, id2, _) ->
+      let mid1 = Hashtbl.find node_id_tbl id1 in
+      let mid2 = Hashtbl.find node_id_tbl id2 in
+      hashtbl_incr edge_tbl (mid1,mid2)
+  in
+  List.iter fill_edge_tbl lobj;
+
+  (* create new object list *)
+  let ln = Hashtbl.fold (fun n i l -> N (i,n,[("kind", "module")])::l) module_name_tbl [] in
+  let le = Hashtbl.fold (fun (i1,i2) m l -> if i1<>i2 then E (i1,i2,[("weight", string_of_int m)]) :: l else l) edge_tbl [] in
+  ln @ le
+;;
+
 let build_graph lobj =
+  let lobj = if !modules_only then transform_module_dep lobj else lobj in
   let g = G.create () in
   let node_tbl = Hashtbl.create 10 in
   let get_node id =
@@ -127,35 +179,9 @@ let build_graph lobj =
   in List.iter add_obj lobj;
     g
 
-
-
 (** remove edge (n1 -> n2) iff n2 is indirectly reachable by n1,
  * or if n1 and n2 are the same *)
-let reduce_graph g =
-  (* a table in which each node is mapped to the set of indirected accessible
-   * nodes *)
-  let module Vset = Set.Make (G.V) in
-  let reach_tbl = Hashtbl.create (G.nb_vertex g) in
-  let rec reachable v =
-    try Hashtbl.find reach_tbl v (* already done *)
-    with Not_found ->
-      let nb_succ_before = List.length (G.succ g v) in
-      let add_succ_reachable acc s =
-        let acc = (* add [s] successors *)
-          List.fold_left (fun set x -> Vset.add x set) acc (G.succ g s)
-	in (Vset.union acc (if Node.equal v s then Vset.empty else reachable s))
-      in
-      let acc = List.fold_left add_succ_reachable Vset.empty (G.succ g v) in
-        (* try to remove edges *)
-      let rm_edge sv = if Vset.mem sv acc then G.remove_edge g v sv in
-      List.iter rm_edge (G.succ g v);
-      let nb_succ_after = List.length (G.succ g v) in
-      debug "Reduce for %s : %d -> %d@." (Node.name v)
-        nb_succ_before nb_succ_after;
-      Hashtbl.add reach_tbl v acc;
-      acc
-  in
-    G.iter_vertex (fun v -> ignore (reachable v)) g
+let reduce_graph g = ignore (GO.replace_by_transitive_reduction g);;
 
 let remove_node g n =
   let transfer_edges p =

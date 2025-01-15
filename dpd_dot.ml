@@ -65,6 +65,7 @@ let node_attribs g n =
         end
     | Some s when s = "inductive"-> color_soft_purple
     | Some s when s = "construct" -> color_soft_blue
+    | Some s when s = "module" -> color_soft_blue
     | _ -> (0x000000) (* TODO warning *)
   in
   let attr = (Aid "fillcolor", Acolor color) :: attr in

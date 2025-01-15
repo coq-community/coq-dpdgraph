@@ -1,6 +1,7 @@
 val debug_flag : bool ref
 val with_defs : bool ref
 val reduce_trans : bool ref
+val modules_only : bool ref
 val pp : string -> ('a, Format.formatter, unit) format -> 'a
 val debug : ('a, Format.formatter, unit) format -> 'a
 val error : ('a, Format.formatter, unit) format -> 'a
