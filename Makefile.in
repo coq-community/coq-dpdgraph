@@ -170,8 +170,8 @@ test-suite:
 	if grep DIFFERENCES tmp.log >/dev/null 2>&1 ; then \
 		for i in $$(grep DIFFERENCES tmp.log | grep -o 'diff .*' | sed s'/diff //g' | sed s'/ /~/g'); do \
 			i="$$(echo "$$i" | sed s'/~/ /g')"; \
-			echo diff $$i; \
-			diff $$i; \
+			echo diff -u $$i; \
+			diff -u $$i; \
 		done ; \
 	fi
 	if grep DIFFERENCES tmp.log >/dev/null 2>&1 ; then false ; else true ; fi
