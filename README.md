@@ -9,8 +9,8 @@ Follow the instructions on https://github.com/coq-community/templates to regener
 [![Code of Conduct][conduct-shield]][conduct-link]
 [![Zulip][zulip-shield]][zulip-link]
 
-[docker-action-shield]: https://github.com/coq-community/coq-dpdgraph/workflows/Docker%20CI/badge.svg?branch=coq-master
-[docker-action-link]: https://github.com/coq-community/coq-dpdgraph/actions?query=workflow:"Docker%20CI"
+[docker-action-shield]: https://github.com/coq-community/coq-dpdgraph/actions/workflows/docker-action.yml/badge.svg?branch=coq-v9.0
+[docker-action-link]: https://github.com/coq-community/coq-dpdgraph/actions/workflows/docker-action.yml
 
 [contributing-shield]: https://img.shields.io/badge/contributions-welcome-%23f7931e.svg
 [contributing-link]: https://github.com/coq-community/manifesto/blob/master/CONTRIBUTING.md
@@ -37,7 +37,7 @@ to visualize dependency graphs and find unused definitions.
   - Anne Pacalet ([**@Karmaki**](https://github.com/Karmaki))
   - Yves Bertot ([**@ybertot**](https://github.com/ybertot))
 - License: [GNU Lesser General Public License v2.1](LICENSE)
-- Compatible Coq versions: master (use the corresponding branch or release for other Coq versions)
+- Compatible Coq versions: 9.0 (use the corresponding branch or release for other Coq versions)
 - Compatible OCaml versions: 4.05.0 or later
 - Additional dependencies:
   - autoconf (except for releases)
@@ -102,16 +102,16 @@ instead of `make` in all previous commands.
 
 ### Install using opam
 
-If you use opam with the latest version of Coq, you can install 
-`coq-dpdgraph` and `ocamlgraph` using
+If you use opam with the latests version of Rocq you can install
+`coq-dpdgraph` and `ocamlgraph`using
 
     $ opam repo add coq-released https://coq.inria.fr/opam/released
     $ opam install coq-dpdgraph
 
-To install a specific release of `coq-dpdgraph` for a previous version of 
-Coq, add the appropriate suffix, for example,
+To install a specific release of `coq-dpdgraph`for a previous version of
+Rocq or Coq, add the appropriate suffix, for example,
 
-    $ opam install coq-dpdgraph.1.0+8.16
+    $ opam install coq-dpdgraph.1.0.8.16
 
 ### Test
 
@@ -264,7 +264,7 @@ Permutation_app_swap	(0)
 ```
 
 In the example above it reports that ``Permutation_app_swap`` was
-references 0 times.  You can specify max number of references allowed
+referenced 0 times.  You can specify max number of references allowed
 (default 0) via ``-threshold`` command line option.
 
 ## Development information

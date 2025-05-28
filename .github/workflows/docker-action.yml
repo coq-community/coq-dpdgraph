@@ -5,7 +5,7 @@ name: Docker CI
 on:
   push:
     branches:
-      - coq-master
+      - coq-v9.0
   pull_request:
     branches:
       - '**'
@@ -16,18 +16,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        coq_version:
-          - 'dev'
+        image:
+          - 'coqorg/coq:9.0'
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
       - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-dpdgraph.opam'
-          coq_version: ${{ matrix.coq_version }}
-          export: 'OPAMWITHTEST'
-        env:
-          OPAMWITHTEST: 'true'
+          custom_image: ${{ matrix.image }}
+
 
 # See also:
 # https://github.com/coq-community/docker-coq-action#readme
