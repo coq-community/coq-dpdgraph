@@ -54,7 +54,7 @@ dependencies:
   description: |-
     [OCamlgraph](https://github.com/backtracking/ocamlgraph)
 
-tested_coq_opam_versions:
+tested_rocq_opam_versions:
 - version: 9.0
 
 namespace: dpdgraph
