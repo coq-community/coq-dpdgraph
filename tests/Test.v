@@ -8,7 +8,7 @@
 
 (*i $Id: List.v 10999 2008-05-27 15:55:22Z letouzey $ i*)
 
-Require Import Arith Bool.
+From Stdlib Require Import Arith Bool.
 
 Set Implicit Arguments.
 
