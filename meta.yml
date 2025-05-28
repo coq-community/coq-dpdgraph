@@ -2,17 +2,17 @@
 fullname: coq-dpdgraph
 shortname: coq-dpdgraph
 opam_name: coq-dpdgraph
-organization: coq-community
+organization: rocq-community
 community: true
 action: true
 plugin: true
 branch: 'coq-master'
 
 synopsis: >-
-  Compute dependencies between Coq objects (definitions, theorems) and produce graphs
+  Compute dependencies between Rocq objects (definitions, theorems) and produce graphs
 
 description: |-
-  Coq plugin that extracts the dependencies between Coq objects,
+  Rocq plugin that extracts the dependencies between Coq objects,
   and produces files with dependency information. Includes tools
   to visualize dependency graphs and find unused definitions.
 
@@ -22,8 +22,6 @@ authors:
 - name: Olivier Pons
 
 maintainers:
-- name: Anne Pacalet
-  nickname: Karmaki
 - name: Yves Bertot
   nickname: ybertot
 
@@ -40,8 +38,8 @@ supported_coq_versions:
   opam: '{= "dev"}'
 
 supported_ocaml_versions:
-    text: 4.05.0 or later
-    opam: '{>= "4.05.0"}'
+    text: 4.09.0 or later
+    opam: '{>= "4.09.0"}'
 
 dependencies:
 - opam:
@@ -69,8 +67,8 @@ categories:
 build: |-
   ## What's inside?
 
-  First of all, it is a small tool (a Coq plugin) that extracts the
-  dependencies between Coq objects, and produces a file (we suggest using
+  First of all, it is a small tool (a Rocq plugin) that extracts the
+  dependencies between Rocq objects, and produces a file (we suggest using
   the suffix .dpd) with this information.
 
   The idea is that other small tools can be then developed to process
@@ -85,11 +83,14 @@ build: |-
   ## How to get it
 
   You can:
-  - either clone it from GitHub at: https://github.com/coq-community/coq-dpdgraph
-  - or get the opam package named `coq-dpdgraph` from the opam-coq archive (repository "released")
-  - or get the [latest distributed version](https://github.com/coq-community/coq-dpdgraph/releases)
+  - either clone it from GitHub at: https://github.com/rocq-community/coq-dpdgraph
+  - or get the opam package named `coq-dpdgraph` from the rocq opam archive (repository "released")
+  - or get the [latest distributed version](https://github.com/rocq-community/coq-dpdgraph/releases)
 
   ### Compilation
+
+  The instructions for compilation given here only work if you have a
+  working installation of rocq, and `coq-dpdgraph` is not yet installed.
 
   First download the archive and unpack it (or clone the repository),
   and change directory to the `coq-dpdgraph` directory.
@@ -124,10 +125,16 @@ build: |-
 
   ### Install using opam
 
-  If you use opam, you can install `coq-dpdgraph` and `ocamlgraph` using
+  If you use opam with the latests version of Rocq you can install
+  `coq-dpdgraph` and `ocamlgraph` using
   
-      $ opam repo add coq-released https://coq.inria.fr/opam/released
+      $ opam repo add coq-released https://rocq-prover.org/opam/released
       $ opam install coq-dpdgraph
+
+  To install a specific release of `coq-dpdgraph` for a previous version of
+  Rocq or Coq, add the appropriate suffix, for example,
+
+      $ opam install coq-dpdgraph.1.0+9.0
 
   ### Test
   
@@ -146,10 +153,10 @@ documentation: |
   
   - to have compiled the tools (see above)
   - a compiled Coq file.
-    You can for instance use `tests/Test.v` (a modified clone of Coq `List.v`)
+    You can for instance use `tests/Test.v` (a modified clone of Rocq `List.v`)
     and compile it doing :
   ```shell
-    $ coqc tests/Test.v
+    $ rocq compile tests/Test.v
   ```
     
   ### Generation of .dpd files
@@ -187,16 +194,16 @@ documentation: |
   
   **Example:**
   ```
-  $ ledit coqtop -R . dpdgraph -I tests/
-  Welcome to Coq 8.5 (April 2016)
+  $ rlwrap rocq repl -R . dpdgraph -I .
+  Welcome to Rocq 9.0.0
   
-  Coq < Require dpdgraph.dpdgraph.
-  [Loading ML file dpdgraph.cmxs ... done]
+  Rocq < Require dpdgraph.dpdgraph.
+  [Loading ML file coq-dpdgraph.plugin ... done]
   
-  Coq < Require List.
+  Coq < From Stdlib Require List.
   Coq < Print FileDependGraph List.
   Print FileDependGraph List.
-  Fetching opaque proofs from disk for Coq.Lists.List
+  Fetching opaque proofs from disk for Stdlib.Lists.List
   Info: output dependencies in file graph.dpd
   Coq < Set DependGraph File "graph2.dpd".
   ^D
@@ -281,7 +288,7 @@ documentation: |
   ```
   
   In the example above it reports that ``Permutation_app_swap`` was
-  references 0 times.  You can specify max number of references allowed
+  referenced 0 times.  You can specify max number of references allowed
   (default 0) via ``-threshold`` command line option.
 
   ## Development information

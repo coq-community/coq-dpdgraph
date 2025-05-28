@@ -3,6 +3,7 @@ Set Implicit Arguments.
 
 Record sigT {A} (P : A -> Type) := existT { projT1 : A ; projT2 : P projT1 }.
 
+#[warnings="-notation-overridden"]
 Notation "{ x : A  & P }" := (sigT (A:=A) (fun x => P)) : type_scope.
 
 Definition bar := @projT1.
