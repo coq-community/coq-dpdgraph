@@ -37,7 +37,7 @@ license:
 
 supported_coq_versions:
   text: 9.0 (use the corresponding branch or release for other Coq versions)
-  opam: '{>= "9.0" & < < "9.1~"}'
+  opam: '{>= "9.0" & < "9.1~"}'
 
 supported_ocaml_versions:
     text: 4.05.0 or later
