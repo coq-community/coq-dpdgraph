@@ -10,7 +10,7 @@
 # will set several variables: (see AC_SUBST at the end of this file)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-AC_INIT(coq-dpdgraph,1.0)
+AC_INIT([coq-dpdgraph],[1.0])
 AC_MSG_NOTICE(AC_PACKAGE_NAME version AC_PACKAGE_VERSION)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -222,7 +222,8 @@ AC_SUBST(BINDIR)
 AC_SUBST(OCAMLGRAPH_PATH)
 
 # Finally create the Makefile from Makefile.in
-AC_OUTPUT(Makefile)
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
 chmod a-w Makefile
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

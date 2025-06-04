@@ -25,7 +25,11 @@ let spec_args = [
   ("-rm-trans", Arg.Set Dpd_compute.reduce_trans,
       ": remove transitive dependencies (default)");
   ("-keep-trans", Arg.Clear Dpd_compute.reduce_trans,
-   ": keep transitive dependencies");
+      ": keep transitive dependencies");
+  ("-modules-only", Arg.Set Dpd_compute.modules_only,
+      ": show only module dependencies");
+  ("-all-items", Arg.Clear Dpd_compute.modules_only,
+      ": show dependencies between all items, not just modules");
   ("-graphname", Arg.String set_graphname,
       ": name of graph (default: name of input file)");
   ("-debug", Arg.Set Dpd_compute.debug_flag,
