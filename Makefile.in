@@ -19,7 +19,7 @@ VERSION=@PACKAGE_VERSION@
 
 BINDIR=@BINDIR@
 
-DPDPLUGIN=./dpdgraph.vo
+DPDPLUGIN=./dpdgraph.vo ./dpdgraph.cmxs
 DPD2DOT=./dpd2dot
 DPDUSAGE=./dpdusage
 
@@ -74,6 +74,8 @@ DISTRIBUTED+=Make
 install : Make_coq
 	$(MAKE) -f $< install
 	cp dpd2dot dpdusage $(BINDIR)/
+
+dpdgraph.vo : dpdgraph.cmxs
 
 $(DPDPLUGIN) : Make_coq $(DISTRIBUTED)
 	$(ECHO_CIBLE)
