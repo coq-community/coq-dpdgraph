@@ -82,6 +82,9 @@ build: |-
 
   ## How to get it
 
+  The recommended method to have this package running on you machine to have
+  it installed using `opam` (see below).
+
   You can:
   - either clone it from GitHub at: https://github.com/rocq-community/coq-dpdgraph
   - or get the opam package named `coq-dpdgraph` from the rocq opam archive (repository "released")
@@ -89,24 +92,29 @@ build: |-
 
   ### Compilation
 
-  The instructions for compilation given here only work if you have a
-  working installation of rocq, and `coq-dpdgraph` is not yet installed.
-
-  First download the archive and unpack it (or clone the repository),
-  and change directory to the `coq-dpdgraph` directory.
+  Compilation is done automatically for you if you follow the recommended
+  option of installing `coq-dpdgraph` using opam (see below).  Otherwise,
+  first make sure that `coq-dpdgraph` is not installed in your opam switch,
+  and then download the archive and unpack it (or clone the repository),
+  and change directory to the `coq-dpdgraph` directory.  In the following
+  instructions, you can disregard the `opam` commands if you are not using
+  this program.
   
-  Depending on how you got hold of the directory, you may be in one of three situations:
+  Depending on how you got hold of the directory, you may be in one of three
+situations:
   
    1/ Makefile is present
   
      You should type the following command.
   
+      $ opam remove --force coq-dpdgraph
       $ make && make install
   
    2/ configure is present, but no Makefile
   
      You should type the following command.
-  
+
+      $ opam remove --force coq-dpdgraph  
       $ ./configure && make && make install
   
    3/ configure is not present, Makefile is not present
@@ -114,6 +122,7 @@ build: |-
      You should type the following command.
   
       $ autoconf
+      $ opam remove --force coq-dpdgraph
       $ configure && make && make install
 
   By default, compilation will fail if there is any warning emitted by
