@@ -14,13 +14,9 @@ version.ml
 graphdepend.ml
 searchdepend.ml
 
-autom4te.cache
-configure
-Makefile
 Make_coq.conf
 .Make_coq.d
 config.log
-config.status
 *.aux
 *.glob
 *.mllib.d

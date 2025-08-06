@@ -9,8 +9,8 @@ Follow the instructions on https://github.com/coq-community/templates to regener
 [![Code of Conduct][conduct-shield]][conduct-link]
 [![Zulip][zulip-shield]][zulip-link]
 
-[docker-action-shield]: https://github.com/coq-community/coq-dpdgraph/workflows/Docker%20CI/badge.svg?branch=coq-master
-[docker-action-link]: https://github.com/coq-community/coq-dpdgraph/actions?query=workflow:"Docker%20CI"
+[docker-action-shield]: https://github.com/rocq-community/coq-dpdgraph/actions/workflows/docker-action.yml/badge.svg?branch=coq-master
+[docker-action-link]: https://github.com/rocq-community/coq-dpdgraph/actions/workflows/docker-action.yml
 
 [contributing-shield]: https://img.shields.io/badge/contributions-welcome-%23f7931e.svg
 [contributing-link]: https://github.com/coq-community/manifesto/blob/master/CONTRIBUTING.md
@@ -23,7 +23,7 @@ Follow the instructions on https://github.com/coq-community/templates to regener
 
 
 
-Coq plugin that extracts the dependencies between Coq objects,
+Rocq plugin that extracts the dependencies between Coq objects,
 and produces files with dependency information. Includes tools
 to visualize dependency graphs and find unused definitions.
 
@@ -33,22 +33,19 @@ to visualize dependency graphs and find unused definitions.
   - Anne Pacalet
   - Yves Bertot
   - Olivier Pons
-- Coq-community maintainer(s):
-  - Anne Pacalet ([**@Karmaki**](https://github.com/Karmaki))
+- Rocq-community maintainer(s):
   - Yves Bertot ([**@ybertot**](https://github.com/ybertot))
 - License: [GNU Lesser General Public License v2.1](LICENSE)
-- Compatible Coq versions: master (use the corresponding branch or release for other Coq versions)
-- Compatible OCaml versions: 4.05.0 or later
+- Compatible OCaml versions: 4.09.0 or later
 - Additional dependencies:
-  - autoconf (except for releases)
   - [OCamlgraph](https://github.com/backtracking/ocamlgraph)
-- Coq namespace: `dpdgraph`
+- Rocq/Coq namespace: `dpdgraph`
 - Related publication(s): none
 
 ## What's inside?
 
-First of all, it is a small tool (a Coq plugin) that extracts the
-dependencies between Coq objects, and produces a file (we suggest using
+First of all, it is a small tool (a Rocq plugin) that extracts the
+dependencies between Rocq objects, and produces a file (we suggest using
 the suffix .dpd) with this information.
 
 The idea is that other small tools can be then developed to process
@@ -63,55 +60,49 @@ Hope other tools later on to do more things. Feel free to contribute!
 ## How to get it
 
 You can:
-- either clone it from GitHub at: https://github.com/coq-community/coq-dpdgraph
-- or get the opam package named `coq-dpdgraph` from the opam-coq archive (repository "released")
-- or get the [latest distributed version](https://github.com/coq-community/coq-dpdgraph/releases)
+- either clone it from GitHub at: https://github.com/rocq-community/coq-dpdgraph
+- or get the opam package named `coq-dpdgraph` from the rocq opam archive (repository "released")
+- or get the [latest distributed version](https://github.com/rocq-community/coq-dpdgraph/releases)
 
 ### Compilation
 
-First download the archive and unpack it (or clone the repository),
-and change directory to the `coq-dpdgraph` directory.
+To perform you own compilation, you need that `ocamlgraph` is installed
+(for instance using `opam install ocamlgraph`).
+Download the archive and unpack it (or clone the repository),
+and change directory to the `coq-dpdgraph` directory.  The `coq-master`
+branch of the repository is maintained to compile with the development
+version of `rocq`.  To compile with a released version of `rocq`, you need
+to download the corresponding tagged version from the `git` repository.
+For instance, the version that is compatible with `rocq` version 9 is
+available at the tag `v1.0+9.0`.
 
-Depending on how you got hold of the directory, you may be in one of three situations:
+To just compile, you should type the following command
 
- 1/ Makefile is present
+    $ make
 
-   You should type the following command.
+When this compilation succeeds, the plugin is located in the compilation
+directory and can be used by relying on
+`-I *the directory* -R *the directory* dpdgraph`
+
+To compile and install the plugin, type the following command
 
     $ make && make install
 
- 2/ configure is present, but no Makefile
-
-   You should type the following command.
-
-    $ ./configure && make && make install
-
- 3/ configure is not present, Makefile is not present
-
-   You should type the following command.
-
-    $ autoconf
-    $ configure && make && make install
-
-By default, compilation will fail if there is any warning emitted by
-the ocaml compiler.  This can be disabled by type
-
-    make WARN_ERR=
-
-instead of `make` in all previous commands.
+When this compilation succeeds, the plugin can be used directly, and the
+compilation directory can be safely removed.
 
 ### Install using opam
 
-If you use opam with the latest version of Coq, you can install 
+If you use opam with recent versions of Rocq or Coq you can install
 `coq-dpdgraph` and `ocamlgraph` using
 
-    $ opam repo add coq-released https://coq.inria.fr/opam/released
+    $ opam repo add coq-released https://rocq-prover.org/opam/released
     $ opam install coq-dpdgraph
 
-To install a specific release of `coq-dpdgraph` for a previous version of 
-Coq, add the appropriate suffix, for example,
+To install a specific release of `coq-dpdgraph` for a previous version of
+Rocq or Coq, add the appropriate suffix, for example,
 
-    $ opam install coq-dpdgraph.1.0+8.16
+    $ opam install coq-dpdgraph.1.0+9.0
 
 ### Test
 
@@ -129,10 +120,10 @@ to check if everything is ok.
 
 - to have compiled the tools (see above)
 - a compiled Coq file.
-  You can for instance use `tests/Test.v` (a modified clone of Coq `List.v`)
+  You can for instance use `tests/Test.v` (a modified clone of Rocq `List.v`)
   and compile it doing :
 ```shell
-  $ coqc tests/Test.v
+  $ rocq compile tests/Test.v
 ```
   
 ### Generation of .dpd files
@@ -170,16 +161,16 @@ you need to use ``Require`` to load the module that you want to explore,
 
 **Example:**
 ```
-$ ledit coqtop -R . dpdgraph -I tests/
-Welcome to Coq 8.5 (April 2016)
+$ rlwrap rocq repl -R . dpdgraph -I .
+Welcome to Rocq 9.0.0
 
-Coq < Require dpdgraph.dpdgraph.
-[Loading ML file dpdgraph.cmxs ... done]
+Rocq < Require dpdgraph.dpdgraph.
+[Loading ML file coq-dpdgraph.plugin ... done]
 
-Coq < Require List.
+Coq < From Stdlib Require List.
 Coq < Print FileDependGraph List.
 Print FileDependGraph List.
-Fetching opaque proofs from disk for Coq.Lists.List
+Fetching opaque proofs from disk for Stdlib.Lists.List
 Info: output dependencies in file graph.dpd
 Coq < Set DependGraph File "graph2.dpd".
 ^D
@@ -264,7 +255,7 @@ Permutation_app_swap	(0)
 ```
 
 In the example above it reports that ``Permutation_app_swap`` was
-references 0 times.  You can specify max number of references allowed
+referenced 0 times.  You can specify max number of references allowed
 (default 0) via ``-threshold`` command line option.
 
 ## Development information
