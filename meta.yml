@@ -33,7 +33,7 @@ license:
   fullname: GNU Lesser General Public License v2.1
   identifier: LGPL-2.1-only
 
-supported_coq_versions:
+supported_rocq_versions:
   text: master (use the corresponding branch or release for other Coq versions)
   opam: '{= "dev"}'
 
@@ -43,17 +43,20 @@ supported_ocaml_versions:
 
 dependencies:
 - opam:
-    name: conf-autoconf
-    version: '{build & dev}'
-  description: |-
-    autoconf (except for releases)
-- opam:
     name: ocamlgraph
   description: |-
     [OCamlgraph](https://github.com/backtracking/ocamlgraph)
 
-tested_coq_opam_versions:
+tested_rocq_opam_versions:
 - version: dev
+
+action_appendix: |2-
+            export: 'OPAMWITHTEST'
+          env:
+            OPAMWITHTEST: true
+
+test_target:
+   test-suite
 
 namespace: dpdgraph
 
@@ -89,45 +92,36 @@ build: |-
 
   ### Compilation
 
-  The instructions for compilation given here only work if you have a
-  working installation of rocq, and `coq-dpdgraph` is not yet installed.
+  To perform you own compilation, you need that `ocamlgraph` is installed
+  (for instance using `opam install ocamlgraph`).
+  Download the archive and unpack it (or clone the repository),
+  and change directory to the `coq-dpdgraph` directory.  The `coq-master`
+  branch of the repository is maintained to compile with the development
+  version of `rocq`.  To compile with a released version of `rocq`, you need
+  to download the corresponding tagged version from the `git` repository.
+  For instance, the version that is compatible with `rocq` version 9 is
+  available at the tag `v1.0+9.0`.
+  
+  To just compile, you should type the following command
 
-  First download the archive and unpack it (or clone the repository),
-  and change directory to the `coq-dpdgraph` directory.
+      $ make
+
+  When this compilation succeeds, the plugin is located in the compilation
+  directory and can be used by relying on
+  `-I *the directory* -R *the directory* dpdgraph`
   
-  Depending on how you got hold of the directory, you may be in one of three situations:
-  
-   1/ Makefile is present
-  
-     You should type the following command.
-  
+  To compile and install the plugin, type the following command
+
       $ make && make install
-  
-   2/ configure is present, but no Makefile
-  
-     You should type the following command.
-  
-      $ ./configure && make && make install
-  
-   3/ configure is not present, Makefile is not present
-  
-     You should type the following command.
-  
-      $ autoconf
-      $ configure && make && make install
 
-  By default, compilation will fail if there is any warning emitted by
-  the ocaml compiler.  This can be disabled by type
-
-      make WARN_ERR=
-
-  instead of `make` in all previous commands.
+  When this compilation succeeds, the plugin can be used directly, and the
+  compilation directory can be safely removed.
 
   ### Install using opam
 
-  If you use opam with the latests version of Rocq you can install
+  If you use opam with recent versions of Rocq or Coq you can install
   `coq-dpdgraph` and `ocamlgraph` using
-  
+
       $ opam repo add coq-released https://rocq-prover.org/opam/released
       $ opam install coq-dpdgraph
 
