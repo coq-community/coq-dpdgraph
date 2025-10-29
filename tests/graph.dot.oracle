@@ -412,7 +412,9 @@ Test_count_occ [label="count_occ", URL=<Test.html#count_occ>, fillcolor="#F070D1
   Test_list_sind -> Test_cons [] ;
   Test_list_sind -> Test_nil [] ;
   Test_list_sind -> Test_list [] ;
-  Test_list_rec -> Test_list_rect [] ;
+  Test_list_rec -> Test_cons [] ;
+  Test_list_rec -> Test_nil [] ;
+  Test_list_rec -> Test_list [] ;
   Test_in_split_r -> Test_split [] ;
   Test_in_split_r -> Test_In [] ;
   Test_in_split_r -> Test_list_ind [] ;
