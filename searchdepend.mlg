@@ -77,15 +77,41 @@ let collect_dependance opaque_access gref =
       let ca = indbody.Declarations.mind_user_lc in
         Array.fold_right (collect_long_names [fst i]) ca Data.empty
 
+let display_data d =
+  let pp gr n s =
+    Printer.pr_global gr ++ str "(" ++ int n ++ str ")" ++ spc() ++s
+  in
+  Feedback.msg_notice (str"[" ++ ((Data.fold pp) d (str "]")))
+
 let display_dependance ~opaque_access gref =
-  let display d =
-    let pp gr n s =
-      Printer.pr_global gr ++ str "(" ++ int n ++ str ")" ++ spc() ++s
-    in
-      Feedback.msg_notice (str"[" ++ ((Data.fold pp) d (str "]")))
-  in try let data = collect_dependance opaque_access gref in display data
+  try let data = collect_dependance opaque_access gref in display_data data
   with NoDef gref ->
     CErrors.user_err (Printer.pr_global gref ++ str " has no value")
+
+let collect_dependance_recursive ~opaque_access gref =
+  let rec aux visited acc gref =
+    if Names.GlobRef.Set.mem gref visited then (visited, acc)
+    else
+      let visited = Names.GlobRef.Set.add gref visited in
+      try
+        let deps = collect_dependance opaque_access gref in
+        let acc = Names.GlobRef.Map.fold
+          (fun dep_gref count acc ->
+            let n = try Names.GlobRef.Map.find dep_gref acc with Not_found -> 0 in
+            Names.GlobRef.Map.add dep_gref (n + count) acc)
+          deps acc
+        in
+        Names.GlobRef.Map.fold
+          (fun dep_gref _ (visited, acc) -> aux visited acc dep_gref)
+          deps (visited, acc)
+      with NoDef _ -> (visited, acc)
+  in
+  let _, result = aux Names.GlobRef.Set.empty Data.empty gref in
+  result
+
+let display_dependance_recursive ~opaque_access gref =
+  let data = collect_dependance_recursive ~opaque_access gref in
+  display_data data
 
 }
 
@@ -93,4 +119,10 @@ VERNAC COMMAND EXTEND Searchdepend CLASSIFIED AS QUERY STATE opaque_access
 | ["SearchDepend" global(ref) ] ->
   {fun ~opaque_access ->
    display_dependance ~opaque_access (Nametab.global ref) }
+END
+
+VERNAC COMMAND EXTEND SearchdependRecursive CLASSIFIED AS QUERY STATE opaque_access
+| ["SearchDependRecursive" global(ref) ] ->
+  {fun ~opaque_access ->
+   display_dependance_recursive ~opaque_access (Nametab.global ref) }
 END

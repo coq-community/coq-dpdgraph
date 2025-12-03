@@ -52,6 +52,7 @@ TESTDIR=tests
 TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v $(TESTDIR)/Polymorph.v \
 	  $(TESTDIR)/PrimitiveProjections.v\
 	  $(TESTDIR)/Morph.cmd $(TESTDIR)/Test.cmd $(TESTDIR)/search.cmd \
+	  $(TESTDIR)/search_recursive.cmd $(TESTDIR)/search_comparison.cmd \
           $(TESTDIR)/Polymorph.cmd $(TESTDIR)/PrimitiveProjections.cmd
 TESTS_DPD=$(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd \
 	  $(TESTDIR)/Morph.dpd $(TESTDIR)/Morph_rw.dpd \
@@ -62,7 +63,8 @@ TESTS_DOT=$(TESTS_DPD:%.dpd=%.dot)
 TESTS_ERR_DPD=$(wildcard $(TESTDIR)/*.err.dpd)
 
 TESTS=$(TESTS_DPD) $(TESTS_DOT) $(TESTDIR)/graph.without.dot \
-      $(TESTDIR)/search  $(TESTDIR)/graph2.dpdusage \
+      $(TESTDIR)/search $(TESTDIR)/search_recursive $(TESTDIR)/search_comparison \
+      $(TESTDIR)/graph2.dpdusage \
       $(TESTS_ERR_DPD:%.dpd=%) $(TESTDIR)/file_not_found.err
 TESTS_LOG=$(TESTS:%=%.log)
 TESTS_ORACLE=$(TESTS:%=%.oracle)
@@ -142,6 +144,14 @@ $(TESTDIR)/PrimitiveProjections.dpd $(TESTDIR)/PrimitiveProjections2.dpd: \
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
 	cd $(TESTDIR) ; coqtop $(TEST_INCLUDE) < search.cmd 2> /dev/null \
+	  | sed -e 's/Welcome to Rocq.*/Welcome to Rocq/' > ../$@
+
+$(TESTDIR)/search_recursive.log : $(TESTDIR)/Test.vo $(TESTDIR)/search_recursive.cmd $(DPDPLUGIN)
+	cd $(TESTDIR) ; coqtop $(TEST_INCLUDE) < search_recursive.cmd 2> /dev/null \
+	  | sed -e 's/Welcome to Rocq.*/Welcome to Rocq/' > ../$@
+
+$(TESTDIR)/search_comparison.log : $(TESTDIR)/Test.vo $(TESTDIR)/search_comparison.cmd $(DPDPLUGIN)
+	cd $(TESTDIR) ; coqtop $(TEST_INCLUDE) < search_comparison.cmd 2> /dev/null \
 	  | sed -e 's/Welcome to Rocq.*/Welcome to Rocq/' > ../$@
 
 %.dot : %.dpd  $(DPD2DOT)
