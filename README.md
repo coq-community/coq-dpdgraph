@@ -258,6 +258,27 @@ In the example above it reports that ``Permutation_app_swap`` was
 referenced 0 times.  You can specify max number of references allowed
 (default 0) via ``-threshold`` command line option.
 
+## Making new releases for each version of Rocq
+
+  - The coq-master branch is maintained to compile with the current
+   version of the rocq prover master branch.  Rocq developers usually
+   take care of that.  When a version of this package needs to be produced
+   to be used in an opam package, it is usually necessary to find in the
+   history the closest commit to the date of the release of rocq that is
+   aimed for.
+
+  - Once this commit is found it is reasonable to mark this as a branch and
+  use it to produce a release on github.  This branch can be used to produce
+  a compressed tar archive as follows.
+
+  ```
+  git checkout -b <branch-name>
+  git archive --format tgz -o coq-dpdgraph-1.0-9.1.tgz
+  ```
+  The `tgz` file thus produced should be uploaded to a new release on github
+  and this file's url should be used in a new opam package description
+  in the opam archive.
+
 ## Development information
 
 ### Generated ``.dpd`` format description
