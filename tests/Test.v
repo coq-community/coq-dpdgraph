@@ -340,6 +340,7 @@ Section Facts.
 
 End Facts.
 
+Create HintDb v62.
 #[global] Hint Resolve app_nil_end ass_app app_ass: datatypes v62.
 #[global] Hint Resolve app_comm_cons app_cons_not_nil: datatypes v62.
 #[global] Hint Immediate app_eq_nil: datatypes v62.
@@ -716,7 +717,7 @@ Section ListOps.
 
   Definition rev' l : list A := rev_append l nil.
 
-  Notation rev_acc := rev_append (only parsing).
+  Abbreviation rev_acc := rev_append (only parsing).
 
   Lemma rev_append_rev : forall l l', rev_acc l l' = rev l ++ l'.
   Proof.
@@ -724,7 +725,7 @@ Section ListOps.
     rewrite <- ass_app; firstorder.
   Qed.
 
-  Notation rev_acc_rev := rev_append_rev (only parsing).
+  Abbreviation rev_acc_rev := rev_append_rev (only parsing).
 
   Lemma rev_alt : forall l, rev l = rev_append l nil.
   Proof.
