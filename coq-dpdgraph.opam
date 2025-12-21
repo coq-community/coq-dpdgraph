@@ -21,7 +21,7 @@ run-test: [make "-j%{jobs}%" "test-suite"]
 install: [make "install"]
 depends: [
   "ocaml" {>= "4.09.0"}
-  "coq" 
+  "rocq-core"
   "ocamlgraph" 
 ]
 
