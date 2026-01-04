@@ -188,11 +188,11 @@ end = struct
     let env = Global.env() in
     let cb = Environ.lookup_constant cnst env in
     let acc = match cb.Declarations.const_body with
-      | Declarations.OpaqueDef _
-      | Declarations.Def _ -> ("body", "yes")::acc
-      | Declarations.Undef _  -> ("body", "no")::acc
-      | Declarations.Primitive _ -> ("body", "no")::acc
-      | Declarations.Symbol _ -> ("body", "no")::acc
+      | Declarations.OpaqueDef _ -> ("opaque", "yes")::("body", "yes")::acc
+      | Declarations.Def _ -> ("opaque", "no")::("body", "yes")::acc
+      | Declarations.Undef _  -> ("opaque", "yes")::("body", "no")::acc
+      | Declarations.Primitive _ -> ("prim", "yes")::("body", "no")::acc
+      | Declarations.Symbol _ -> ("symb", "yes")::("body", "no")::acc
     in acc
 
   let add_gref_attrib acc gref id =

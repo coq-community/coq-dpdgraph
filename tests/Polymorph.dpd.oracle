@@ -1,4 +1,4 @@
-N: 1 "foo" [body=yes, kind=cnst, prop=no, path="Polymorph", ];
+N: 1 "foo" [opaque=no, body=yes, kind=cnst, prop=no, path="Polymorph", ];
 N: 2 "sigT" [kind=inductive, prop=no, ];
 N: 3 "existT" [kind=construct, prop=no, ];
 E: 1 2 [weight=15, ];
