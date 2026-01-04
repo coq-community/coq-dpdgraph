@@ -1,7 +1,6 @@
 Welcome to Rocq
 [Loading ML file coq-dpdgraph.plugin ... done]
-[Loading ML file rocq-runtime.plugins.ring ... done]
 Fetching opaque proofs from disk for dpdgraph.tests.Test
-[cons(42) nil(6) perm_swap(1) perm_skip(3) list(18) Permutation(11) app(43)
-Permutation_trans(3) eq_ind_r(1) eq_ind(2) list_ind(2) Permutation_refl(2)
-app_comm_cons(1) app_nil_end(2) Permutation_sym(3) ]
+[cons(3) nil(11) conj(1) eq_refl(3) S(6) O(18) sumbool(5) list(14) eq(35)
+nat(19) eq_ind_r(1) eq_sym(1) O_S(1) list_ind(1) count_occ(19) not(6) iff(1)
+False_ind(2) ]
