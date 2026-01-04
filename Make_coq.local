@@ -58,6 +58,8 @@ TESTS_DPD=$(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd \
 	  $(TESTDIR)/Polymorph.dpd \
           $(TESTDIR)/PrimitiveProjections.dpd \
 	  $(TESTDIR)/PrimitiveProjections2.dpd
+TESTS_VO=$(TESTDIR)/Morph.vo $(TESTDIR)/Test.vo $(TESTDIR)/Polymorph.vo\
+         $(TESTDIR)/PrimitiveProjections.vo
 TESTS_DOT=$(TESTS_DPD:%.dpd=%.dot)
 TESTS_ERR_DPD=$(wildcard $(TESTDIR)/*.err.dpd)
 
@@ -177,4 +179,4 @@ clean ::
 	rm -f dpd_parse.ml dpd_parse.mli dpd_lex.ml dpd2dot.cm[ix] dpd2dot.o\
           dpd_compute.cm[ix] dpd_compute.o dpd_dot.cm[ix] dpd_dot.o \
           dpd_lex.cm[ix] dpd_lex.o dpd_parse.cm[ix] dpd_parse.o has_ocamlgraph \
-          $(TESTS_DPD)
+          $(TESTS_DPD) $(TESTS_VO)
