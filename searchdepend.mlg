@@ -15,6 +15,15 @@ DECLARE PLUGIN "coq-dpdgraph.plugin"
 open Pp
 open Stdarg
 
+(** Flag to control whether opaque (Qed'd) constant bodies are traversed.
+    When false, only the type of opaque constants is used for dependencies.
+    Controlled via: Set/Unset DependGraph AccessOpaque *)
+let { Goptions.get = access_opaque } =
+  Goptions.declare_bool_option_and_ref
+    ~key:["DependGraph"; "AccessOpaque"]
+    ~value:true
+    ()
+
 module Data = struct
   type t = int Names.GlobRef.Map.t
 
@@ -67,9 +76,15 @@ let collect_dependance opaque_access gref =
   | VarRef _ -> assert false
   | ConstRef cst ->
       let cb = Environ.lookup_constant cst (Global.env()) in
-      let cl = match Global.body_of_constant_body opaque_access cb with
-         Some (e,_,_) -> [e]
-	| None -> [] in
+      let cl =
+        (* Skip opaque bodies when access_opaque flag is unset *)
+        if access_opaque () || not (Declareops.is_opaque cb) then
+          match Global.body_of_constant_body opaque_access cb with
+          | Some (e,_,_) -> [e]
+          | None -> []
+        else
+          []
+      in
       let cl = cb.Declarations.const_type :: cl in
       List.fold_right (collect_long_names []) cl Data.empty
   | IndRef i | ConstructRef (i,_) ->
