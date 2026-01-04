@@ -301,6 +301,9 @@ node_attribute :
    | prop=[yes|no]
    | path="m0.m1.m2"
    | body=[yes|no]
+   | opaque=[yes|no]
+   | prim=[yes|no]
+   | symb=[yes|no]
 
 edge : "E: "  node_id node_id edge_attributes ';'
 edge_attributes :
