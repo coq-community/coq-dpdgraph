@@ -108,7 +108,7 @@ $(TESTDIR)/%.err.log: $(TESTDIR)/%.err.dpd $(DPD2DOT)
 	cp $< $@
 
 %.vo : %.v
-	coqc -q -R . dpdgraph $<
+	rocq compile -q -R . dpdgraph $<
 
 %.html : %.v
 	coqdoc $<
@@ -120,28 +120,28 @@ TEST_INCLUDE= -R .. dpdgraph -I ..
 
 $(TESTDIR)/Morph%.dpd : $(TESTDIR)/Morph.vo $(TESTDIR)/Morph.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop $(TEST_INCLUDE) < Morph.cmd > /dev/null 2>&1
+	cd $(TESTDIR); rocq repl $(TEST_INCLUDE) < Morph.cmd > /dev/null 2>&1
 
 $(TESTDIR)/Polymorph%.dpd : $(TESTDIR)/Polymorph.vo $(TESTDIR)/Polymorph.cmd \
                             $(DPDPLUGIN)
-	cd $(TESTDIR); coqtop $(TEST_INCLUDE) < Polymorph.cmd
+	cd $(TESTDIR); rocq repl $(TEST_INCLUDE) < Polymorph.cmd
 
 $(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd: \
 	             $(TESTDIR)/Test.vo $(TESTDIR)/Test.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop $(TEST_INCLUDE) < Test.cmd > /dev/null 2>&1
+	cd $(TESTDIR); rocq repl $(TEST_INCLUDE) < Test.cmd > /dev/null 2>&1
 
 $(TESTDIR)/PrimitiveProjections.dpd $(TESTDIR)/PrimitiveProjections2.dpd: \
 	             $(TESTDIR)/PrimitiveProjections.vo $(TESTDIR)/PrimitiveProjections.cmd $(DPDPLUGIN)
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop $(TEST_INCLUDE) < PrimitiveProjections.cmd > /dev/null 2>&1
+	cd $(TESTDIR); rocq repl $(TEST_INCLUDE) < PrimitiveProjections.cmd > /dev/null 2>&1
 
 %.dpd : %.vo %.cmd
 	# cd to tests to generate .dpd file there.
-	cd $(TESTDIR); coqtop $(TEST_INCLUDE) < $(*F).cmd > /dev/null 2>&1
+	cd $(TESTDIR); rocq repl $(TEST_INCLUDE) < $(*F).cmd > /dev/null 2>&1
 
 $(TESTDIR)/search.log : $(TESTDIR)/Test.vo $(TESTDIR)/search.cmd $(DPDPLUGIN)
-	cd $(TESTDIR) ; coqtop $(TEST_INCLUDE) < search.cmd 2> /dev/null \
+	cd $(TESTDIR) ; rocq repl $(TEST_INCLUDE) < search.cmd 2> /dev/null \
 	  | sed -e 's/Welcome to Rocq.*/Welcome to Rocq/' > ../$@
 
 %.dot : %.dpd  $(DPD2DOT)
