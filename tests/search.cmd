@@ -2,4 +2,4 @@ Require Import dpdgraph.dpdgraph.
 
 Require Import Test.
 
-SearchDepend Test.Permutation_app_swap.
+SearchDepend Test.count_occ_inv_nil.
