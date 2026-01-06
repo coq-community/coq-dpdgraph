@@ -243,10 +243,10 @@ end = struct
       error (str "cannot open file: " ++ (str msg));
 end
 
-let mk_dpds_graph opaque_access gref =
+let mk_dpds_graph opaque_access grefs =
   let graph = G.empty in
   let all = true in (* get all the dependencies recursively *)
-  let graph = add_gref_list_and_dpds opaque_access graph ~all [gref] in
+  let graph = add_gref_list_and_dpds opaque_access graph ~all grefs in
     Out.file graph
 
 let file_graph_depend opaque_access dirlist =
@@ -280,8 +280,8 @@ END
 *)
 
 VERNAC COMMAND EXTEND DependGraph CLASSIFIED AS QUERY STATE opaque_access
-  | ["Print" "DependGraph" reference(ref) ] ->
-      { fun ~opaque_access -> mk_dpds_graph opaque_access (Nametab.global ref) }
+  | ["Print" "DependGraph" reference_list(refs) ] ->
+      { fun ~opaque_access -> mk_dpds_graph opaque_access (List.map Nametab.global refs) }
   | ["Print" "FileDependGraph" reference_list(dl) ] ->
       { fun ~opaque_access ->
         file_graph_depend opaque_access (List.map locate_mp_dirpath dl) }

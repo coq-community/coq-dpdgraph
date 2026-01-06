@@ -141,11 +141,11 @@ The available commands are :
     Take all the objects of the specified modules and build the dependencies
     between them.
 
-- Generate the dependencies of one objects:
+- Generate the dependencies of one or more objects:
 
-        Print DependGraph my_lemma.
+        Print DependGraph my_lemma my_other_lemma.
 
-  Analyse recursively the dependencies of ``my_lemma``.
+  Analyse recursively the dependencies of the given objects.
 
 - Change the name of the generated file (default is ``graph.dpd``):
 
