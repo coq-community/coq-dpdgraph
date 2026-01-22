@@ -1,3 +1,5 @@
+.NOTPARALLEL:
+
 DPD2DOT=./dpd2dot
 DPDUSAGE=./dpdusage
 ML_COMMON = version.ml dpd_compute.ml dpd_dot.ml \
