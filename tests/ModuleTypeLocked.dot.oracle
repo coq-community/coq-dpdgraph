@@ -1,9 +1,13 @@
 digraph tests/ModuleTypeLocked {
   graph [ratio=0.5]
   node [style=filled]
-ModuleTypeLocked_Foo_T [label="T", URL=<ModuleTypeLocked.html#Foo.T>, peripheries=3, fillcolor="#FACDEF"] ;
+ModuleTypeLocked_Foo_T [label="T", URL=<ModuleTypeLocked.html#Foo.T>, peripheries=3, fillcolor="#F070D1"] ;
 _nat [label="nat", URL=<.html#nat>, fillcolor="#E2CDFA"] ;
+_O [label="O", URL=<.html#O>, fillcolor="#7FAAFF"] ;
+_S [label="S", URL=<.html#S>, fillcolor="#7FAAFF"] ;
   ModuleTypeLocked_Foo_T -> _nat [] ;
+  ModuleTypeLocked_Foo_T -> _O [] ;
+  ModuleTypeLocked_Foo_T -> _S [] ;
 subgraph cluster_ModuleTypeLocked { label="ModuleTypeLocked"; fillcolor="#FFFFC3"; labeljust=l; style=filled 
 subgraph cluster_ModuleTypeLocked_Foo { label="Foo"; fillcolor="#FFFFA3"; labeljust=l; style=filled 
 ModuleTypeLocked_Foo_T; };

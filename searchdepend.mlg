@@ -69,28 +69,202 @@ let collect_long_names avoid (c:Constr.t) (acc:Data.t) =
 
 exception NoDef of Names.GlobRef.t
 
+(** Module structure lookup for accessing bodies hidden by module type constraints.
+    Based on the approach used by Print Assumptions in vernac/assumptions.ml *)
+module ModLookup : sig
+  val lookup_constant : Names.Constant.t -> Declarations.constant_body
+  val get_constant_body : Global.indirect_accessor -> Names.Constant.t -> Constr.t option
+  val lookup_mind : Names.MutInd.t -> Declarations.mutual_inductive_body
+end = struct
+(* This module is copied verbatim from Rocq's assumptions.ml and is thus licensed under Rocq's license, the GNU Lesser General Public License Version 2.1 *)
+open Util
+open Names
+open Declarations
+open Mod_declarations
+
+(** For a constant c in a module sealed by an interface (M:T and
+    not M<:T), [Global.lookup_constant] may return a [constant_body]
+    without body. We fix this by looking in the implementation
+    of the module *)
+
+let modcache = ref (ModPath.Map.empty : structure_body ModPath.Map.t)
+
+let rec search_mod_label lab = function
+  | [] -> raise Not_found
+  | (l, SFBmodule mb) :: _ when Id.equal l lab -> mb
+  | _ :: fields -> search_mod_label lab fields
+
+let rec search_cst_label lab = function
+  | [] -> raise Not_found
+  | (l, SFBconst cb) :: _ when Id.equal l lab -> cb
+  | _ :: fields -> search_cst_label lab fields
+
+let rec search_mind_label lab = function
+  | [] -> raise Not_found
+  | (l, SFBmind mind) :: _ when Id.equal l lab -> mind
+  | _ :: fields -> search_mind_label lab fields
+
+(* TODO: using [empty_delta_resolver] below is probably slightly incorrect. But:
+    a) I don't see currently what should be used instead
+    b) this shouldn't be critical for Print Assumption. At worse some
+       constants will have a canonical name which is non-canonical,
+       leading to failures in [Global.lookup_constant], but our own
+       [lookup_constant] should work.
+*)
+
+let rec fields_of_functor f subs mp0 args = function
+  | NoFunctor a -> f subs mp0 args a
+  | MoreFunctor (mbid,_,e) ->
+    let open Mod_subst in
+    match args with
+    | [] -> assert false (* we should only encounter applied functors *)
+    | mpa :: args ->
+      let subs = join (map_mbid mbid mpa (empty_delta_resolver mpa) (*TODO*)) subs in
+      fields_of_functor f subs mp0 args e
+
+let rec lookup_module_in_impl mp =
+    match mp with
+    | MPfile _ -> Global.lookup_module mp
+    | MPbound _ -> Global.lookup_module mp
+    | MPdot (mp',lab') ->
+       if ModPath.equal mp' (Global.current_modpath ()) then
+         Global.lookup_module mp
+       else
+         let fields = memoize_fields_of_mp mp' in
+         search_mod_label lab' fields
+
+and memoize_fields_of_mp mp =
+  try ModPath.Map.find mp !modcache
+  with Not_found ->
+    let l = fields_of_mp mp in
+    modcache := ModPath.Map.add mp l !modcache;
+    l
+
+and fields_of_mp mp =
+  let open Mod_subst in
+  let mb = lookup_module_in_impl mp in
+  let fields,inner_mp,subs = fields_of_mb empty_subst mp mb [] in
+  let delta_mb = mod_delta mb in
+  let subs =
+    (* XXX this code makes little sense, adding a delta_mb to subs if the root
+       does not coincide with mp used to be equivalent to a no-op and now fails
+       with an assertion failure. More likely than not, this means that we have
+       no idea about what we are doing. *)
+    if ModPath.equal inner_mp mp then subs
+    else if has_root_delta_resolver mp delta_mb then
+      add_mp inner_mp mp delta_mb subs
+    else
+      add_mp inner_mp mp (empty_delta_resolver mp) subs
+  in
+  Modops.subst_structure subs mp fields
+
+and fields_of_mb subs mp mb args = match Mod_declarations.mod_expr mb with
+  | Algebraic expr -> fields_of_expression subs mp args (mod_type mb) expr
+  | Struct (_, sign) ->
+    let sign = Modops.annotate_struct_body sign (mod_type mb) in
+    fields_of_signature subs mp args sign
+  | Abstract|FullStruct -> fields_of_signature subs mp args (mod_type mb)
+
+(** The Abstract case above corresponds to [Declare Module] *)
+
+and fields_of_signature x =
+  fields_of_functor
+    (fun subs mp0 args struc ->
+      assert (List.is_empty args);
+      (struc, mp0, subs)) x
+
+and fields_of_expr subs mp0 args = function
+  | MEident mp ->
+    let mp = Mod_subst.subst_mp subs mp in
+    let mb = lookup_module_in_impl mp in
+    fields_of_mb subs mp mb args
+  | MEapply (me1,mp2) -> fields_of_expr subs mp0 (mp2::args) me1
+  | MEwith _ -> assert false (* no 'with' in [mod_expr] *)
+
+and fields_of_expression subs mp args mty me =
+  let me = Modops.annotate_module_expression me mty in
+  fields_of_functor fields_of_expr subs mp args me
+
+let lookup_constant_in_impl cst fallback =
+  try
+    let mp,lab = KerName.repr (Constant.canonical cst) in
+    let fields = memoize_fields_of_mp mp in
+    (* A module found this way is necessarily closed, in particular
+       our constant cannot be in an opened section : *)
+    search_cst_label lab fields
+  with Not_found ->
+    (* Either:
+       - The module part of the constant isn't registered yet :
+         we're still in it, so the [constant_body] found earlier
+         (if any) was a true axiom.
+       - The label has not been found in the structure. This is an error *)
+    match fallback with
+      | Some cb -> cb
+      | None ->
+        CErrors.anomaly
+          Pp.(str "Print Assumption: unknown constant "
+            ++ Constant.print cst ++ str ".")
+
+let lookup_constant cst =
+  let env = Global.env() in
+  if not (Environ.mem_constant cst env)
+  then lookup_constant_in_impl cst None
+  else
+    let cb = Environ.lookup_constant cst env in
+    if Declareops.constant_has_body cb then cb
+    else lookup_constant_in_impl cst (Some cb)
+
+let lookup_mind_in_impl mind =
+  try
+    let mp,lab = KerName.repr (MutInd.canonical mind) in
+    let fields = memoize_fields_of_mp mp in
+      search_mind_label lab fields
+  with Not_found ->
+    CErrors.anomaly
+      Pp.(str "Print Assumption: unknown inductive "
+        ++ MutInd.print mind ++ str ".")
+
+let lookup_mind mind =
+  let env = Global.env() in
+  if Environ.mem_mind mind env then Environ.lookup_mind mind env
+  else lookup_mind_in_impl mind
+
+
+let get_constant_body access kn =
+  let cb = lookup_constant kn in
+  match cb.const_body with
+  | Undef _ | Primitive _ | Symbol _ -> None
+  | Def c -> Some c
+  | OpaqueDef o ->
+    match Global.force_proof access o with
+    | c, _ -> Some c
+    | exception e when CErrors.noncritical e -> None (* missing delayed body, e.g. in vok mode *)
+
+end
+
 let collect_dependance opaque_access gref =
   let open Names in
   let open GlobRef in
   match gref with
   | VarRef _ -> assert false
   | ConstRef cst ->
-      let cb = Environ.lookup_constant cst (Global.env()) in
+      let cb = ModLookup.lookup_constant cst in
       let cl =
         (* Skip opaque bodies when access_opaque flag is unset *)
         if access_opaque () || not (Declareops.is_opaque cb) then
-          match Global.body_of_constant_body opaque_access cb with
-          | Some (e,_,_) -> [e]
+          match ModLookup.get_constant_body opaque_access cst with
+          | Some e -> [e]
           | None -> []
         else
           []
       in
       let cl = cb.Declarations.const_type :: cl in
       List.fold_right (collect_long_names []) cl Data.empty
-  | IndRef i | ConstructRef (i,_) ->
-      let _, indbody = Global.lookup_inductive i in
+  | IndRef (mind, n) | ConstructRef ((mind, n),_) ->
+      let mib = ModLookup.lookup_mind mind in
+      let indbody = mib.Declarations.mind_packets.(n) in
       let ca = indbody.Declarations.mind_user_lc in
-        Array.fold_right (collect_long_names [fst i]) ca Data.empty
+        Array.fold_right (collect_long_names [mind]) ca Data.empty
 
 let display_dependance ~opaque_access gref =
   let display d =

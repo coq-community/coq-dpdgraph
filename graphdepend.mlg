@@ -14,6 +14,10 @@ DECLARE PLUGIN "coq-dpdgraph.plugin"
 open Pp
 open Stdarg
 
+let pr_global_safe gref =
+  try Printer.pr_global gref
+  with Not_found -> Names.GlobRef.print gref
+
 let debug msg = if false then Feedback.msg_debug msg
 
 let feedback msg = Feedback.msg_notice (str "Info: " ++ msg)
@@ -28,7 +32,7 @@ let get_dirlist_grefs dirlist =
   let selected_gref = ref [] in
   let select gref kind env sigma constr =
     if Search.module_filter (SearchInside dirlist) gref kind env sigma constr then
-    (debug (str "Select " ++ Printer.pr_global gref);
+    (debug (str "Select " ++ pr_global_safe gref);
      selected_gref := gref::!selected_gref)
   in
     Search.generic_search (Global.env()) (Evd.from_env (Global.env())) select;
@@ -64,21 +68,38 @@ module G = struct
         Nametab.shortest_qualid_of_global Names.Id.Set.empty (gref n)
       in Libnames.string_of_qualid qualid
 
+    let qualid_of n =
+      try Some (Nametab.shortest_qualid_of_global Names.Id.Set.empty (gref n))
+      with Not_found -> None
+
+    (** Fallback name for GlobRefs not registered in the Nametab
+        (e.g. constants hidden by module type constraints). *)
+    let fallback_split_name n =
+      let open Names in
+      match gref n with
+      | GlobRef.ConstRef cst ->
+        let kn = Constant.canonical cst in
+        let mp, lab = KerName.repr kn in
+        (ModPath.to_string mp, Label.to_string lab)
+      | GlobRef.IndRef (mind, _) ->
+        let kn = MutInd.canonical mind in
+        let mp, lab = KerName.repr kn in
+        (ModPath.to_string mp, Label.to_string lab)
+      | GlobRef.ConstructRef ((mind, _), _) ->
+        let kn = MutInd.canonical mind in
+        let mp, lab = KerName.repr kn in
+        (ModPath.to_string mp, Label.to_string lab)
+      | GlobRef.VarRef id -> ("", Id.to_string id)
+
     let split_name n =
-      let qualid =
-        Nametab.shortest_qualid_of_global Names.Id.Set.empty (gref n) in
-      let dirpath, ident = Libnames.repr_qualid qualid in
-      let dirpath = Names.DirPath.to_string dirpath in
-      let dirpath = if dirpath = "<>" then "" else dirpath in
-      let name = Names.Id.to_string ident in
+      match qualid_of n with
+      | Some qualid ->
+        let dirpath, ident = Libnames.repr_qualid qualid in
+        let dirpath = Names.DirPath.to_string dirpath in
+        let dirpath = if dirpath = "<>" then "" else dirpath in
+        let name = Names.Id.to_string ident in
         (dirpath, name)
-        (*
-      let mod_list = Names.repr_dirpath dir_path in
-      let rec dirname l = match l with [] -> ""
-        | m::[] -> Names.string_of_id m
-        | d::tl -> (dirname tl)^"."^(Names.string_of_id d)
-      in (dirname mod_list, name)
-         *)
+      | None -> fallback_split_name n
   end
 
   module Edge = struct
@@ -143,7 +164,7 @@ end
   * If not all, don't add nodes, and return an empty list. *)
 let add_gref_dpds opaque_access graph ~all n_gref todo =
   let gref = G.Node.gref n_gref in
-  debug (str "Add dpds " ++ Printer.pr_global gref);
+  debug (str "Add dpds " ++ pr_global_safe gref);
   let add_dpd dpd nb_use (g, td) = match G.get_node g dpd with
     | Some n -> let g = G.add_edge g n_gref n nb_use in g, td
     | None ->
@@ -157,12 +178,15 @@ let add_gref_dpds opaque_access graph ~all n_gref todo =
       let data = Searchdepend.collect_dependance opaque_access gref in
       let graph, todo = Searchdepend.Data.fold add_dpd data (graph, todo) in
         graph, todo
-    with Searchdepend.NoDef gref -> (* nothing to do *) graph, todo
+    with
+    | Searchdepend.NoDef gref -> (* nothing to do *) graph, todo
+    | exn when CErrors.noncritical exn || CErrors.is_sync_anomaly exn ->
+        graph, todo
 
 (** add gref node and add it to the todo list
 * to process its dependencies later. *)
 let add_gref_only (graph, todo) gref =
-  debug (str "Add " ++ Printer.pr_global gref);
+  debug (str "Add " ++ pr_global_safe gref);
   let graph, n = G.add_node graph gref in
   let todo = n::todo in
     graph, todo
@@ -184,16 +208,32 @@ module Out : sig
   val file : G.t -> unit
 end = struct
 
-  let add_cnst_attrib acc cnst =
-    let env = Global.env() in
-    let cb = Environ.lookup_constant cnst env in
+  let add_cnst_body_attrib acc cnst =
+    let cb = Searchdepend.ModLookup.lookup_constant cnst in
     let acc = match cb.Declarations.const_body with
-      | Declarations.OpaqueDef _ -> ("opaque", "yes")::("body", "yes")::acc
-      | Declarations.Def _ -> ("opaque", "no")::("body", "yes")::acc
-      | Declarations.Undef _  -> ("opaque", "yes")::("body", "no")::acc
-      | Declarations.Primitive _ -> ("prim", "yes")::("body", "no")::acc
-      | Declarations.Symbol _ -> ("symb", "yes")::("body", "no")::acc
+      | Declarations.OpaqueDef _ -> ("body", "yes")::acc
+      | Declarations.Def _ -> ("body", "yes")::acc
+      | Declarations.Undef _  -> ("body", "no")::acc
+      | Declarations.Primitive _ -> ("body", "no")::acc
+      | Declarations.Symbol _ -> ("body", "no")::acc
     in acc
+
+  let add_cnst_opaque_attrib acc cnst =
+    try
+      let env = Global.env() in
+      let cb = Environ.lookup_constant cnst env in
+      let acc = match cb.Declarations.const_body with
+        | Declarations.OpaqueDef _ -> ("opaque", "yes")::acc
+        | Declarations.Def _ -> ("opaque", "no")::acc
+        | Declarations.Undef _  -> ("opaque", "yes")::acc
+        | Declarations.Primitive _ -> ("prim", "yes")::acc
+        | Declarations.Symbol _ -> ("symb", "yes")::acc
+      in acc
+    with exn when CErrors.noncritical exn || CErrors.is_sync_anomaly exn -> acc
+
+  let add_cnst_attrib acc cnst =
+    let acc = add_cnst_body_attrib acc cnst in
+    add_cnst_opaque_attrib acc cnst
 
   let add_gref_attrib acc gref id =
     let is_prop = is_prop gref id in
