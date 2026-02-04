@@ -112,7 +112,7 @@ $(TESTDIR)/%.err.log: $(TESTDIR)/%.err.dpd $(DPD2DOT)
 	cp $< $@
 
 %.vo : %.v
-	rocq compile -q -R . dpdgraph $<
+	rocq compile -q -R . dpdgraph -I . $<
 
 %.html : %.v
 	coqdoc $<
