@@ -1,2 +1,2 @@
 Info: read file tests/graph2.dpd
-Test:count_occ_inv_nil	(0)
+Info: Graph output in tests/graph2.dot

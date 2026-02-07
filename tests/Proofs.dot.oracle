@@ -1,0 +1,56 @@
+digraph tests/Proofs {
+  graph [ratio=0.5]
+  node [style=filled]
+PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec [label="land_spec", URL=<PeanoNat.html#Nat.PrivateImplementsBitwiseSpec.land_spec>, peripheries=3, fillcolor="#FFB57F"] ;
+PeanoNat_Nat_land [label="land", URL=<PeanoNat.html#Nat.land>, fillcolor="#F070D1"] ;
+_andb [label="andb", URL=<.html#andb>, fillcolor="#F070D1"] ;
+PeanoNat_Nat_testbit [label="testbit", URL=<PeanoNat.html#Nat.testbit>, fillcolor="#F070D1"] ;
+_nat [label="nat", URL=<.html#nat>, fillcolor="#E2CDFA"] ;
+_bool [label="bool", URL=<.html#bool>, fillcolor="#E2CDFA"] ;
+_eq [label="eq", URL=<.html#eq>, fillcolor="#E2CDFA"] ;
+PeanoNat_Nat_odd [label="odd", URL=<PeanoNat.html#Nat.odd>, fillcolor="#F070D1"] ;
+PeanoNat_Nat_div2 [label="div2", URL=<PeanoNat.html#Nat.div2>, fillcolor="#F070D1"] ;
+_O [label="O", URL=<.html#O>, fillcolor="#7FAAFF"] ;
+_S [label="S", URL=<.html#S>, fillcolor="#7FAAFF"] ;
+PeanoNat_Nat_even [label="even", URL=<PeanoNat.html#Nat.even>, fillcolor="#F070D1"] ;
+_negb [label="negb", URL=<.html#negb>, fillcolor="#F070D1"] ;
+_true [label="true", URL=<.html#true>, fillcolor="#7FAAFF"] ;
+_false [label="false", URL=<.html#false>, fillcolor="#7FAAFF"] ;
+PeanoNat_Nat_bitwise [label="bitwise", URL=<PeanoNat.html#Nat.bitwise>, fillcolor="#F070D1"] ;
+PeanoNat_Nat_add [label="add", URL=<PeanoNat.html#Nat.add>, fillcolor="#F070D1"] ;
+PeanoNat_Nat_mul [label="mul", URL=<PeanoNat.html#Nat.mul>, fillcolor="#F070D1"] ;
+  PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec -> PeanoNat_Nat_land [] ;
+  PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec -> PeanoNat_Nat_testbit [] ;
+  PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec -> _eq [] ;
+  PeanoNat_Nat_land -> _andb [] ;
+  PeanoNat_Nat_land -> PeanoNat_Nat_bitwise [] ;
+  _andb -> _bool [] ;
+  _andb -> _false [] ;
+  PeanoNat_Nat_testbit -> PeanoNat_Nat_odd [] ;
+  PeanoNat_Nat_testbit -> PeanoNat_Nat_div2 [] ;
+  PeanoNat_Nat_odd -> PeanoNat_Nat_even [] ;
+  PeanoNat_Nat_odd -> _negb [] ;
+  PeanoNat_Nat_div2 -> _nat [] ;
+  PeanoNat_Nat_div2 -> _O [] ;
+  PeanoNat_Nat_div2 -> _S [] ;
+  PeanoNat_Nat_even -> _nat [] ;
+  PeanoNat_Nat_even -> _bool [] ;
+  PeanoNat_Nat_even -> _true [] ;
+  PeanoNat_Nat_even -> _false [] ;
+  _negb -> _bool [] ;
+  _negb -> _true [] ;
+  _negb -> _false [] ;
+  PeanoNat_Nat_bitwise -> PeanoNat_Nat_odd [] ;
+  PeanoNat_Nat_bitwise -> PeanoNat_Nat_div2 [] ;
+  PeanoNat_Nat_bitwise -> PeanoNat_Nat_mul [] ;
+  PeanoNat_Nat_add -> _nat [] ;
+  PeanoNat_Nat_add -> _S [] ;
+  PeanoNat_Nat_mul -> _O [] ;
+  PeanoNat_Nat_mul -> PeanoNat_Nat_add [] ;
+subgraph cluster_PeanoNat { label="PeanoNat"; fillcolor="#FFFFC3"; labeljust=l; style=filled 
+subgraph cluster_PeanoNat_Nat { label="Nat"; fillcolor="#FFFFA3"; labeljust=l; style=filled 
+subgraph cluster_PeanoNat_Nat_PrivateImplementsBitwiseSpec { label="PrivateImplementsBitwiseSpec"; fillcolor="#FFFF83"; labeljust=l; style=filled 
+PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec; };
+PeanoNat_Nat_mul; PeanoNat_Nat_add; PeanoNat_Nat_bitwise; PeanoNat_Nat_even; PeanoNat_Nat_div2; PeanoNat_Nat_odd; PeanoNat_Nat_testbit; PeanoNat_Nat_land; };
+};
+} /* END */

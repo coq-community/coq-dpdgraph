@@ -1,0 +1,3 @@
+N: 1 "T" [opaque=yes, body=no, kind=cnst, prop=no, path="ModuleTypeLocked.Foo", ];
+N: 2 "nat" [kind=inductive, prop=no, ];
+E: 1 2 [weight=1, ];

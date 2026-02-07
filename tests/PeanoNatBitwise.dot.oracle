@@ -1,0 +1,54 @@
+digraph tests/PeanoNatBitwise {
+  graph [ratio=0.5]
+  node [style=filled]
+Nat_PrivateImplementsBitwiseSpec_land_spec [label="land_spec", URL=<Nat.html#PrivateImplementsBitwiseSpec.land_spec>, peripheries=3, fillcolor="#FFB57F"] ;
+Nat_land [label="land", URL=<Nat.html#land>, fillcolor="#F070D1"] ;
+_andb [label="andb", URL=<.html#andb>, fillcolor="#F070D1"] ;
+Nat_testbit [label="testbit", URL=<Nat.html#testbit>, fillcolor="#F070D1"] ;
+_nat [label="nat", URL=<.html#nat>, fillcolor="#E2CDFA"] ;
+_bool [label="bool", URL=<.html#bool>, fillcolor="#E2CDFA"] ;
+_eq [label="eq", URL=<.html#eq>, fillcolor="#E2CDFA"] ;
+Nat_odd [label="odd", URL=<Nat.html#odd>, fillcolor="#F070D1"] ;
+Nat_div2 [label="div2", URL=<Nat.html#div2>, fillcolor="#F070D1"] ;
+_O [label="O", URL=<.html#O>, fillcolor="#7FAAFF"] ;
+_S [label="S", URL=<.html#S>, fillcolor="#7FAAFF"] ;
+Nat_even [label="even", URL=<Nat.html#even>, fillcolor="#F070D1"] ;
+_negb [label="negb", URL=<.html#negb>, fillcolor="#F070D1"] ;
+_true [label="true", URL=<.html#true>, fillcolor="#7FAAFF"] ;
+_false [label="false", URL=<.html#false>, fillcolor="#7FAAFF"] ;
+Nat_bitwise [label="bitwise", URL=<Nat.html#bitwise>, fillcolor="#F070D1"] ;
+Nat_add [label="add", URL=<Nat.html#add>, fillcolor="#F070D1"] ;
+Nat_mul [label="mul", URL=<Nat.html#mul>, fillcolor="#F070D1"] ;
+  Nat_PrivateImplementsBitwiseSpec_land_spec -> Nat_land [] ;
+  Nat_PrivateImplementsBitwiseSpec_land_spec -> Nat_testbit [] ;
+  Nat_PrivateImplementsBitwiseSpec_land_spec -> _eq [] ;
+  Nat_land -> _andb [] ;
+  Nat_land -> Nat_bitwise [] ;
+  _andb -> _bool [] ;
+  _andb -> _false [] ;
+  Nat_testbit -> Nat_odd [] ;
+  Nat_testbit -> Nat_div2 [] ;
+  Nat_odd -> Nat_even [] ;
+  Nat_odd -> _negb [] ;
+  Nat_div2 -> _nat [] ;
+  Nat_div2 -> _O [] ;
+  Nat_div2 -> _S [] ;
+  Nat_even -> _nat [] ;
+  Nat_even -> _bool [] ;
+  Nat_even -> _true [] ;
+  Nat_even -> _false [] ;
+  _negb -> _bool [] ;
+  _negb -> _true [] ;
+  _negb -> _false [] ;
+  Nat_bitwise -> Nat_odd [] ;
+  Nat_bitwise -> Nat_div2 [] ;
+  Nat_bitwise -> Nat_mul [] ;
+  Nat_add -> _nat [] ;
+  Nat_add -> _S [] ;
+  Nat_mul -> _O [] ;
+  Nat_mul -> Nat_add [] ;
+subgraph cluster_Nat { label="Nat"; fillcolor="#FFFFC3"; labeljust=l; style=filled 
+subgraph cluster_Nat_PrivateImplementsBitwiseSpec { label="PrivateImplementsBitwiseSpec"; fillcolor="#FFFFA3"; labeljust=l; style=filled 
+Nat_PrivateImplementsBitwiseSpec_land_spec; };
+Nat_mul; Nat_add; Nat_bitwise; Nat_even; Nat_div2; Nat_odd; Nat_testbit; Nat_land; };
+} /* END */
