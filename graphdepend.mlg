@@ -59,11 +59,6 @@ module G = struct
     let compare n1 n2 = compare (id n1) (id n2)
     let equal n1 n2 = 0 = compare n1 n2
 
-    let full_name n =
-      let qualid =
-        Nametab.shortest_qualid_of_global Names.Id.Set.empty (gref n)
-      in Libnames.string_of_qualid qualid
-
     let split_name n =
       let qualid =
         Nametab.shortest_qualid_of_global Names.Id.Set.empty (gref n) in
