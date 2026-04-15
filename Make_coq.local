@@ -54,11 +54,12 @@ TESTDIR=tests
 TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v $(TESTDIR)/Polymorph.v \
 	  $(TESTDIR)/PrimitiveProjections.v $(TESTDIR)/ModuleTypeLocked.v \
 	  $(TESTDIR)/NestedModules.v $(TESTDIR)/PeanoNatBitwise.v \
-	  $(TESTDIR)/Proofs.v \
+	  $(TESTDIR)/Proofs.v $(TESTDIR)/TypeOnly.v \
 	  $(TESTDIR)/Morph.cmd $(TESTDIR)/Test.cmd $(TESTDIR)/search.cmd \
           $(TESTDIR)/Polymorph.cmd $(TESTDIR)/PrimitiveProjections.cmd \
           $(TESTDIR)/ModuleTypeLocked.cmd $(TESTDIR)/NestedModules.cmd \
-          $(TESTDIR)/PeanoNatBitwise.cmd $(TESTDIR)/Proofs.cmd
+          $(TESTDIR)/PeanoNatBitwise.cmd $(TESTDIR)/Proofs.cmd \
+          $(TESTDIR)/TypeOnly.cmd
 TESTS_DPD=$(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd \
 	  $(TESTDIR)/Morph.dpd $(TESTDIR)/Morph_rw.dpd \
 	  $(TESTDIR)/Polymorph.dpd \
@@ -67,11 +68,16 @@ TESTS_DPD=$(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd \
 	  $(TESTDIR)/ModuleTypeLocked.dpd \
 	  $(TESTDIR)/NestedModules.dpd \
 	  $(TESTDIR)/PeanoNatBitwise.dpd \
-	  $(TESTDIR)/Proofs.dpd
+	  $(TESTDIR)/Proofs.dpd \
+	  $(TESTDIR)/Proofs_type_only.dpd \
+	  $(TESTDIR)/ModuleTypeLocked_type_only.dpd \
+	  $(TESTDIR)/TypeOnly_proofs.dpd \
+	  $(TESTDIR)/TypeOnly_stmts_body.dpd \
+	  $(TESTDIR)/TypeOnly_stmts_type.dpd
 TESTS_VO=$(TESTDIR)/Morph.vo $(TESTDIR)/Test.vo $(TESTDIR)/Polymorph.vo\
          $(TESTDIR)/PrimitiveProjections.vo $(TESTDIR)/ModuleTypeLocked.vo \
          $(TESTDIR)/NestedModules.vo $(TESTDIR)/PeanoNatBitwise.vo \
-         $(TESTDIR)/Proofs.vo
+         $(TESTDIR)/Proofs.vo $(TESTDIR)/TypeOnly.vo
 TESTS_DOT=$(TESTS_DPD:%.dpd=%.dot)
 TESTS_ERR_DPD=$(wildcard $(TESTDIR)/*.err.dpd)
 
@@ -89,10 +95,12 @@ clean_test :
 	rm -f $(TESTDIR)/Polymorph.vo $(TESTDIR)/Polymorph.glob
 	rm -f $(TESTDIR)/PrimitiveProjections.vo $(TESTDIR)/PrimitiveProjections.glob
 	rm -f $(TESTDIR)/ModuleTypeLocked.vo $(TESTDIR)/ModuleTypeLocked.glob
-	rm -f $(TESTDIR)/ModuleTypeLocked_regular.dpd $(TESTDIR)/ModuleTypeLocked_axiom.dpd
+	rm -f $(TESTDIR)/ModuleTypeLocked_regular.dpd $(TESTDIR)/ModuleTypeLocked_axiom.dpd $(TESTDIR)/ModuleTypeLocked_type_only.dpd
+	rm -f $(TESTDIR)/Proofs_type_only.dpd
 	rm -f $(TESTDIR)/NestedModules.vo $(TESTDIR)/NestedModules.glob
 	rm -f $(TESTDIR)/PeanoNatBitwise.vo $(TESTDIR)/PeanoNatBitwise.glob
 	rm -f $(TESTDIR)/Proofs.vo $(TESTDIR)/Proofs.glob
+	rm -f $(TESTDIR)/TypeOnly.vo $(TESTDIR)/TypeOnly.glob
 	rm -f  $(TESTDIR)/.*.vo.aux
 
 .PRECIOUS : $(TESTS) $(TESTS_LOG) $(TESTS_ORACLE)
@@ -155,7 +163,7 @@ $(TESTDIR)/PrimitiveProjections.dpd $(TESTDIR)/PrimitiveProjections2.dpd: \
 	# cd to tests to generate .dpd file there.
 	cd $(TESTDIR); rocq repl $(TEST_INCLUDE) < PrimitiveProjections.cmd > /dev/null 2>&1
 
-$(TESTDIR)/ModuleTypeLocked.dpd $(TESTDIR)/ModuleTypeLocked_regular.dpd $(TESTDIR)/ModuleTypeLocked_axiom.dpd: \
+$(TESTDIR)/ModuleTypeLocked.dpd $(TESTDIR)/ModuleTypeLocked_regular.dpd $(TESTDIR)/ModuleTypeLocked_axiom.dpd $(TESTDIR)/ModuleTypeLocked_type_only.dpd: \
 	             $(TESTDIR)/ModuleTypeLocked.vo $(TESTDIR)/ModuleTypeLocked.cmd $(DPDPLUGIN)
 	cd $(TESTDIR); rocq repl $(TEST_INCLUDE) < ModuleTypeLocked.cmd > /dev/null 2>&1
 
@@ -165,8 +173,12 @@ $(TESTDIR)/NestedModules.dpd: $(TESTDIR)/NestedModules.vo $(TESTDIR)/NestedModul
 $(TESTDIR)/PeanoNatBitwise.dpd: $(TESTDIR)/PeanoNatBitwise.vo $(TESTDIR)/PeanoNatBitwise.cmd $(DPDPLUGIN)
 	cd $(TESTDIR); rocq repl $(TEST_INCLUDE) < PeanoNatBitwise.cmd > /dev/null 2>&1
 
-$(TESTDIR)/Proofs.dpd: $(TESTDIR)/Proofs.vo $(TESTDIR)/Proofs.cmd $(DPDPLUGIN)
+$(TESTDIR)/Proofs.dpd $(TESTDIR)/Proofs_type_only.dpd: $(TESTDIR)/Proofs.vo $(TESTDIR)/Proofs.cmd $(DPDPLUGIN)
 	cd $(TESTDIR); rocq repl $(TEST_INCLUDE) < Proofs.cmd > /dev/null 2>&1
+
+$(TESTDIR)/TypeOnly_proofs.dpd $(TESTDIR)/TypeOnly_stmts_body.dpd $(TESTDIR)/TypeOnly_stmts_type.dpd: \
+		$(TESTDIR)/TypeOnly.vo $(TESTDIR)/TypeOnly.cmd $(DPDPLUGIN)
+	cd $(TESTDIR); rocq repl $(TEST_INCLUDE) < TypeOnly.cmd > /dev/null 2>&1
 
 %.dpd : %.vo %.cmd
 	# cd to tests to generate .dpd file there.

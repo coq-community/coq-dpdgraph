@@ -24,6 +24,17 @@ let { Goptions.get = access_opaque } =
     ~value:true
     ()
 
+(** Flag to collect only type-level dependencies.
+    When true, only the type of constants (never the body, even for transparent
+    definitions) and only the arity of inductives (not constructor types) are
+    used for dependencies.
+    Controlled via: Set/Unset DependGraph TypeOnly *)
+let { Goptions.get = type_only } =
+  Goptions.declare_bool_option_and_ref
+    ~key:["DependGraph"; "TypeOnly"]
+    ~value:false
+    ()
+
 module Data = struct
   type t = int Names.GlobRef.Map.t
 
@@ -250,8 +261,7 @@ let collect_dependance opaque_access gref =
   | ConstRef cst ->
       let cb = ModLookup.lookup_constant cst in
       let cl =
-        (* Skip opaque bodies when access_opaque flag is unset *)
-        if access_opaque () || not (Declareops.is_opaque cb) then
+        if not (type_only ()) && (access_opaque () || not (Declareops.is_opaque cb)) then
           match ModLookup.get_constant_body opaque_access cst with
           | Some e -> [e]
           | None -> []
@@ -263,7 +273,13 @@ let collect_dependance opaque_access gref =
   | IndRef (mind, n) | ConstructRef ((mind, n),_) ->
       let mib = ModLookup.lookup_mind mind in
       let indbody = mib.Declarations.mind_packets.(n) in
-      let ca = indbody.Declarations.mind_user_lc in
+      if type_only () then
+        (* TypeOnly: only collect from the inductive's arity, not constructor types *)
+        let arity = indbody.Declarations.mind_user_arity in
+        collect_long_names [mind] arity Data.empty
+      else
+        (* Default: collect from all constructor types *)
+        let ca = indbody.Declarations.mind_user_lc in
         Array.fold_right (collect_long_names [mind]) ca Data.empty
 
 let display_dependance ~opaque_access gref =

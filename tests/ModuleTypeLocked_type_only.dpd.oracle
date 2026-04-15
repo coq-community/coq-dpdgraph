@@ -1,0 +1,7 @@
+N: 13 "Ax" [opaque=yes, body=no, kind=cnst, prop=no, path="ModuleTypeLocked", ];
+N: 12 "Regular" [opaque=no, body=yes, kind=cnst, prop=no, path="ModuleTypeLocked", ];
+N: 11 "T" [opaque=yes, body=yes, kind=cnst, prop=no, path="ModuleTypeLocked.Foo", ];
+N: 14 "nat" [kind=inductive, prop=no, ];
+E: 11 14 [weight=1, ];
+E: 12 14 [weight=1, ];
+E: 13 14 [weight=1, ];

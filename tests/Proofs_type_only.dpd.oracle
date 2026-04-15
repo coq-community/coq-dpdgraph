@@ -1,0 +1,17 @@
+N: 445 "andb" [opaque=no, body=yes, kind=cnst, prop=no, path="Corelib.Init.Datatypes", ];
+N: 444 "land" [opaque=no, body=yes, kind=cnst, prop=no, path="Stdlib.Arith.PeanoNat.Nat", ];
+N: 443 "land_spec" [opaque=yes, body=yes, kind=cnst, prop=yes, path="Stdlib.Arith.PeanoNat.Nat.PrivateImplementsBitwiseSpec", ];
+N: 446 "testbit" [opaque=no, body=yes, kind=cnst, prop=no, path="Stdlib.Arith.PeanoNat.Nat", ];
+N: 448 "bool" [kind=inductive, prop=no, path="Corelib.Init.Datatypes", ];
+N: 449 "eq" [kind=inductive, prop=no, path="Corelib.Init.Logic", ];
+N: 447 "nat" [kind=inductive, prop=no, path="Corelib.Init.Datatypes", ];
+E: 443 444 [weight=1, ];
+E: 443 445 [weight=1, ];
+E: 443 446 [weight=3, ];
+E: 443 447 [weight=3, ];
+E: 443 448 [weight=1, ];
+E: 443 449 [weight=1, ];
+E: 444 447 [weight=3, ];
+E: 445 448 [weight=3, ];
+E: 446 447 [weight=2, ];
+E: 446 448 [weight=1, ];

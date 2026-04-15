@@ -1,0 +1,37 @@
+digraph tests/Proofs_type_only {
+  graph [ratio=0.5]
+  node [style=filled]
+Stdlib_Arith_PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec [label="land_spec", URL=<Stdlib.html#Arith.PeanoNat.Nat.PrivateImplementsBitwiseSpec.land_spec>, peripheries=3, fillcolor="#7FFFD4"] ;
+Stdlib_Arith_PeanoNat_Nat_land [label="land", URL=<Stdlib.html#Arith.PeanoNat.Nat.land>, fillcolor="#F070D1"] ;
+Corelib_Init_Datatypes_andb [label="andb", URL=<Corelib.html#Init.Datatypes.andb>, fillcolor="#F070D1"] ;
+Stdlib_Arith_PeanoNat_Nat_testbit [label="testbit", URL=<Stdlib.html#Arith.PeanoNat.Nat.testbit>, fillcolor="#F070D1"] ;
+Corelib_Init_Datatypes_nat [label="nat", URL=<Corelib.html#Init.Datatypes.nat>, fillcolor="#E2CDFA"] ;
+Corelib_Init_Datatypes_bool [label="bool", URL=<Corelib.html#Init.Datatypes.bool>, fillcolor="#E2CDFA"] ;
+Corelib_Init_Logic_eq [label="eq", URL=<Corelib.html#Init.Logic.eq>, fillcolor="#E2CDFA"] ;
+  Stdlib_Arith_PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec -> Stdlib_Arith_PeanoNat_Nat_land [] ;
+  Stdlib_Arith_PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec -> Corelib_Init_Datatypes_andb [] ;
+  Stdlib_Arith_PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec -> Stdlib_Arith_PeanoNat_Nat_testbit [] ;
+  Stdlib_Arith_PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec -> Corelib_Init_Logic_eq [] ;
+  Stdlib_Arith_PeanoNat_Nat_land -> Corelib_Init_Datatypes_nat [] ;
+  Corelib_Init_Datatypes_andb -> Corelib_Init_Datatypes_bool [] ;
+  Stdlib_Arith_PeanoNat_Nat_testbit -> Corelib_Init_Datatypes_nat [] ;
+  Stdlib_Arith_PeanoNat_Nat_testbit -> Corelib_Init_Datatypes_bool [] ;
+subgraph cluster_Corelib { label="Corelib"; fillcolor="#FFFFC3"; labeljust=l; style=filled 
+subgraph cluster_Corelib_Init { label="Init"; fillcolor="#FFFFA3"; labeljust=l; style=filled 
+subgraph cluster_Corelib_Init_Logic { label="Logic"; fillcolor="#FFFF83"; labeljust=l; style=filled 
+Corelib_Init_Logic_eq; };
+subgraph cluster_Corelib_Init_Datatypes { label="Datatypes"; fillcolor="#FFFF83"; labeljust=l; style=filled 
+Corelib_Init_Datatypes_bool; Corelib_Init_Datatypes_nat; Corelib_Init_Datatypes_andb; };
+};
+};
+subgraph cluster_Stdlib { label="Stdlib"; fillcolor="#FFFFC3"; labeljust=l; style=filled 
+subgraph cluster_Stdlib_Arith { label="Arith"; fillcolor="#FFFFA3"; labeljust=l; style=filled 
+subgraph cluster_Stdlib_Arith_PeanoNat { label="PeanoNat"; fillcolor="#FFFF83"; labeljust=l; style=filled 
+subgraph cluster_Stdlib_Arith_PeanoNat_Nat { label="Nat"; fillcolor="#FFFF63"; labeljust=l; style=filled 
+subgraph cluster_Stdlib_Arith_PeanoNat_Nat_PrivateImplementsBitwiseSpec { label="PrivateImplementsBitwiseSpec"; fillcolor="#FFFF43"; labeljust=l; style=filled 
+Stdlib_Arith_PeanoNat_Nat_PrivateImplementsBitwiseSpec_land_spec; };
+Stdlib_Arith_PeanoNat_Nat_testbit; Stdlib_Arith_PeanoNat_Nat_land; };
+};
+};
+};
+} /* END */
