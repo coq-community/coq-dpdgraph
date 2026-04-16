@@ -1,0 +1,36 @@
+digraph tests/TypeOnly_stmts_body {
+  graph [ratio=0.5]
+  node [style=filled]
+dpdgraph_tests_TypeOnly_mylist [label="mylist", URL=<dpdgraph.html#tests.TypeOnly.mylist>, fillcolor="#E2CDFA"] ;
+dpdgraph_tests_TypeOnly_mylen [label="mylen", URL=<dpdgraph.html#tests.TypeOnly.mylen>, fillcolor="#F070D1"] ;
+dpdgraph_tests_TypeOnly_mylen_zero [label="mylen_zero", URL=<dpdgraph.html#tests.TypeOnly.mylen_zero>, peripheries=3, fillcolor="#7FFFD4"] ;
+Corelib_Init_Datatypes_nat [label="nat", URL=<Corelib.html#Init.Datatypes.nat>, fillcolor="#E2CDFA"] ;
+Corelib_Init_Logic_eq [label="eq", URL=<Corelib.html#Init.Logic.eq>, fillcolor="#E2CDFA"] ;
+Corelib_Init_Datatypes_O [label="O", URL=<Corelib.html#Init.Datatypes.O>, fillcolor="#7FAAFF"] ;
+dpdgraph_tests_TypeOnly_mynil [label="mynil", URL=<dpdgraph.html#tests.TypeOnly.mynil>, fillcolor="#7FAAFF"] ;
+Corelib_Init_Datatypes_S [label="S", URL=<Corelib.html#Init.Datatypes.S>, fillcolor="#7FAAFF"] ;
+  dpdgraph_tests_TypeOnly_mylist -> Corelib_Init_Datatypes_nat [] ;
+  dpdgraph_tests_TypeOnly_mylist -> Corelib_Init_Datatypes_O [] ;
+  dpdgraph_tests_TypeOnly_mylist -> Corelib_Init_Datatypes_S [] ;
+  dpdgraph_tests_TypeOnly_mylen -> dpdgraph_tests_TypeOnly_mylist [] ;
+  dpdgraph_tests_TypeOnly_mylen_zero -> dpdgraph_tests_TypeOnly_mylen [] ;
+  dpdgraph_tests_TypeOnly_mylen_zero -> Corelib_Init_Logic_eq [] ;
+  dpdgraph_tests_TypeOnly_mylen_zero -> dpdgraph_tests_TypeOnly_mynil [] ;
+  dpdgraph_tests_TypeOnly_mynil -> Corelib_Init_Datatypes_nat [] ;
+  dpdgraph_tests_TypeOnly_mynil -> Corelib_Init_Datatypes_O [] ;
+  dpdgraph_tests_TypeOnly_mynil -> Corelib_Init_Datatypes_S [] ;
+subgraph cluster_dpdgraph { label="dpdgraph"; fillcolor="#FFFFC3"; labeljust=l; style=filled 
+subgraph cluster_dpdgraph_tests { label="tests"; fillcolor="#FFFFA3"; labeljust=l; style=filled 
+subgraph cluster_dpdgraph_tests_TypeOnly { label="TypeOnly"; fillcolor="#FFFF83"; labeljust=l; style=filled 
+dpdgraph_tests_TypeOnly_mynil; dpdgraph_tests_TypeOnly_mylen_zero; dpdgraph_tests_TypeOnly_mylen; dpdgraph_tests_TypeOnly_mylist; };
+};
+};
+subgraph cluster_Corelib { label="Corelib"; fillcolor="#FFFFC3"; labeljust=l; style=filled 
+subgraph cluster_Corelib_Init { label="Init"; fillcolor="#FFFFA3"; labeljust=l; style=filled 
+subgraph cluster_Corelib_Init_Logic { label="Logic"; fillcolor="#FFFF83"; labeljust=l; style=filled 
+Corelib_Init_Logic_eq; };
+subgraph cluster_Corelib_Init_Datatypes { label="Datatypes"; fillcolor="#FFFF83"; labeljust=l; style=filled 
+Corelib_Init_Datatypes_S; Corelib_Init_Datatypes_O; Corelib_Init_Datatypes_nat; };
+};
+};
+} /* END */
