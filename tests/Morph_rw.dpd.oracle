@@ -24,10 +24,10 @@ N: 42 "symmetry" [opaque=no, body=yes, kind=cnst, prop=yes, path="RelationClasse
 N: 16 "trans_sym_co_inv_impl_morphism" [opaque=no, body=yes, kind=cnst, prop=yes, path="Morphisms", ];
 N: 40 "trans_sym_co_inv_impl_morphism_obligation_1" [opaque=yes, body=yes, kind=cnst, prop=yes, path="Morphisms", ];
 N: 44 "transitivity" [opaque=no, body=yes, kind=cnst, prop=yes, path="RelationClasses", ];
-N: 26 "Equivalence" [kind=inductive, prop=no, path="RelationClasses", ];
-N: 34 "PER" [kind=inductive, prop=no, path="RelationClasses", ];
-N: 27 "Build_Equivalence" [kind=construct, prop=yes, path="RelationClasses", ];
-N: 35 "Build_PER" [kind=construct, prop=yes, path="RelationClasses", ];
+N: 26 "Equivalence" [constructors=["Build_Equivalence"], kind=inductive, prop=no, path="RelationClasses", ];
+N: 34 "PER" [constructors=["Build_PER"], kind=inductive, prop=no, path="RelationClasses", ];
+N: 27 "Build_Equivalence" [inductive="Equivalence", kind=construct, prop=yes, path="RelationClasses", ];
+N: 35 "Build_PER" [inductive="PER", kind=construct, prop=yes, path="RelationClasses", ];
 E: 15 16 [weight=1, ];
 E: 15 17 [weight=1, ];
 E: 15 18 [weight=6, ];

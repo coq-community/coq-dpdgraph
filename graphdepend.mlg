@@ -195,6 +195,33 @@ end = struct
       | Declarations.Symbol _ -> ("symb", "yes")::("body", "no")::acc
     in acc
 
+  let quote_string s = "\"" ^ String.escaped s ^ "\""
+
+  let string_list_attrib l =
+    "[" ^ String.concat "," (List.map quote_string l) ^ "]"
+
+  let lookup_inductive_body ind =
+    let _, indbody = Global.lookup_inductive ind in
+    indbody
+
+  let add_constructor_attrib acc (mind, n) =
+    let indbody = lookup_inductive_body (mind, n) in
+    let constructors =
+      indbody.Declarations.mind_consnames
+      |> Array.to_list
+      |> List.map Names.Id.to_string
+    in
+    match constructors with
+    | [] -> acc
+    | _ ->
+        let constructors = string_list_attrib constructors in
+        ("constructors", constructors)::acc
+
+  let add_inductive_attrib acc ind =
+    let indbody = lookup_inductive_body ind in
+    let inductive = Names.Id.to_string indbody.Declarations.mind_typename in
+    ("inductive", quote_string inductive)::acc
+
   let add_gref_attrib acc gref id =
     let is_prop = is_prop gref id in
     let acc = ("prop", if is_prop then "yes" else "no")::acc in
@@ -202,12 +229,12 @@ end = struct
       | Names.GlobRef.ConstRef cnst ->
           let acc = ("kind", "cnst")::acc in
             add_cnst_attrib acc cnst
-      | Names.GlobRef.IndRef _ ->
+      | Names.GlobRef.IndRef ind ->
           let acc = ("kind", "inductive")::acc in
-            acc
-      | Names.GlobRef.ConstructRef _ ->
+            add_constructor_attrib acc ind
+      | Names.GlobRef.ConstructRef (ind, _) ->
           let acc = ("kind", "construct")::acc in
-            acc
+            add_inductive_attrib acc ind
       | Names.GlobRef.VarRef _ -> assert false
     in acc
 

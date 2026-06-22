@@ -6,6 +6,7 @@ N: 5 "five" [ prop=yes, prop=no, ] ; /* known attribute with two values.
                                         Should this be an error?
                                       */
 N: 6 "six" [ another_attribute=42, ]; /* unknown attribute */
+N: 7 "seven" [ constructors=["one","two"], ]; /* string list attribute */
 
 E: 1 1;  /* no attibute */
 E: 1 2 []; /* empty attributes */
