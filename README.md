@@ -300,6 +300,8 @@ node_attribute :
    | kind=[cnst|inductive|construct]
    | prop=[yes|no]
    | path="m0.m1.m2"
+   | constructors=["c0","c1",...]
+   | inductive="ind"
    | body=[yes|no]
    | opaque=[yes|no]
    | prim=[yes|no]
@@ -318,7 +320,8 @@ edge_attribute :
 
 The parser accept .dpd files as described above,
   but also any attribute for nodes and edges having the form :
-  ``prop=val`` or ``prop="string..."`` or ``prop=NUM``
+  ``prop=val`` or ``prop="string..."`` or ``prop=NUM`` or
+  ``prop=["string0","string1",...]``
   so that the generated ``.dpd`` can have new attributes without having to change
   the other tools.
 Each tool can then pick the attributes that it is able to handle;
@@ -330,4 +333,3 @@ Each tool can then pick the attributes that it is able to handle;
 Also see:
 - [CHANGES](CHANGES.md)
 - [distributed versions](https://anne.pacalet.fr/dev/dpdgraph/)
-

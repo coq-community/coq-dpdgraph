@@ -9,6 +9,8 @@
 (*        (see the enclosed LICENSE file for mode details)                    *)
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*)
 
+let quote_string s = "\"" ^ String.escaped s ^ "\""
+
 %}
 
 %token <string> IDENT
@@ -59,5 +61,15 @@ attrib_value:
     | IDENT { $1 }
     | STRING { $1 }
     | NUM { string_of_int $1 }
+    | string_list { $1 }
+
+string_list:
+    | LBRACKET string_list_items RBRACKET
+        { "[" ^ String.concat "," (List.map quote_string $2) ^ "]" }
+
+string_list_items:
+    | /* empty */ { [] }
+    | STRING { [$1] }
+    | STRING COMMA string_list_items { $1::$3 }
 
 %%

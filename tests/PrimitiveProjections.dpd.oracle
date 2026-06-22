@@ -3,8 +3,8 @@ N: 2 "baz" [opaque=no, body=yes, kind=cnst, prop=no, path="PrimitiveProjections"
 N: 1 "foo" [opaque=no, body=yes, kind=cnst, prop=no, path="PrimitiveProjections", ];
 N: 5 "projT1" [opaque=no, body=yes, kind=cnst, prop=no, path="PrimitiveProjections", ];
 N: 4 "projT2" [opaque=no, body=yes, kind=cnst, prop=no, path="PrimitiveProjections", ];
-N: 7 "sigT" [kind=inductive, prop=no, path="PrimitiveProjections", ];
-N: 6 "existT" [kind=construct, prop=no, path="PrimitiveProjections", ];
+N: 7 "sigT" [constructors=["existT"], kind=inductive, prop=no, path="PrimitiveProjections", ];
+N: 6 "existT" [inductive="sigT", kind=construct, prop=no, path="PrimitiveProjections", ];
 E: 1 6 [weight=2, ];
 E: 1 7 [weight=8, ];
 E: 2 7 [weight=2, ];
