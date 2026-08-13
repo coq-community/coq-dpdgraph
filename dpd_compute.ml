@@ -130,32 +130,62 @@ let build_graph lobj =
 
 
 (** remove edge (n1 -> n2) iff n2 is indirectly reachable by n1,
- * or if n1 and n2 are the same *)
+ * or if n1 and n2 are the same.
+ *
+ * The graph can have cycles: the members of a mutual inductive block refer to
+ * each other.  So both the reachability and the "is this edge redundant" test
+ * are computed on the strongly connected components, over the acyclic graph
+ * they form, rather than by recursing along the edges of each node -- that
+ * recursion does not terminate on a cycle, and asking whether n2 is reachable
+ * from n1 in two steps or more would answer yes for every edge entering a
+ * cycle, leaving the node it comes from isolated.
+ *
+ * Edges between two distinct nodes of the same component are kept: each of
+ * them is redundant in the above sense, so removing them would drop the cycle
+ * from the graph altogether. *)
 let reduce_graph g =
-  (* a table in which each node is mapped to the set of indirected accessible
-   * nodes *)
-  let module Vset = Set.Make (G.V) in
-  let reach_tbl = Hashtbl.create (G.nb_vertex g) in
-  let rec reachable v =
-    try Hashtbl.find reach_tbl v (* already done *)
-    with Not_found ->
-      let nb_succ_before = List.length (G.succ g v) in
-      let add_succ_reachable acc s =
-        let acc = (* add [s] successors *)
-          List.fold_left (fun set x -> Vset.add x set) acc (G.succ g s)
-	in (Vset.union acc (if Node.equal v s then Vset.empty else reachable s))
-      in
-      let acc = List.fold_left add_succ_reachable Vset.empty (G.succ g v) in
-        (* try to remove edges *)
-      let rm_edge sv = if Vset.mem sv acc then G.remove_edge g v sv in
-      List.iter rm_edge (G.succ g v);
-      let nb_succ_after = List.length (G.succ g v) in
-      debug "Reduce for %s : %d -> %d@." (Node.name v)
-        nb_succ_before nb_succ_after;
-      Hashtbl.add reach_tbl v acc;
-      acc
+  (* a table in which each component is mapped to the set of components
+   * indirectly accessible from it *)
+  let module Cset = Set.Make (Int) in
+  let module Scc = Graph.Components.Make (G) in
+  let nb_scc, scc_of = Scc.scc g in
+  let succs = Array.make nb_scc [] in
+  G.iter_vertex
+    (fun v -> let c = scc_of v in succs.(c) <- G.succ g v @ succs.(c)) g;
+  let reach_tbl = Array.make nb_scc None in
+  let rec reachable c = match reach_tbl.(c) with
+    | Some set -> set (* already done *)
+    | None ->
+        let add set s =
+          let cs = scc_of s in
+          (* the components below [c] are reached through the successors of
+           * [c]'s own members, which are all in [succs.(c)] already *)
+          if cs = c then set
+          else Cset.union (Cset.add cs set) (reachable cs)
+        in
+        let set = List.fold_left add Cset.empty succs.(c) in
+          reach_tbl.(c) <- Some set;
+          set
   in
-    G.iter_vertex (fun v -> ignore (reachable v)) g
+  let reduce v =
+    let c = scc_of v in
+    let nb_succ_before = List.length (G.succ g v) in
+    (* the components reachable from [v] in two steps or more *)
+    let acc =
+      List.fold_left (fun acc s -> Cset.union acc (reachable (scc_of s)))
+        Cset.empty (G.succ g v)
+    in
+    let rm_edge sv =
+      let cs = scc_of sv in
+      if Node.equal v sv || (cs <> c && Cset.mem cs acc) then
+        G.remove_edge g v sv
+    in
+    List.iter rm_edge (G.succ g v);
+    let nb_succ_after = List.length (G.succ g v) in
+    debug "Reduce for %s : %d -> %d@." (Node.name v)
+      nb_succ_before nb_succ_after
+  in
+    G.iter_vertex reduce g
 
 let remove_node g n =
   let transfer_edges p =
