@@ -1,0 +1,14 @@
+digraph tests/MutualInductive {
+  graph [ratio=0.5]
+  node [style=filled]
+MutualInductive_RecV [label="RecV", URL=<MutualInductive.html#RecV>, peripheries=3, fillcolor="#7FAAFF"] ;
+MutualInductive_val [label="val", URL=<MutualInductive.html#val>, fillcolor="#E2CDFA"] ;
+MutualInductive_OfVal [label="OfVal", URL=<MutualInductive.html#OfVal>, peripheries=3, fillcolor="#7FAAFF"] ;
+MutualInductive_expr [label="expr", URL=<MutualInductive.html#expr>, fillcolor="#E2CDFA"] ;
+  MutualInductive_RecV -> MutualInductive_expr [] ;
+  MutualInductive_val -> MutualInductive_expr [] ;
+  MutualInductive_OfVal -> MutualInductive_val [] ;
+  MutualInductive_expr -> MutualInductive_val [] ;
+subgraph cluster_MutualInductive { label="MutualInductive"; fillcolor="#FFFFC3"; labeljust=l; style=filled 
+MutualInductive_expr; MutualInductive_OfVal; MutualInductive_val; MutualInductive_RecV; };
+} /* END */

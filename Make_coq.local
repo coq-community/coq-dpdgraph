@@ -52,16 +52,18 @@ uninstall ::
 
 TESTDIR=tests
 TESTS_SRC=$(TESTDIR)/Morph.v $(TESTDIR)/Test.v $(TESTDIR)/Polymorph.v \
-	  $(TESTDIR)/PrimitiveProjections.v\
+	  $(TESTDIR)/PrimitiveProjections.v $(TESTDIR)/MutualInductive.v\
 	  $(TESTDIR)/Morph.cmd $(TESTDIR)/Test.cmd $(TESTDIR)/search.cmd \
-          $(TESTDIR)/Polymorph.cmd $(TESTDIR)/PrimitiveProjections.cmd
+          $(TESTDIR)/Polymorph.cmd $(TESTDIR)/PrimitiveProjections.cmd \
+          $(TESTDIR)/MutualInductive.cmd
 TESTS_DPD=$(TESTDIR)/graph.dpd $(TESTDIR)/graph2.dpd \
 	  $(TESTDIR)/Morph.dpd $(TESTDIR)/Morph_rw.dpd \
 	  $(TESTDIR)/Polymorph.dpd \
           $(TESTDIR)/PrimitiveProjections.dpd \
-	  $(TESTDIR)/PrimitiveProjections2.dpd
+	  $(TESTDIR)/PrimitiveProjections2.dpd \
+	  $(TESTDIR)/MutualInductive.dpd
 TESTS_VO=$(TESTDIR)/Morph.vo $(TESTDIR)/Test.vo $(TESTDIR)/Polymorph.vo\
-         $(TESTDIR)/PrimitiveProjections.vo
+         $(TESTDIR)/PrimitiveProjections.vo $(TESTDIR)/MutualInductive.vo
 TESTS_DOT=$(TESTS_DPD:%.dpd=%.dot)
 TESTS_ERR_DPD=$(wildcard $(TESTDIR)/*.err.dpd)
 
@@ -78,6 +80,7 @@ clean_test :
 	rm -f $(TESTDIR)/Morph.vo $(TESTDIR)/Morph.glob
 	rm -f $(TESTDIR)/Polymorph.vo $(TESTDIR)/Polymorph.glob
 	rm -f $(TESTDIR)/PrimitiveProjections.vo $(TESTDIR)/PrimitiveProjections.glob
+	rm -f $(TESTDIR)/MutualInductive.vo $(TESTDIR)/MutualInductive.glob
 	rm -f  $(TESTDIR)/.*.vo.aux
 
 .PRECIOUS : $(TESTS) $(TESTS_LOG) $(TESTS_ORACLE)
